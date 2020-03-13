@@ -1,0 +1,224 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+		    "path" : "pages/my/my",
+		    "style" : {}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {}
+		}
+		,
+		
+		{
+		    "path" : "pages/my/historyData/historyData",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "历史数据"
+			}
+		},
+		
+		
+		
+		{
+		    "path" : "pages/my/info/info",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "消息中心"
+			}
+		},
+		
+		{
+		    "path" : "pages/my/set/userInfo/userInfo",
+		   "style" : {
+		   	"navigationBarTextStyle": "white",
+		   	"navigationBarTitleText": "个人中心"
+		   }
+		},
+		
+		
+		
+		
+		
+		{
+		   "path" : "pages/my/waring/waring",
+		   "style" : {
+		   	"navigationBarTextStyle": "white",
+		   	"navigationBarTitleText": "历史预警"
+		   }
+		},
+		
+		
+		
+		
+		
+		{
+		    "path" : "pages/my/set/set",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "设置"
+			}
+		},
+		
+		{
+		    "path" : "pages/my/userinfo/userinfo",
+		    "style" : {
+		    	"navigationBarTextStyle": "white",
+		    	"navigationBarTitleText": "个人中心"
+		    }
+		},
+		
+		
+	
+		
+		
+		
+		
+		
+		{
+		    "path" : "pages/my/help/help",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "故障引导列表"
+			}
+		}
+		,
+		
+		
+		{
+		    "path" : "pages/index/Remarks/Remarks",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "设备备注"
+				}
+		},
+		
+		
+		
+		
+		{
+		    "path" : "pages/information/information",
+		    "style" : {
+		    	"navigationBarTextStyle": "white",
+		    	"navigationBarTitleText": "产品列表"
+		    }
+		},
+		
+		
+		
+		
+		{
+		    "path" : "pages/my/devlist/devlist",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "设备列表"
+			}
+		},
+		
+		
+		 
+		
+		
+		{
+		    "path" : "pages/my/Repair/Repair",
+		    "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "报修列表"
+			}
+		},
+		
+		
+		
+		
+		
+        {
+            "path" : "pages/information/infodetail/infodetail",
+            "style" : {}
+        }
+        
+        ,{
+            "path" : "pages/information/product/product",
+            "style" : {
+            	"navigationBarTextStyle": "white",
+            	"navigationBarTitleText": "产品详情"
+            }
+        },
+       
+		
+		
+		
+		
+		{
+            "path" : "pages/my/about/about",
+            "style" : {
+            	"navigationBarTextStyle": "white",
+            	"navigationBarTitleText": "关于永生"
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        ,{
+            "path" : "pages/my/help/helpdetail/helpdetail",
+            "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "故障引导"
+			}
+        }
+        ,{
+            "path" : "pages/my/Repair/repairDetail/repairDetail",
+            "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "报修详情"
+			}
+        }
+        ,{
+            "path" : "pages/my/Repair/postRepair/postRepair",
+            "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "添加报修"
+			}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "永生仪器",
+		"navigationBarBackgroundColor": "#ea302f",
+		"backgroundColor": "#F8F8F8",
+		"enablePullDownRefresh":true
+		
+	},
+	"style": {
+	    "app-plus": {
+	        "animationType": "fade-in",
+	        "animationDuration": 500
+	    }
+	},
+	"tabBar": {
+	    "color": "#b9babc",
+	    "selectedColor": "#e71c16",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+		"fontSize":"",
+	    "list": [{
+	        "pagePath": "pages/index/index",
+	        "iconPath": "static/images/tab1.png",
+	        "selectedIconPath": "static/images/tab1-active.png",
+	        "text": "设备"
+	    }, {
+	        "pagePath": "pages/information/information",
+	        "iconPath": "static/images/tab2.png",
+	        "selectedIconPath": "static/images/tab2-active.png",
+	        "text": "产品"
+	    },{
+	        "pagePath": "pages/my/my",
+	        "iconPath": "static/images/tab3.png",
+	        "selectedIconPath": "static/images/tab3-active.png",
+	        "text": "我的"
+	    }]
+	}
+}
