@@ -13,6 +13,14 @@
 				</view>
 			</swiper-item>
 		</swiper> -->
+		<cu-custom >
+		  <block slot="content">
+			  <view class="text">
+			  	产品列表
+			  </view>
+			  
+			</block>
+		</cu-custom>
 		<view class="classifi">
 			<view class="text" @tap="handelAll">
 				全部

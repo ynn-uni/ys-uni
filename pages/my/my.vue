@@ -1,5 +1,14 @@
 <template>
 	<view class="my">
+		<image class="index-bg" src="../../static/images/my-linear.png" />
+		<cu-custom >
+		  <block slot="content">
+			  <view class="text">
+			  	我的
+			  </view>
+			  
+			</block>
+		</cu-custom>
 		<view class="bank">
 			<view class="heade-info">
 				<image src="../../static/images/head_03.gif" mode="" v-if="!isLogin"></image>
@@ -18,7 +27,8 @@
 		<view class="otherinfo my-box">
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/set/set" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
-					<image src="../../static/images/devtool.png" mode=""></image>
+					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
+					 <view class="iconfont iconshebeizhongxin"></view>
 					<view class="title">系统设置</view>
 				</view>
 				<view class="cu-right">
@@ -28,7 +38,7 @@
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/devlist/devlist" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
 					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
-					<text class="cuIcon-vipcard"></text>
+					<view class="iconfont1 cuIcon-vipcard"></view>
 					<view class="title">设备中心</view>
 				</view>
 				<view class="cu-right">
@@ -37,7 +47,7 @@
 			</view>
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/waring/waring" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
-					<image src="../../static/images/waring1.png" mode=""></image>
+					<view class="iconfont iconyujing1"></view>
 					<view class="title">历史故障</view>
 				</view>
 				<view class="cu-right">
@@ -47,7 +57,7 @@
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/historyData/historyData" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
 					<!-- <image src="../../static/images/waring1.png" mode=""></image> -->
-					<text class="cuIcon-sort"></text>
+					<view class="iconfont iconshuju"></view>
 					<view class="title">历史数据</view>
 				</view>
 				<view class="cu-right">
@@ -56,7 +66,7 @@
 			</view>
 			<!-- <view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/info/info" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
-					<image src="../../static/images/message.png" mode=""></image>
+					<view class="iconfont iconxiaoxi"></view>
 					<view class="title">
 						消息中心
 						<view class="circle" v-if='showInfo'>
@@ -73,7 +83,7 @@
 			<view class="cu-form-group"  @click="doubleTap" data-path="/pages/my/Repair/Repair" @touchstart="touchStart"
 			 @touchend="touchEnd" >
 				<view class="cu-left">
-					<image src="../../static/images/bx.png" mode=""></image>
+					<view class="iconfont iconbaoxiu"></view>
 					<view class="title">在线报修</view>
 				</view>
 				<view class="cu-right">
@@ -82,7 +92,7 @@
 			</view>
 			<view class="cu-form-group"  @tap="doubleTap" data-path="/pages/my/help/help" @touchstart="touchStart" @touchend="touchEnd" >
 				<view class="cu-left">
-					<image src="../../static/images/hel.png" mode=""></image>
+					<view class="iconfont iconshebeiguzhangyindao"></view>
 					<view class="title">故障引导</view>
 				</view>
 				<view class="cu-right">
@@ -91,7 +101,7 @@
 			</view>
 			<view class="cu-form-group"  @tap="doubleTap" data-path="/pages/my/about/about" @touchstart="touchStart" @touchend="touchEnd" >
 				<view class="cu-left">
-					<image src="../../static/images/help.png" mode=""></image>
+					<view class="iconfont iconbangzhu"></view>
 					<view class="title">关于永生</view>
 				</view>
 				<view class="cu-right">
@@ -320,9 +330,18 @@
 		right: 0;
 		background-color: #fff;
 		overflow: auto;
+		.text{
+			color: #fff;
+		}
+		.index-bg {
+		  position: absolute;
+		  top: 0;
+		  width: 100%;
+		  height: 430upx;
+		}
 		.bank{
 			height: 330upx;
-			background:#ea302f;
+			// background:#ea302f;
 			position: relative;
 			.heade-info{
 				display: flex;
@@ -339,7 +358,7 @@
 					width:120upx;
 					height:120upx;
 					border-radius: 50%;
-					border: 1px solid #ea302f;
+					// border: 1px solid #ea302f;
 					overflow: hidden;
 				}
 				text,.nickName{
@@ -354,7 +373,7 @@
 			.bg{
 				width: 100%;
 				height: 98upx;
-				background-image: url('../../static/images/head_06.gif');
+				// background-image: url('../../static/images/head_06.gif');
 				background-repeat: no-repeat;
 				background-size: cover;
 				position: absolute;
@@ -371,6 +390,10 @@
 				.cu-left{
 					display: flex;
 					align-items: center;
+					.iconfont,.iconfont1{
+						font-size: 74upx;
+						color: $primaryColor;
+					}
 					image{
 						width: 50upx;
 						height: 50upx;
