@@ -108,23 +108,13 @@ export default {
     }
   },
   onLoad() {
-    this.initWebsocket().then(instance => {
-      instance.onopen = evt => {
-        instance.send({ mac: this.devListMac /*|| '00:60:65:4E:B4:AF'*/})
-      }
-      instance.onmessage = evt => {
-        // console.log(evt.data);
-        if (evt === 'PONG') return
-        const json = JSON.parse(evt.data)
-        this.waringinfo = json.e
-        this.tData = this.setTemperatureData(json.t)
-        this.hData = this.setHumidityData(json.h)
-      }
-    })
+    // if (!this.$store.state.isAppHide) {
+    //   this.initsocket()
+    // }
   },
   onShow() {
     this.checkUserLogin()
-    if (!this.$store.state.isAppHide) {
+    if (this.$store.state.isAppHide) {
       this.initsocket()
     }
 
@@ -142,17 +132,18 @@ export default {
     ...mapActions('user', ['fatchDevListByToken']),
     initsocket() {
       this.initWebsocket().then(instance => {
+        this.$store.state.isAppHide=false
         instance.onopen = evt => {
           instance.send({ mac: this.devListMac })
         }
         instance.onmessage = evt => {
-          // console.log(evt.data);
-          if (evt === 'PONG') return
+          console.log(evt);
+          if (evt.data === 'PONG') return
           const json = JSON.parse(evt.data)
           this.waringinfo = json.e
           this.tData = this.setTemperatureData(json.t)
           this.hData = this.setHumidityData(json.h)
-      	this.chartData=this.setChartData(json)
+      	  this.chartData=this.setChartData(json)
       	// this.chartData=
         }
       })

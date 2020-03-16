@@ -22,7 +22,7 @@
     <view class="precent flex margin-top justify-center align-center">
       <view class="margin-right-xs out">输出</view>
       <view class="cu-progress round bg-bgc">
-        <view class="bg-percent" :style="[{ width:width||'0%'}]"></view>
+        <view class="bg-percent" :style="[{ width: datas.output + '%'||'0%'}]"></view>
       </view>
       <view class="margin-left-xs">{{ datas.output }}</view>
     </view>
@@ -70,7 +70,7 @@ export default {
     }
   },
   watch: {
-    datas() {
+    "datas.current"() {
       this.initdata()
       this.showArcbar('canvasGauge', this.chartData)
     }
