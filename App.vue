@@ -1,6 +1,10 @@
 <script>
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	import Vue from 'vue';
 	export default {
+		computed:{
+			...mapGetters(['socketInstance'])
+		},
 		onLaunch: function() {
 			uni.getSystemInfo({
 			  success: function(e) {
@@ -37,7 +41,10 @@
 			var that=this
 			that.$store.state.isAppHide=false;
 			that.$store.state.isHide=false;
-			// uni.closeSocket();
+			if(this.socketInstance){
+				this.socketInstance.close(this.socketInstance)
+			}
+			
 			console.log("客户端关闭")
 		}
 	}

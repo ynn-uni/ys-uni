@@ -76,11 +76,11 @@
 		computed:{
 			...mapGetters(['socketInstance'])
 		},
-		created() {
-			this.socketInstance.onmessage=evt=>{
-				console.log(evt)
-			}
-		},
+		// created() {
+		// 	this.socketInstance.onmessage=evt=>{
+		// 		console.log(evt)
+		// 	}
+		// },
 		mounted() {
 			this.initdata()
 			// console.log(this.data)

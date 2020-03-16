@@ -7,8 +7,8 @@
 				
 				<button v-if="!token" class="cu-btn btn active animation-slide-right" open-type="getUserInfo"
 				@getuserinfo="getUserInfo">点击登录/注册</button>
-				<button v-if="token&&!userInfo.phone" class="cu-btn btn active animation-slide-right" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">获取手机号</button>
-				<button v-if="token&&userInfo.phone&&devList.length<=0" class="cu-btn btn active animation-slide-right" @tap="handelDev">添加设备</button>
+				<!-- <button v-if="token&&!userInfo.phone"  class="cu-btn btn active animation-slide-right" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">获取手机号</button> -->
+				<button v-if="token&&devList.length<=0" class="cu-btn btn active animation-slide-right" @tap="handelDev">添加设备</button>
 			</view>
 			
 		</view>
@@ -96,6 +96,7 @@
 			},
 			getPhoneNumber(e){
 				let data={}
+				console.log(this.userInfo)
 				data.sessionKey=this.userInfo.key;
 				data.iv=e.detail.iv;
 				data.encryptedData=e.detail.encryptedData;

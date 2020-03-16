@@ -126,57 +126,57 @@
 		
 		
 		mounted() {
-			this.init()
+			// this.init()
 		},
 		
 		methods: {
-			init(){
-				this.waringData.slice(0)
-				for(var i in this.waringinfo){
-					if(i=='e1'){
-						this.waringData.push({
-						name:'超温',
-						icon:'iconchaowen',
-						status:this.waringinfo[i],//正常
-					})}else if(i=='e2'){
-						this.waringData.push({
-							name:'断水',
-							icon:'iconduanshui',
-							status:this.waringinfo[i],//正常
-						})
+			// init(){
+			// 	this.waringData.slice(0)
+			// 	for(var i in this.waringinfo){
+			// 		if(i=='e1'){
+			// 			this.waringData.push({
+			// 			name:'超温',
+			// 			icon:'iconchaowen',
+			// 			status:this.waringinfo[i],//正常
+			// 		})}else if(i=='e2'){
+			// 			this.waringData.push({
+			// 				name:'断水',
+			// 				icon:'iconduanshui',
+			// 				status:this.waringinfo[i],//正常
+			// 			})
 						
-					}else if(i=='e3'){
-						that.waringInfo.push({name:'水堵',statu:that.deviceData.e[i]})
-					}else if(i=='e4'){
-						that.waringInfo.push({name:'温偏差',statu:that.deviceData.e[i]})
-					}else if(i=='e5'){
-						that.waringInfo.push({name:'湿偏差',statu:that.deviceData.e[i]})
-					}else if(i=='e6'){
-						that.waringInfo.push({name:'电源错误',statu:that.deviceData.e[i]})
-						// that.waringInfo.push({name:'电源错误',statu:1})
-					}else if(i=='e7'){
-						that.waringInfo.push({name:'SOS',statu:that.deviceData.e[i]})
-					}else if(i=='e8'){
-						that.waringInfo.push({name:'内存错误',statu:that.deviceData.e[i]})
-					}else if(i=='e9'){
-						that.waringInfo.push({name:'系统错误',statu:that.deviceData.e[i]})
-					}else if(i=='e10'){
-						that.waringInfo.push({name:'压缩机一',statu:that.deviceData.e[i]})
-					}else if(i=='e11'){
-						that.waringInfo.push({name:'压缩机二',statu:that.deviceData.e[i]})
-					}else if(i=='e12'){
-						that.waringInfo.push({name:'风机状态',statu:that.deviceData.e[i]})
-					}else if(i=='e13'){
-						that.waringInfo.push({name:'照明状态',statu:that.deviceData.e[i]})
-					}
-					// else if(i=='e14'){
-					// 	that.waringInfo.push({name:'温度控制',statu:that.deviceData.e[i]})
-					// }else if(i=='e15'){
-					// 	that.waringInfo.push({name:'湿度控制',statu:that.deviceData.e[i]})
-					// }
+			// 		}else if(i=='e3'){
+			// 			that.waringInfo.push({name:'水堵',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e4'){
+			// 			that.waringInfo.push({name:'温偏差',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e5'){
+			// 			that.waringInfo.push({name:'湿偏差',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e6'){
+			// 			that.waringInfo.push({name:'电源错误',statu:that.deviceData.e[i]})
+			// 			// that.waringInfo.push({name:'电源错误',statu:1})
+			// 		}else if(i=='e7'){
+			// 			that.waringInfo.push({name:'SOS',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e8'){
+			// 			that.waringInfo.push({name:'内存错误',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e9'){
+			// 			that.waringInfo.push({name:'系统错误',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e10'){
+			// 			that.waringInfo.push({name:'压缩机一',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e11'){
+			// 			that.waringInfo.push({name:'压缩机二',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e12'){
+			// 			that.waringInfo.push({name:'风机状态',statu:that.deviceData.e[i]})
+			// 		}else if(i=='e13'){
+			// 			that.waringInfo.push({name:'照明状态',statu:that.deviceData.e[i]})
+			// 		}
+			// 		// else if(i=='e14'){
+			// 		// 	that.waringInfo.push({name:'温度控制',statu:that.deviceData.e[i]})
+			// 		// }else if(i=='e15'){
+			// 		// 	that.waringInfo.push({name:'湿度控制',statu:that.deviceData.e[i]})
+			// 		// }
 					
-				}
-			}
+			// 	}
+			// }
 		}
 	}
 </script>

@@ -121,11 +121,14 @@ export default {
 	  });
 	},
     // 从后端获取用户信息
-    fatchDevListByToken({ commit }) {
+    fatchDevListByToken({ state,commit }) {
       getDeviceList().then(res => {
         console.log(res);
         commit('updateDevList', res.data);
-		commit('updateDevListMac', res.data[0].mac);
+		if(res.data.length>0&&state.devListMac==''){
+			commit('updateDevListMac', res.data[0].mac);
+		}
+		
       });
     }
   }

@@ -4,9 +4,9 @@
 			<block slot="content">永生仪器</block>
 		</cu-custom>
 		<button open-type="openSetting" bindopensetting="callback">打开设置页</button>
-		<noLogin v-if="!isLogin" @haslogin="handelLogin"></noLogin>
+		<noLogin v-if="devList.length<=0" @haslogin="handelLogin"></noLogin>
 		<!-- <noLogin v-if="!haveDev"></noLogin> -->
-		<view v-if="isLogin" class="dev-content animation-slide-right">
+		<view v-if="devList.length>0" class="dev-content animation-slide-right">
 			
 		
 			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
@@ -96,21 +96,20 @@
 			 }
 			
 		},
+		watch:{
+			devListMac(){
+				this.initsocket()
+			}
+		},
 		onLoad() {
-			this.initWebsocket().then(instance => {
-			  instance.onopen = evt => {
-			    instance.send({mac:this.devListMac})
-			  };
-			   instance.onmessage=evt=>{
-				console.log(evt)
-				this.waringinfo=evt.data.e
-				}
-			});
+			this.initsocket()
 		},
 		 onShow() {
-			// setTimeout(()=>{
-				this.checkUserLogin()
-			// },2000)
+		 this.checkUserLogin()
+		 if(!this.$store.state.isAppHide){
+			 this.initsocket()
+		 }
+			
 		  this.devList.forEach((val,index)=>{
 				 if(val.mac==this.devListMac){
 					 this.index=index
@@ -125,8 +124,24 @@
 			...mapActions('user', [
 			  'fatchDevListByToken'
 			]),
+			initsocket(){
+				if(this.devList.length>0){
+					 this.initWebsocket().then(instance => {
+					   instance.onopen = evt => {
+						   this.$store.state.isAppHide=true;
+						 instance.send({mac:this.devListMac})
+					   };
+						instance.onmessage=evt=>{
+							let data =JSON.parse(evt.data)
+						console.log(data)
+						// console.log(evt.data.t)
+						this.waringinfo=data.e
+						}
+					 });
+				}
+			},
 			checkUserLogin(data) {
-				if(this.token&&this.devList.length>0){
+				if(this.devList.length>0){
 					 this.isLogin=true
 				 }else{
 					this.isLogin=false	
