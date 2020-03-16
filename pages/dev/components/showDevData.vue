@@ -39,25 +39,17 @@ var canvaArcbar1 = null
 export default {
   data() {
     return {
-      width: '20%',
       cWidth3: '', //圆弧进度图
       cHeight3: '', //圆弧进度图
       arcbarWidth: '', //圆弧进度图，进度条宽度,此设置可使各端宽度一致
       pixelRatio: 1,
-      textarea: '',
       chartData: {
-        categories: [],
         series: [
           {
-            color: '#838af1',
-            data: null,
-            index: 0,
-            legendShape: 'circle',
             name: null,
-            pointShape: 'circle',
-            show: true,
-            type: 'arcbar',
-            _proportion_: 1.184999565
+            data: null,
+            color: '#838af1',
+            type: 'arcbar'
           }
         ]
       }
@@ -84,22 +76,8 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      console.log(this.datas)
-    }, 1000)
     this.initdata()
     _self = this
-    //#ifdef MP-ALIPAY
-    uni.getSystemInfo({
-      success: function(res) {
-        if (res.pixelRatio > 1) {
-          //正常这里给2就行，如果pixelRatio=3性能会降低一点
-          //_self.pixelRatio =res.pixelRatio;
-          _self.pixelRatio = 2
-        }
-      }
-    })
-    //#endif
     this.cWidth3 = uni.upx2px(600) //这里要与样式的宽高对应
     this.cHeight3 = uni.upx2px(500) //这里要与样式的宽高对应
     this.arcbarWidth = uni.upx2px(38)
