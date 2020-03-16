@@ -72,13 +72,15 @@ export default {
         label: '温度',
         current: 0,
         setting: 0,
-        output: 0
+				output: 0,
+				unit: '℃'
       },
       hData: {
-        label: '温度',
+				label: '温度',
         current: 0,
         setting: 0,
-        output: 0
+        output: 0,
+				unit: '%'
       },
       waringinfo: {}
     }
@@ -187,8 +189,9 @@ export default {
       return {
         label: '温度',
         current: +(data.Ta / 100).toFixed(2),
-        setting: data.Ts + '℃',
-        output: data.To + '℃'
+        setting: data.Ts,
+				output: data.To,
+				unit: '℃'
       }
     },
     setHumidityData(data) {
@@ -197,8 +200,9 @@ export default {
       return {
         label: '湿度',
         current: +(data.Ha / 100).toFixed(2),
-        setting: data.Hs + '%',
-        output: data.Ho + '%'
+        setting: data.Hs,
+				output: data.Ho,
+				unit: '%'
       }
     }
   }
