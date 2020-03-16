@@ -1,24 +1,10 @@
 <template>
 	<view class="imformation">
-		<!-- <swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-		 :autoplay="true" interval="5000" duration="500" @change="cardSwiper" indicator-color="#8799a3"
-		 indicator-active-color="#0081ff"> -->
-		 <!-- <swiper class="card-swiper"  :circular="true"
-		  :autoplay="true" interval="5000" duration="500" @change="cardSwiper" indicator-color="#8799a3"
-		  indicator-active-color="#0081ff">
-			<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
-				<view class="swiper-item" @tap="handelProduct(item.id)">
-					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
-				</view>
-			</swiper-item>
-		</swiper> -->
 		<cu-custom bgColor="bg-e">
 		  <block slot="content">
 			  <view class="text">
 			  	产品列表
 			  </view>
-			  
 			</block>
 		</cu-custom>
 		<view class="classifi">
@@ -82,7 +68,7 @@
 </template>
 
 <script>
-	// import req from '@/request/request.js'
+  import {getProductCategoryList} from '@/apis'
 	import xflSelect from '@/components/xfl-select/xfl-select.vue';
 	export default {
 		components:{
@@ -107,37 +93,6 @@
 				check2:'',
 				cardCur: 0,
 				productList: []//产品列表
-				// 轮播模拟数据
-				// swiperList: [{
-				// 	id: 0,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 1,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 2,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 3,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 4,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 5,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }, {
-				// 	id: 6,
-				// 	type: 'image',
-				// 	url: '../../static/images/info1.png'
-				// }],
-				// 产品模拟数据
 				
 			}
 			
@@ -147,8 +102,6 @@
 			
 		},
 		onPullDownRefresh() {
-		       // this.$store.state.isHide=false;
-		       console.log("下拉刷新")
 			   setTimeout(function(){
 			   	 uni.stopPullDownRefresh()
 			   },2000)
@@ -156,7 +109,6 @@
 			   
 		  },
 		 onReachBottom() {//触底事件
-		        console.log('refresh');
 			 this.page++
 			 if(this.pid){
 				  this.all(this.page,this.size,this.pid);
@@ -169,69 +121,43 @@
 		methods: {
 			init(){
 				var that=this;
-				that.req.httpRequest({
-					url:"/Api/Product/getProductCategoryList",
-					method:'GET'
-				},{
-					pid:0,
-				}).then((res)=>{
-					console.log(res)
-					var data=res.data.data
+				getProductCategoryList({pid:0}).then((res)=>{
+					var data=res.data
 					for(var i in data){
 						that.list.name.unshift(data[i].name)
 						that.list.id.unshift(data[i].id)
 					}
-					// console.log(that.list)
 				})
 				this.pid=this.$store.state.pid;
 				this.all(this.page,this.size,this.pid);
 			},
 			change({newVal, oldVal, index, orignItem}){//分类
-				// console.log(this.list[index])
-				console.log(newVal, oldVal, index, orignItem)
-				
 				if(newVal!='请选择'&&this.list.name[index]===newVal){
-					// if(this.list.name[index]===newVal){
-					console.log(this.list.id[index])
-					console.log(index)
-					
 					this.list1.name.splice(0)
 					var that=this;
-					that.req.httpRequest({
-						url:"/Api/Product/getProductCategoryList",
-						method:'GET'
-					},{
-						pid:this.list.id[index],
-					}).then((res)=>{
-						console.log(res)
-						for(var i in res.data.data){
-							// console.log()
-							that.list1.name.push(res.data.data[i].name)
-							that.list1.id.push(res.data.data[i].id)
+					getProductCategoryList({pid:this.list.id[index],}).then((res)=>{
+					var data=res.data
+					for(var i in res.data){
+							that.list1.name.push(res.data[i].name)
+							that.list1.id.push(res.data[i].id)
 						}
-					})
-					// console.log(this.list1)
-					//提交请求
-					// console.log(newVal)
+				})
 				}else{
-					 this.page=1
-					
+					this.page=1
 					this.pid=parseInt(this.list1.id[index])
 					this.$store.state.pid=this.pid;
-					// console.log(this.pid)
 					this.all(this.page,this.size,this.pid);
-					// console.log(newVal)
 				}
 			},
 			cardSwiper(e) {
 				this.cardCur = e.detail.current
 			},
 			touchStart(e) {
-				console.log(e.timeStamp)
+				
 			  this.touchStartTime = e.timeStamp;
 			},
 			touchEnd(e) {
-				console.log(e.timeStamp)
+				
 			  this.touchEndTime = e.timeStamp;
 			},
 			doubleTap(e) {
@@ -274,7 +200,6 @@
 					this.productList.splice(0)
 					
 				}
-				console.log(pid)
 				if(pid){
 					obj={page:page,size:size,type:pid}
 					

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	// import req from '@/request/request.js'
+	import {getProductDetails} from '@/apis'
 	export default {
 		data() {
 			return {
@@ -28,19 +28,11 @@
 		
 		onLoad(option){
 			var that=this;
-			console.log(option.id)
 			this.id=option.id;
-			that.req.httpRequest(
-			{
-				url:'/Api/Product/getProductDetails',
-				method:'GET'
-			},
-			{
-				id:that.id
-			}).then((res)=>{
-				console.log(res)
-				that.detailData=res.data.data
+			getProductDetails({id:that.id}).then((res)=>{
+				that.detailData=res.data
 			})
+			
 		},
 		methods: {
 			imageLoad(e) {
@@ -48,7 +40,6 @@
 			    var $height = e.detail.height; //获取图片真实高度
 			    this.imgwidth= $width+'rpx'
 			    this.imgheight= $height+'rpx'
-			   console.log(this.imgwidth,this.imgheight)
 			  }
 			 
 		}

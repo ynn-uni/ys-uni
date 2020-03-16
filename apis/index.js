@@ -1,10 +1,13 @@
 import { getAction, postAction } from '../utils/request';
+//注册
 export function register(data = {}) {
   return postAction('/Api/User/registerWithWechat', data);
 }
+//登录
 export function login(data = {}) {
   return getAction('/Api/User/loginWithWechat', data);
 }
+//设备列表
 export function getDeviceList(data = {}) {
   return getAction('/Api/Device/getDeviceList', data);
 }
@@ -40,3 +43,13 @@ export function getDataList(data = {}) {
 export function getRepairList(data = {}) {
   return getAction('/Api/Repair/getRepairList', data);
 }
+
+//获取产品设备列表
+export function getProductCategoryList(data = {}) {
+  return getAction('/Api/Product/getProductCategoryList', data);
+}
+//获取产品设备详情
+export function getProductDetails(data = {}) {
+  return getAction('/Api/Product/getProductDetails', data);
+}
+

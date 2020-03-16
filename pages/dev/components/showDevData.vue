@@ -159,6 +159,7 @@ export default {
     .des-btn {
       width: 100upx;
       height: 68upx;
+      background-color: #fff;
       box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
       text {
         color: #ee7777;
