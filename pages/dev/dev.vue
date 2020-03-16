@@ -17,7 +17,7 @@
 			<view class="content">
 				<showDevData :datas="tData" v-if="TabCur===0"></showDevData>
 				<showDevData :datas="hData" v-if="TabCur===1"></showDevData>
-				<showWaringData v-if="TabCur===2"></showWaringData>
+				<showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
 				<showChartLine v-if="TabCur===3"></showChartLine>
 				<scroll-view scroll-x class="bg-white nav margin-tb">
 					<view class="flex text-center tablist">
@@ -74,7 +74,8 @@
 				hData: {
 					realname:'实时湿度',
 					setname:'设定湿度'
-				}
+				},
+				waringinfo:{}
 			};
 		},
 		components: {
@@ -82,6 +83,7 @@
 			showWaringData,
 			showChartLine,
 			noLogin
+			
 		},
 		computed:{
 			 ...mapGetters(['token', 'devList','devListMac','userInfo']),
@@ -96,11 +98,13 @@
 		},
 		onLoad() {
 			this.initWebsocket().then(instance => {
-				// instance.onopen=evt=>{}
 			  instance.onopen = evt => {
 			    instance.send({mac:this.devListMac})
 			  };
-			   
+			   instance.onmessage=evt=>{
+				console.log(evt)
+				this.waringinfo=evt.data.e
+				}
 			});
 		},
 		 onShow() {

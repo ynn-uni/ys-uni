@@ -37,6 +37,7 @@
 <script>
 	import cmdCircle from "@/components/cmd-circle/cmd-circle.vue"
 	import uCharts from '@/components/u-charts/u-charts.js';
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	var _self;
 	var canvaArcbar1=null;
 	
@@ -72,8 +73,14 @@
 				default:()=>{}
 			}
 		},
-		
-		
+		computed:{
+			...mapGetters(['socketInstance'])
+		},
+		created() {
+			this.socketInstance.onmessage=evt=>{
+				console.log(evt)
+			}
+		},
 		mounted() {
 			this.initdata()
 			// console.log(this.data)
