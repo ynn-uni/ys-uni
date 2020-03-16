@@ -3,7 +3,10 @@
     <view class="box">
       <uni-grid :column="5" :show-border="false" :square="false" class="gride">
         <uni-grid-item v-for="(item,index) in waringData" :key="index">
-          <view class="gride-item flex justify-center align-center flex-direction my-item">
+          <view
+            class="gride-item flex justify-center align-center flex-direction my-item"
+            :class="{'status-error' : item.status}"
+          >
             <view v-if="item.icon==='sos'" class="myicon">{{item.name}}</view>
             <view v-else :class="'myicon iconfont '+item.icon "></view>
             <view class="text">{{item.name}}</view>
@@ -23,76 +26,91 @@ export default {
     return {
       waringData: [
         {
+          id: 'e1',
           name: '超温',
           icon: 'iconchaowen',
           status: 0 //正常
         },
         {
+          id: 'e2',
           name: '断水',
           icon: 'iconduanshui',
           status: 0 //正常
         },
         {
+          id: 'e3',
           name: '水堵',
           icon: 'iconshuidu',
           status: 0 //正常
         },
         {
+          id: 'e4',
           name: '湿偏差',
           icon: 'iconshipiancha',
           status: 0 //正常
         },
         {
+          id: 'e5',
           name: '温偏差',
           icon: 'iconwenpiancha',
           status: 0 //正常
         },
         {
+          id: 'e6',
           name: '电源错误',
           icon: 'icondianyuancuowu',
           status: 0 //正常
         },
         {
+          id: 'e7',
           name: 'sos',
           icon: 'sos',
           status: 0 //正常
         },
         {
+          id: 'e8',
           name: '内存错误',
           icon: 'iconneicuncuowu',
           status: 0 //正常
         },
         {
+          id: 'e9',
           name: '系统错误',
           icon: 'iconxitongcuowu',
           status: 0 //正常
         },
         {
+          id: 'e10',
           name: '压缩机一',
           icon: 'iconyasuoji',
           status: 0 //正常
         },
         {
+          id: 'e11',
           name: '压缩机二',
           icon: 'iconyasuoji',
           status: 0 //正常
         },
         {
+          id: 'e12',
           name: '风机状态',
           icon: 'iconfengji',
           status: 0 //正常
         },
         {
+          id: 'e13',
           name: '照明状态',
           icon: 'iconzhaoming',
           status: 0 //正常
         },
         {
+          id: 'e14',
           name: '温度控制',
           icon: 'iconwendukongzhi',
           status: 0 //正常
         },
         {
+          id: 'e15',
           name: '湿度控制',
           icon: 'iconshidukongzhi',
           status: 0 //正常
@@ -117,71 +135,9 @@ export default {
 
   methods: {
     init() {
-      this.waringData.slice(0)
-      for (var i in this.waringinfo) {
-        if (i == 'e1') {
-          this.waringData.push({
-            name: '超温',
-            icon: 'iconchaowen',
-            status: this.waringinfo[i] //正常
-          })
-        } else if (i == 'e2') {
-          this.waringData.push({
-            name: '断水',
-            icon: 'iconduanshui',
-            status: this.waringinfo[i] //正常
-          })
-        } else if (i == 'e3') {
-          that.waringInfo.push({ name: '水堵', statu: that.deviceData.e[i] })
-        } else if (i == 'e4') {
-          that.waringInfo.push({ name: '温偏差', statu: that.deviceData.e[i] })
-        } else if (i == 'e5') {
-          that.waringInfo.push({ name: '湿偏差', statu: that.deviceData.e[i] })
-        } else if (i == 'e6') {
-          that.waringInfo.push({
-            name: '电源错误',
-            statu: that.deviceData.e[i]
-          })
-          // that.waringInfo.push({name:'电源错误',statu:1})
-        } else if (i == 'e7') {
-          that.waringInfo.push({ name: 'SOS', statu: that.deviceData.e[i] })
-        } else if (i == 'e8') {
-          that.waringInfo.push({
-            name: '内存错误',
-            statu: that.deviceData.e[i]
-          })
-        } else if (i == 'e9') {
-          that.waringInfo.push({
-            name: '系统错误',
-            statu: that.deviceData.e[i]
-          })
-        } else if (i == 'e10') {
-          that.waringInfo.push({
-            name: '压缩机一',
-            statu: that.deviceData.e[i]
-          })
-        } else if (i == 'e11') {
-          that.waringInfo.push({
-            name: '压缩机二',
-            statu: that.deviceData.e[i]
-          })
-        } else if (i == 'e12') {
-          that.waringInfo.push({
-            name: '风机状态',
-            statu: that.deviceData.e[i]
-          })
-        } else if (i == 'e13') {
-          that.waringInfo.push({
-            name: '照明状态',
-            statu: that.deviceData.e[i]
-          })
-        }
-        // else if(i=='e14'){
-        // 	that.waringInfo.push({name:'温度控制',statu:that.deviceData.e[i]})
-        // }else if(i=='e15'){
-        // 	that.waringInfo.push({name:'湿度控制',statu:that.deviceData.e[i]})
-        // }
-      }
+      this.waringData.map(i => {
+        i.status = this.waringinfo[i.id]
+      })
     }
   }
 }
@@ -217,6 +173,10 @@ export default {
     .text {
       font-size: 30upx;
       color: #313131;
+    }
+    &.status-error .myicon {
+      color: #fff;
+      background: #f38181;
     }
   }
 }
