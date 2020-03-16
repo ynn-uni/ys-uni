@@ -32,6 +32,19 @@ export default {
       } //图表数据对象
     }
   },
+  props:{
+	  datas: {
+	    type: Array,
+	    default: () => []
+	    
+	  }
+  },
+  watch:{
+	  datas() {
+	    this.initData()
+	    this.showArea('canvasArea1', this.Area)
+	  }
+  },
   mounted() {
     _self = this
     //#ifdef MP-ALIPAY
@@ -47,9 +60,20 @@ export default {
     //#endif
     this.cWidth = uni.upx2px(750)
     this.cHeight = uni.upx2px(660)
-    _self.showArea('canvasArea1', _self.Area)
+	this.initData()
+	this.showArea('canvasArea1', this.Area)
+    // _self.showArea('canvasArea1', _self.Area)
   },
   methods: {
+	  initData(){
+		  this.Area.categories=[]
+		  this.Area.series=[]
+		  for(var i=0;i<this.datas[0].data.length;i++){
+			  this.Area.categories.push(i)
+		  }
+		  this.Area.series=this.datas
+		  
+	  },
     showArea(canvasId, chartData) {
       //绘制温度图表
 

@@ -3,7 +3,7 @@
     <cu-custom bgcolor="bg-white">
       <block slot="content">永生仪器</block>
     </cu-custom>
-    <button open-type="openSetting" bindopensetting="callback">打开设置页</button>
+    <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
     <noLogin v-if="devList.length<=0" @haslogin="handelLogin"></noLogin>
     <!-- <noLogin v-if="!haveDev"></noLogin> -->
     <view v-if="devList.length>0" class="dev-content animation-slide-right">
@@ -14,7 +14,7 @@
         <showDevData :datas="tData" v-if="TabCur===0"></showDevData>
         <showDevData :datas="hData" v-if="TabCur===1"></showDevData>
         <showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
-        <showChartLine v-if="TabCur===3"></showChartLine>
+        <showChartLine v-if="TabCur===3" :datas="chartData"></showChartLine>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
             <view
@@ -80,6 +80,7 @@ export default {
         setting: 0,
         output: 0
       },
+	  chartData:[],
       waringinfo: {}
     }
   },
@@ -105,19 +106,7 @@ export default {
     }
   },
   onLoad() {
-    this.initWebsocket().then(instance => {
-      instance.onopen = evt => {
-        instance.send({ mac: this.devListMac })
-      }
-      instance.onmessage = evt => {
-        // console.log(evt.data);
-        if (evt === 'PONG') return
-        const json = JSON.parse(evt.data)
-        this.waringinfo = json.e
-        this.tData = this.setTemperatureData(json.t)
-        this.hData = this.setHumidityData(json.h)
-      }
-    })
+    this.initsocket()
   },
   onShow() {
     this.checkUserLogin()
@@ -138,20 +127,21 @@ export default {
     ...mapMutations('user', ['updateDevListMac']),
     ...mapActions('user', ['fatchDevListByToken']),
     initsocket() {
-      if (this.devList.length > 0) {
-        this.initWebsocket().then(instance => {
-          instance.onopen = evt => {
-            this.$store.state.isAppHide = true
-            instance.send({ mac: this.devListMac })
-          }
-          instance.onmessage = evt => {
-            let data = JSON.parse(evt.data)
-            console.log(data)
-            // console.log(evt.data.t)
-            this.waringinfo = data.e
-          }
-        })
-      }
+      this.initWebsocket().then(instance => {
+        instance.onopen = evt => {
+          instance.send({ mac: this.devListMac })
+        }
+        instance.onmessage = evt => {
+          // console.log(evt.data);
+          if (evt === 'PONG') return
+          const json = JSON.parse(evt.data)
+          this.waringinfo = json.e
+          this.tData = this.setTemperatureData(json.t)
+          this.hData = this.setHumidityData(json.h)
+      	this.chartData=this.setChartData(json)
+      	// this.chartData=
+        }
+      })
     },
     checkUserLogin(data) {
       if (this.devList.length > 0) {
@@ -200,7 +190,41 @@ export default {
         setting: data.Hs + '%',
         output: data.Ho + '%'
       }
-    }
+    },
+	
+	setChartData(data){
+		if(!data.t||!data.h) return;
+		console.log(data)
+		let newData=[{ name: '实时温度', data: [] },
+          { name: '输出温度', data: [] },
+          { name: '实时湿度', data: [] },
+          { name: '输出湿度', data: [] }];
+		if(data.t.length>1){
+			this.chartData=[]
+			data.t.forEach((val)=>{
+				newData[0].data.push(parseInt(val.Ta).toFixed(2))
+				newData[1].data.push(val.To)
+			})
+			data.h.forEach((val)=>{
+				newData[2].data.push( parseInt(val.Ha).toFixed(2))
+				newData[3].data.push(val.Ho)
+			})
+		}else{
+			newData=this.chartData
+			this.chartData.forEach((val,index)=>{
+				newData[index].data=val.data.slice(1)
+			})
+			data.t.forEach((val)=>{
+				newData[0].data.push(parseInt(val.Ta).toFixed(2))
+				newData[1].data.push(val.To)
+			})
+			data.h.forEach((val)=>{
+				newData[2].data.push( parseInt(val.Ha).toFixed(2))
+				newData[3].data.push(val.Ho)
+			})
+		}
+		return newData
+	}
   }
 }
 </script>

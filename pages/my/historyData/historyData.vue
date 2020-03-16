@@ -332,7 +332,7 @@
 			}
 		}
 		.charts {
-			margin-top: 100upx;
+			margin-top: 120upx;
 			padding-right: 10px;
 			width: 100%;
 			height: 800upx;
