@@ -68,12 +68,16 @@
 					
 				],
 				tData: {
-					realname:'实时温度',
-					setname:'设定温度'
+					label: '温度',
+					current: 0,
+					setting: 0,
+					output: 0
 				},
 				hData: {
-					realname:'实时湿度',
-					setname:'设定湿度'
+					label: '温度',
+					current: 0,
+					setting: 0,
+					output: 0
 				},
 				waringinfo:{}
 			};
@@ -102,7 +106,19 @@
 			}
 		},
 		onLoad() {
-			this.initsocket()
+			this.initWebsocket().then(instance => {
+			  instance.onopen = evt => {
+			    instance.send({mac:this.devListMac})
+			  };
+			  instance.onmessage=evt=>{
+					// console.log(evt.data);
+					if (evt === 'PONG') return
+					const json = JSON.parse(evt.data)
+					this.waringinfo = json.e
+					this.tData = this.setTemperatureData(json.t)
+					this.hData = this.setHumidityData(json.h)
+				}
+			});
 		},
 		 onShow() {
 		 this.checkUserLogin()
@@ -158,6 +174,34 @@
 			},
 			handelLogin(){
 				this.isLogin=true
+			},
+			getLastData(data) {
+				if (Array.isArray(data)) {
+					const length = data.length
+					return data[length - 1]
+				} else {
+					return data
+				}
+			},
+			setTemperatureData(data) {
+				if (!data) return
+				data = this.getLastData(data)
+				return {
+					label: '温度',
+					current: +(data.Ta / 100).toFixed(2),
+					setting: data.Ts + '℃',
+					output: data.To + '℃'
+				}
+			},
+			setHumidityData(data) {
+				if (!data) return
+				data = this.getLastData(data)
+				return {
+					label: '湿度',
+					current: +(data.Ha / 100).toFixed(2),
+					setting: data.Hs + '%',
+					output: data.Ho + '%'
+				}
 			}
 		}
 	}
