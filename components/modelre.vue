@@ -17,10 +17,10 @@
 					<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
 					<!-- 弹出授权框 -->
 					<button class="cu-btn bg-green margin-left" @tap="makesure('点击确认')" open-type="getUserInfo"
-				  bindgetuserinfo="bindGetUserInfo" v-if="modalname=='DialogModal1'">确定</button>
+				  @getuserinfo="getUserInfo" v-if="modalname=='DialogModal1'">确定</button>
 					<!-- 确定 -->
-					<button class="cu-btn bg-green margin-left" @tap="makesure('点击确认')" v-if="modalname=='DialogModal2'">确定</button>
-					<button class="cu-btn bg-green margin-left" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" v-if="modalname=='DialogModal4'">确定</button>
+					<button class="cu-btn bg-green margin-left" @tap="delDev('点击确认')" v-if="modalname=='DialogModal2'">确定</button>
+					<button class="cu-btn bg-green margin-left" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" @tap="makesure('点击确认')" v-if="modalname=='DialogModal4'">确定</button>
 					<button class="cu-btn bg-green margin-left" @tap="makesure('确定标记所有')" v-if="modalname=='DialogModal5'">确定</button>
 					<button class="cu-btn bg-green margin-left" @tap="makesure('确定标记该信息')" v-if="modalname=='DialogModal6'">确定</button>
 					<button class="cu-btn bg-green margin-left" @tap="makesure('确定删除所有')" v-if="modalname=='DialogModal7'">确定</button>
@@ -32,53 +32,67 @@
 </template>
 
 <script>
-	import {isAuthorized} from '@/utils/loginreg.js'
+	import {setUserPhone} from '../apis/index.js'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default{
 		data(){
 			return{
-				iv:'',
-				encryptedData:''
+				modalname:null
 			}
 			
 		},
+		computed:{
+			 ...mapGetters([ 'userInfo']),
+		},
 		props:{
-			modalname:'',
+			// modalname:'',
 			
 		},
-		getPhoneNumber(e){
-			console.log(e)
-			this.iv=e.detail.iv;
-			this.encryptedData=e.detail.encryptedData;
-			
-		},
+		
 		methods:{
+			...mapMutations('user', [
+			  'updateUserInfo'
+			]),
+			...mapActions('user', [
+			  'loginWithUserInfo'
+			]),
+			getUserInfo(evt) {
+			  const {iv, encryptedData,errMsg} = evt.detail;
+			  if (errMsg === 'getUserInfo:ok') {
+				this.loginWithUserInfo({ iv, encryptedData });
+				
+			  }
+			},
 			getPhoneNumber(e){
-				console.log(e)
-				this.iv=e.detail.iv;
-				this.encryptedData=e.detail.encryptedData;
-				let detail={};
-				detail.msg="确认手机授权";
-				detail.iv=this.iv;
-				detail.encryptedData=this.encryptedData
-				console.log(detail)
-				this.$emit("ListenChild",detail)
+				let data={}
+				data.sessionKey=this.userInfo.key;
+				data.iv=e.detail.iv;
+				data.encryptedData=e.detail.encryptedData;
+				setUserPhone(data).then((res)=>{
+					this.userInfo.phone=res.data.phone
+					this.updateUserInfo(this.userInfo)
+				})
 			},
 			hideModal(e) {
-				this.$emit("ListenChild","拒绝授权")
+				this.modalname=null
+			},
+			showModal() {
+				 this.modalname = 'DialogModal1'
+			},
+			showModalPhone() {
+				 this.modalname = 'DialogModal4'
+			},
+			showModalDel(){
+				this.modalname = 'DialogModal2'
 			},
 			makesure(str){
-				console.log(str)
-				if(str){
-					this.$emit("ListenChild",str)
-				}else{
-					this.$emit("ListenChild","点击确认")
-				}
-				
+				this.hideModal()
 			},
-			// makesureTel(){
-				
-				
-			// }
+			delDev(){
+				this.$emit('deldev')
+				this.hideModal()
+			}
+			
 		}
 	}
 </script>

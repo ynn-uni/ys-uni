@@ -1,11 +1,10 @@
 <template>
 	<view class="help">
-		<!-- <view class="title">
-			帮助中心
-		</view> -->
-		<!-- <view class="content">
-			永生仪器售后服务中心，致力于为客户提供及时、专业、高效的设备维修及使用人员培训服务。我们认为公司的品牌竞争力不仅建立在我们提供先进、可靠的产品基础上，而且依赖于我们所提供的及时优质的服务。为此，我们培养了一支优秀可靠的技术服务队伍，完善的培训和实践经验令售后服务工程师实现技能的持续提升，为客户持续提供高品质专业化服务。我们相信，我们的资深售后服务工程师能时刻为身处各地的永生设备保驾护航。
-		</view> -->
+		
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">关于永生</block>
+		</cu-custom>
 		<view class="content">
 			永生仪器是生命科学领域温湿度控制仪器、药品检验解决方案的制造商和供应商。永生仪器自2000年成立以来，一直专注于为制药企业和研究机构提供药品稳定性试验箱、步入式试验室以及药品实验系统的全方位解决方案。
 			早在中国加入WTO，永生仪器率先研发出药品稳定性考察试验仪器，及时填补了国内在药品检验领域实验仪器的空白。因此，永生仪器成为全国首家系统设计药品试验箱的制造商。
@@ -34,7 +33,7 @@
 
 <style lang="scss" scoped>
 	.help{
-		padding: 20upx 34upx;
+		padding: 20upx 0upx;
 		position: fixed;
 		top: 0;
 		bottom: 0;
@@ -48,6 +47,7 @@
 			letter-spacing:1px;
 		}
 		.content{
+			padding: 0 34upx;
 			font-size:30upx;
 			font-weight:400;
 			color:rgba(102,102,102,1);

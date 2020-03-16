@@ -1,36 +1,43 @@
 <template>
-	<view class="repair">
-		<form >
-			<view class="in-group">
-				<view class="text">
-					联系人
+	<view class="rep">
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">添加报修</block>
+		</cu-custom>
+		<view class="repair">
+			<form >
+				<view class="in-group">
+					<view class="text">
+						联系人
+					</view>
+					<input type="text" value="" v-model="name"/>
 				</view>
-				<input type="text" value="" v-model="name"/>
-			</view>
-			<view class="in-group">
-				<view class="text">
-					联系电话
+				<view class="in-group">
+					<view class="text">
+						联系电话
+					</view>
+					<input type="tel" value="" v-model="tel"/>
 				</view>
-				<input type="tel" value="" v-model="tel"/>
-			</view>
-			<view class="in-group">
-				<view class="text">
-					联系地址
+				<view class="in-group">
+					<view class="text">
+						联系地址
+					</view>
+					<input type="text" value="" v-model="address"/>
 				</view>
-				<input type="text" value="" v-model="address"/>
-			</view>
-			<view class="in-group">
-				<view class="text">
-					详细信息
+				<view class="in-group">
+					<view class="text">
+						详细信息
+					</view>
+					<textarea value="" v-model="dis"/>
 				</view>
-				<textarea value="" v-model="dis"/>
-			</view>
-			
-			<view class="btn">
-				<button class="cu-btn" @tap="makesure">提交</button>
-			</view>
-			
-		</form>
+				
+				<view class="btn">
+					<button class="cu-btn sure" @tap="makesure">提交</button>
+				</view>
+				
+			</form>
+		</view>
+		
 	</view>
 </template>
 
@@ -98,8 +105,11 @@
 </script>
 
 <style lang="scss" scoped>
+	.rep{
+		min-height: 100vh;
+	}
 	.repair{
-		padding: 82upx 32upx;
+		padding: 140upx 32upx;
 		position: fixed;
 		top: 0;
 		bottom: 0;
@@ -135,7 +145,7 @@
 				button{
 					width:232upx;
 					height:70upx;
-					background:rgba(234,91,66,1);
+					background:rgba(255,255,255,1) linear-gradient(39deg,rgba(103,130,235,1) 0%,rgba(164,146,248,1) 100%);
 					border-radius:35upx;
 					font-size:28upx;
 					font-weight:400;

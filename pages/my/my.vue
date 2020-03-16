@@ -11,15 +11,15 @@
 		</cu-custom>
 		<view class="bank">
 			<view class="heade-info">
-				<image src="../../static/images/head_03.gif" mode="" v-if="!isLogin"></image>
-				<text v-if="!isLogin">匿名用户</text>
-				<text v-if="!isLogin">电话号码</text>
-				<view  class="head-img" v-if="isLogin" @tap="handelUserInfo">
+				<image src="../../static/images/head_03.gif" mode="" v-if="!token"></image>
+				<text v-if="!token">匿名用户</text>
+				<text v-if="!token">电话号码</text>
+				<view  class="head-img" v-if="token" @tap="handelUserInfo">
 					<open-data type="userAvatarUrl"></open-data>    
 				</view>
 				
-				<open-data v-if="isLogin" type="userNickName" lang="zh_CN" class="nickName"></open-data> 
-				<text v-if="tel">{{tel}}</text>
+				<open-data v-if="token" type="userNickName" lang="zh_CN" class="nickName"></open-data> 
+				<text v-if="token">{{userInfo.phone}}</text>
 			</view>
 			<view class="bg">
 			</view>
@@ -112,7 +112,7 @@
 			
 		</view>
 		
-		<modelre v-on:ListenChild="ShowChild" :modalname="modalName"></modelre>
+		<modelre @ListenChild="hideModel" :modalname="modalName" ref="regist"></modelre>
 	</view>
 </template>
 
@@ -120,28 +120,34 @@
 	// import req from '@/request/request.js'
 	import modelre from '@/components/modelre.vue'
 	import {isAuthorized} from '@/utils/loginreg.js'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
 		data() {
 			return {
 				showInfo:false,
 				modalName:null,
 				isLogin:false,
-				code:'',
-				token:'',
+				// code:'',
+				// token:'',
 				tel:'',
 				touchStartTime: 0, // 触摸开始时间
 				touchEndTime: 0, // 触摸结束时间
 				lastTapTime: 0 // 最后一次单击事件点击发生时间
 			}
 		},
+		computed:{
+			 ...mapGetters(['token', 'userInfo'])
+		},
 		components:{
 			modelre
 		},
 		onShow(){
+			// console.log(this.token)
 			var that=this;
 			this.isLogin=this.$store.state.isLogin;
 			this.tel=this.$store.state.tel;
 			var isLogin=this.$store.state.isLogin;
+			//消息提示
 			if(isLogin){
 				that.req.httpTokenRequest(
 				{url:'/Api/Notice/getNoticeList',method:'GET'}).then((res)=>{
@@ -188,7 +194,6 @@
 			    // 如果两次点击时间在300毫秒内，则认为是双击事件
 			    if (currentTime - lastTapTime > 350) {
 			      // do something 点击事件具体执行那个业务
-				  console.log(path)
 				  if(path=='/pages/my/about/about'||path=='/pages/my/help/help'){
 					  vm.handelHelp(path);
 				  }else{
@@ -200,71 +205,15 @@
 			},
 			handelInfo(path){
 				var that=this
-				if(that.$store.state.isLogin){
+				if(that.token){
 					// 已经登陆
 					console.log("已经登陆")
 					uni.navigateTo({
 						 url: path
 					});
 				}else{
-					// if(that.$store.state.sessionKey){
-					// 	console.log("...")
-					// 	that.showModal()
-					// }
+					that.$refs.regist.showModal()
 					
-					
-					// 已经登陆
-					
-					uni.login({
-					     success(res){
-						 // console.log(res.code);
-						 that.code=res.code
-						 // console.log(data)
-						 that.req.httpRequest({
-							 url:'/Api/User/loginWithWechat',
-							 method:'GET'
-						 },{code:that.code}).then((r)=>{
-							 console.log(r)
-							 var tel=r.data.data.phone;
-							 var email=r.data.data.email;
-							 if(tel){
-							 	 that.$store.state.tel=tel;
-							 }
-							 if(email){
-								 that.$store.state.email=email;
-							 }
-								 that.$store.state.sessionKey=r.data.data.key
-							 
-							 // that.sessionKey=r.data.result.key;
-							 							
-							 if(r.data.status==0){
-							   console.log(r.data.data.token)
-							   uni.setStorage({
-								key:'token',
-								data:r.data.data.token,
-								 success() {
-									that.$store.state.token=r.data.data.token
-									that.$store.state.isLogin=true;
-									that.haveUserInfo=true;
-									that.token=res;
-									if(path){
-										uni.navigateTo({
-											 url: path
-										});
-									}
-									console.log("设置缓存成功")
-								 },
-								 fail() {
-									 console.log('缓存失败了')
-								 }
-							   });
-							 }else{
-								   that.showModal()
-							 }
-						 })
-					  
-					     }
-					   })
 				}
 					
 			},
@@ -278,40 +227,7 @@
 			showModal(num) {
 				 this.modalName = 'DialogModal1'
 			},
-			ShowChild: function (data) {
-				var that=this;
-				console.log("点击弹出框按钮")
-				if(data=='点击确认'){
-					isAuthorized(that.$store.state.sessionKey).then(res=>{
-						console.log(res)
-						if(res=='DialogModal1'){
-							// this.showModal()
-						}else{
-							console.log("token:"+res)
-							// this.haveUserInfo=true
-							uni.setStorage({
-								key:'token',
-								data:res,
-								 success() {
-									 that.$store.state.token=res
-									 that.$store.state.isLogin=true;
-									 that.haveUserInfo=true;
-									 that.token=res;
-									// uni.switchTab({
-									//     url: '/pages/my/my'
-									// });
-									console.log("设置缓存成功")
-								 },
-								 fail() {
-									 console.log('缓存失败了')
-								 }
-							});
-						}
-					})
-				}else{
-					console.log('拒绝授权')
-				}
-				
+			hideModel() {
 			     this.modalName =null
 			},
 			
@@ -323,12 +239,8 @@
 <style lang="scss" scoped>
 	
 	.my{
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		background-color: #fff;
+		min-height: 100vh;
+		background-color: #FFFFFF;
 		overflow: auto;
 		.text{
 			color: #fff;

@@ -32,7 +32,7 @@ uni.getStorage({
 		key: 'token',
 		success: function(ress) {
 			 token = ress.data;
-			console.log("token:"+token)
+			// console.log("token:"+token)
 			},
 	})
 

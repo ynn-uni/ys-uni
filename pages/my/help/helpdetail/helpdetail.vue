@@ -1,5 +1,9 @@
 <template>
 	<view class="help">
+		<cu-custom :isBack="true" bgColor="bg-white">
+			<block slot="backText">返回</block>
+			<block slot="content">故障引导</block>
+		</cu-custom>
 		<!-- <view class="title">
 			帮助中心
 		</view> -->
@@ -37,10 +41,8 @@
 
 <style lang="scss" scoped>
 	.help{
-		padding: 20upx 34upx;
-		position: fixed;
-		top: 0;
-		bottom: 0;
+		padding: 20upx 0upx;
+		min-height: 100vh;
 		background-color: #fff;
 		overflow: auto;
 		.title{
@@ -52,6 +54,7 @@
 			letter-spacing:1px;
 		}
 		.content{
+			padding: 0upx 34upx;
 			.text{
 				font-size:30upx;
 				font-weight:400;

@@ -13,7 +13,7 @@
 				</view>
 			</swiper-item>
 		</swiper> -->
-		<cu-custom >
+		<cu-custom bgColor="bg-e">
 		  <block slot="content">
 			  <view class="text">
 			  	产品列表
@@ -325,7 +325,8 @@
 		
 	.imformation{
 		// background-color: rgba(245,245,245,1);
-		
+		min-height: 100vh;
+		overflow: auto;
 		.card-list{
 			display: flex;
 			flex-direction: column;

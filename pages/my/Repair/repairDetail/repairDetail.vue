@@ -1,5 +1,12 @@
 <template>
 	<view class="repair">
+		<cu-custom :isBack="true" bgColor="#eee">
+			<block slot="backText">返回</block>
+			<block slot="content">报修详情</block>
+		</cu-custom>
+		<view class="rep">
+			
+		
 		<form >
 			<view class="in-group">
 				<view class="text">
@@ -31,6 +38,7 @@
 			</view>
 			
 		</form>
+		</view>
 	</view>
 </template>
 
@@ -65,41 +73,42 @@
 
 <style lang="scss" scoped>
 	.repair{
-		padding: 82upx 32upx;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		width: 100%;
-		background-color: #fff;
-	     form{
-			.in-group{
-				margin-bottom: 40upx;
-				.text{
-					font-size:28upx;
-					font-weight:400;
-					color:rgba(19,41,54,1);
-					line-height:33upx;
+		
+		min-height: 100vh;
+		background-color: #FFFFFF;
+		.rep{
+			padding: 22upx 32upx;
+			form{
+				.in-group{
+					margin-bottom: 40upx;
+					.text{
+						font-size:28upx;
+						font-weight:400;
+						color:rgba(19,41,54,1);
+						line-height:33upx;
+					}
+					/deep/ input{
+						margin-top: 6upx;
+						width:688upx;
+						height:60upx;
+						opacity:0.34;
+						color: #000;
+						border:1px solid rgba(110,116,123,1);
+					}
+					textarea{
+						margin-top: 6upx;
+						width:100%;
+						height:240upx;
+						background:rgba(255,255,255,1);
+						opacity:0.34;
+						border:1px solid rgba(110,116,123,1);
+					}
 				}
-				/deep/ input{
-					margin-top: 6upx;
-					width:688upx;
-					height:60upx;
-					opacity:0.34;
-					color: #000;
-					border:1px solid rgba(110,116,123,1);
-				}
-				textarea{
-					margin-top: 6upx;
-					width:100%;
-					height:240upx;
-					background:rgba(255,255,255,1);
-					opacity:0.34;
-					border:1px solid rgba(110,116,123,1);
-				}
+				
+				
 			}
-			
-			
 		}
+	     
 		
 	}
 </style>

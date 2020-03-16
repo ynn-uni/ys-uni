@@ -1,4 +1,7 @@
 .bg-linear {
-	min-height: 100vh;
-	background:linear-gradient(135deg,rgba(101,0,140,1) 0%,rgba(78,7,186,1) 67%,rgba(19,1,174,1) 100%);
+	background:rgba(255,255,255,1) linear-gradient(39deg,rgba(103,130,235,1) 0%,rgba(164,146,248,1) 100%);
+}
+
+.bg-e{
+	background-color: #f1f1f1;
 }

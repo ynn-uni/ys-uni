@@ -1,136 +1,107 @@
 {
     "pages" : [
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path" : "pages/dev/dev",
-            "style" : {}
-        },
-        {
-            "path" : "pages/my/my",
-            "style" : {}
-        },
-        {
-            "path" : "pages/index/index",
-            "style" : {}
-        },
-        {
-            "path" : "pages/my/historyData/historyData",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "历史数据"
-            }
-        },
-        {
-            "path" : "pages/my/info/info",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "消息中心"
-            }
-        },
+		{
+		    "path" : "pages/my/my",
+		    "style":{
+		    	"navigationBarTextStyle": "white"
+		    }
+		},
+		{
+		    "path" : "pages/dev/dev",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/index/index",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/my/historyData/historyData"
+		   
+		},
+		
+		{
+		    "path" : "pages/my/userinfo/userinfo",
+			"style":{
+				"navigationBarTextStyle": "white"
+			}
+		   
+		},
         {
             "path" : "pages/my/set/userInfo/userInfo",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "个人中心"
-            }
+			"style":{
+				"navigationBarTextStyle": "white"
+			}
+           
+        },
+       
+       
+       
+       
+        {
+            "path" : "pages/my/info/info"
+            
         },
         {
-            "path" : "pages/my/waring/waring",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "历史预警"
-            }
+            "path" : "pages/my/waring/waring"
+            
         },
         {
-            "path" : "pages/my/set/set",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "设置"
-            }
+            "path" : "pages/my/set/set"
+            
+        },
+       
+        {
+            "path" : "pages/my/help/help"
+            
         },
         {
-            "path" : "pages/my/userinfo/userinfo",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "个人中心"
-            }
+            "path" : "pages/index/Remarks/Remarks"
+           
         },
         {
-            "path" : "pages/my/help/help",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "故障引导列表"
-            }
+            "path" : "pages/information/information"
+           
         },
         {
-            "path" : "pages/index/Remarks/Remarks",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "设备备注"
-            }
+            "path" : "pages/my/devlist/devlist"
+            
         },
         {
-            "path" : "pages/information/information",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "产品列表"
-            }
-        },
-        {
-            "path" : "pages/my/devlist/devlist",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "设备列表"
-            }
-        },
-        {
-            "path" : "pages/my/Repair/Repair",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "报修列表"
-            }
+            "path" : "pages/my/Repair/Repair"
+           
         },
         {
             "path" : "pages/information/infodetail/infodetail",
             "style" : {}
         },
         {
-            "path" : "pages/information/product/product",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "产品详情"
-            }
+            "path" : "pages/information/product/product"
+            
         },
         {
-            "path" : "pages/my/about/about",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "关于永生"
-            }
+            "path" : "pages/my/about/about"
+            
         },
         {
-            "path" : "pages/my/help/helpdetail/helpdetail",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "故障引导"
-            }
+            "path" : "pages/my/help/helpdetail/helpdetail"
+            
         },
         {
-            "path" : "pages/my/Repair/repairDetail/repairDetail",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "报修详情"
-            }
+            "path" : "pages/my/Repair/repairDetail/repairDetail"
+           
         },
         {
-            "path" : "pages/my/Repair/postRepair/postRepair",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "添加报修"
-            }
+            "path" : "pages/my/Repair/postRepair/postRepair"
+           
+        }
+        ,{
+            "path" : "pages/login/login",
+            "style" : {}
         }
     ],
     "globalStyle" : {
+		"navigationBarTextStyle": "black",
         "navigationStyle" : "custom"
     },
     "style" : {
@@ -147,7 +118,7 @@
         "fontSize" : "",
         "list" : [
             {
-                "pagePath" : "pages/index/index",
+                "pagePath" : "pages/dev/dev",
                 "iconPath" : "static/images/dev.png",
                 "selectedIconPath" : "static/images/dev-active.png",
                 "text" : "设备"

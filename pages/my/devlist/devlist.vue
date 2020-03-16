@@ -1,9 +1,13 @@
 <template>
 	
 	<view class="devlist">
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">设备列表</block>
+		</cu-custom>
 		<view class="add">
-			<button class="cu-btn round bg-red add-btn" @tap="showModal">
-				<image class="addicon" src="../../../static/images/add.png" mode=""></image>
+			<button class="cu-btn round bg-red add-btn bg-linear" @tap="showModal">
+				<text class="cuIcon-add"></text>
 				添加设备
 			</button>
 			<!-- <button @tap="delDevice()">del</button> -->
@@ -33,7 +37,7 @@
 								</view>
 							</view>
 							<view class="addbtn">
-								<button class="cu-btn round bg-red" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">确认绑定</button>
+								<button class="cu-btn round sure bg-linear" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">确认绑定</button>
 							</view>
 						</form>
 					</view>
@@ -42,7 +46,7 @@
 		</view>
 		<view class="cu-list menu-avatar">
 			
-			<view class="cu-item dl-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in devlist" :key="index"
+			<view class="cu-item dl-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in devList" :key="index"
 			 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd" :data-target="'move-box-' + index" >
 			
 				<view class="info" @tap="devDetail(index)">
@@ -65,13 +69,14 @@
 			</view>
 			
 		</view>
-		<modelre v-on:ListenChild="ShowChild" :modalname="modalName"></modelre>
+		<modelre @deldev="delDev"  ref="adddev"></modelre>
 	</view>
 </template>
 
 <script>
+	import {setUserPhone,addDevice,delDevice} from '../../../apis/index.js'
 	import modelre from '@/components/modelre.vue'
-	// import req from '@/request/request.js'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -89,13 +94,20 @@
 				lastTapTime: 0 // 最后一次单击事件点击发生时间
 			}
 		},
+		computed:{
+			 ...mapGetters([ 'devList','devListMac','userInfo']),
+		},
 		components:{
 			modelre
 		},
-		onLoad(){
+		onShow(){
 			this.getDevList();
 		},
 		methods: {
+		...mapMutations('user',['updateDevListMac']),
+			...mapActions('user', [
+			  'fatchDevListByToken'
+			]),
 			// ListTouch触摸开始
 			ListTouchStart(e) {
 				
@@ -119,20 +131,18 @@
 				this.listTouchDirection = null
 			},
 			showModal() {
-				let tel=this.$store.state.tel;
+				let tel=this.userInfo.phone;
 				console.log(tel)
 				if(tel){
 					this.modalName = 'DialogModal3'
 				}else{
-					console.log("sss")
-					this.modalName = 'DialogModal4'
+					
+					this.$refs.adddev.showModalPhone()
+					
 				}
-				console.log(this.modalName)
 			},
 			hideModal(){
 				this.modalName = null;
-				// this.$emit("ListenChild","I am child.vue")
-				
 			},
 			touchStart(e) {
 				console.log(e.timeStamp)
@@ -163,33 +173,26 @@
 			makesure(){
 				var that=this;
 				if(this.devTitle&&this.devMac&& this.devName && this.devPwd){
-					// uni.showLoading({
-					// 	title:'正在保存设备信息'
-					// })
 					var data={
 						title:this.devTitle,
 						mac: this.devMac,
 						username: this.devName,
 						password:this.devPwd
 					}
-					that.req.httpTokenRequest({
-						url:'/Api/Device/addDevice',
-						method:'GET'
-					},data
-					).then((res)=>{
-						console.log(res)
-						if(res.statusCode==200){
-							that.modalName=null
-							that.devlist.splice(0)
-							that.getDevList();
-							that.$store.state.isHide=false
-							uni.closeSocket({
-								success() {
-									console.log('kkkk',that.$store.state.isHide)
-								}
-							})
+					
+					addDevice(data).then((res)=>{
+						if(res.msg==='添加设备数据成功'){
+							this.fatchDevListByToken()
+							// this.devlist.push(data)
+							this.devTitle=null;
+							this.devMac=null;
+							this.devName=null;
+							this.devPwd=null;
+							this.modalName=null
+							// this.$emit('haslogin')
 						}
 					})
+					
 					
 				}else{
 					uni.showToast({
@@ -202,82 +205,26 @@
 				var that=this;
 				var id=parseInt(id);
 				// 弹出是否删除
-				this.modalName = 'DialogModal2'
+				this.$refs.adddev.showModalDel()
+				// this.modalName = 'DialogModal2'
 				this.delid=id;
 				
 			},
-			ShowChild: function (data) {
-				var that=this;
-				console.log(data)
-				if(data=="拒绝授权"){
-					
-				}else if(data.msg=='确认手机授权'){
-					let sendData={};
-					sendData.sessionKey=that.$store.state.sessionKey;
-					sendData.iv=data.iv;
-					sendData.encryptedData=data.encryptedData;
-					console.log(sendData)
-					that.req.httpTokenRequest({
-						url:'/Api/User/setUserPhone',
-						method:'POST'
-					},JSON.stringify(sendData)
-					).then((res)=>{
-						console.log(res)
-						that.$store.state.tel=res.data.data.phone;
-					})
-				}else if(data=='点击确认'){
-					this.modalName = null
-					console.log("接下来的操作")
-					
-					
-					// for(var i in that.devlist){
-					that.req.httpTokenRequest({
-						url:'/Api/Device/delDevice',
-						method:'GET'
-					},{
-						id:that.delid
-					}).then((res)=>{
-						console.log(res)
-						console.log(res.data.status)
-						if(res.data.status==0){
-							for(var i in that.devlist){
-								if(that.devlist[i].id==that.delid){
-									that.devlist.splice(i,1)
-								}
-							}
-							that.$store.state.isHide=false
-							console.log(that.devlist)
-							uni.closeSocket()
-						}
-					})
-				// }
-				}
-				this.modalName = null
-			},
-			devDetail(index){
+			delDev(){
 				
-				this.$store.state.devIndex=index;
+				delDevice({id:this.delid}).then((res)=>{
+					this.fatchDevListByToken()
+				})
+			},
+			
+			devDetail(index){
+				this.updateDevListMac(this.devList[index].mac)
 				uni.reLaunch({
-					url:'/pages/index/index'
+					url:'/pages/dev/dev'
 				})
 			},
 			getDevList(){
-				this.req.httpTokenRequest({
-					url:'/Api/Device/getDeviceList',
-					method:'GET'
-				}
-				).then((res)=>{
-					console.log(res)
-					if(res.data.data){
-						// this.devlist=res.data.data.reverse();
-						this.devlist=res.data.data;
-					}
-					
-					
-					// if(res.statusCode==200){
-					// 	this.$emit("ListenChild","I am nodev")
-					// }
-				})
+				this.devlist=this.devList
 			}
 		}
 	}
@@ -296,7 +243,6 @@
 				display: flex;
 				justify-content: space-between;
 				width:190upx;
-				background:linear-gradient(137deg,rgba(234,93,67,1) 0%,rgba(231,67,53,1) 100%);
 				border-radius:33upx;
 				font-size:26upx;
 				font-weight:500;
@@ -344,6 +290,9 @@
 									display: flex;
 									justify-content: center;
 									margin-top: 28upx;
+									.sure{
+										color: #fff;
+										}
 								}
 							}
 					}	

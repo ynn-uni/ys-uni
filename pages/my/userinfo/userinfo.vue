@@ -1,5 +1,10 @@
 <template>
 	<view class="my">
+		<image class="index-bg" src="../../../static/images/my-linear.png" />
+		<cu-custom :isBack="true" class="text-white">
+			<block slot="backText">返回</block>
+			<block slot="content">个人中心</block>
+		</cu-custom>
 		<view class="bank">
 			<view class="heade-info">
 				
@@ -56,6 +61,8 @@
 </template>
 
 <script>
+	import {setUserPhoneOrEmail} from '../../../apis/index.js'
+	import { mapGetters, mapMutations } from 'vuex';
 	export default {
 		data(){
 			return{
@@ -63,11 +70,15 @@
 				email:''
 			}
 		},
+		computed:{
+			 ...mapGetters([ 'userInfo'])
+		},
 		onShow() {
-			this.tel=this.$store.state.tel;
-			this.email=this.$store.state.email;
+			this.tel=this.userInfo.phone;
+			this.email=this.userInfo.email;
 		},
 		methods:{
+			...mapMutations('user',['updateUserInfo']),
 			handelClear(str){
 				if(str=='tel'){
 					this.tel=''
@@ -101,22 +112,14 @@
 					this.email='';
 					return false;
 				}else{
-					that.req.httpTokenRequest({
-						url:'/Api/User/setUserPhoneOrEmail',
-						method:'GET'
-					},{
-						phone:this.tel,
-						email:this.email
-					}
-					).then((res)=>{
-						console.log(res)
-						// this.switchB = e.detail.value
+					setUserPhoneOrEmail({phone:this.tel,email:this.email}).then((res)=>{
 						uni.showToast({
 							title:'修改成功',
 							icon:'none'
 						})
-						that.$store.state.tel=this.tel;
-						that.$store.state.email=this.email;
+						this.userInfo.phone=this.tel
+						this.userInfo.email=this.email
+						this.updateUserInfo(this.userInfo)
 					})
 				}
 			}
@@ -126,15 +129,17 @@
 
 <style lang="scss" scoped>
 	.my{
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		min-height: 100vh;
 		background-color: #fff;
+		.index-bg {
+		  position: absolute;
+		  top: 0;
+		  width: 100%;
+		  height: 430upx;
+		}
 		.bank{
 			height: 330upx;
-			background:#ea302f;
+			// background:#ea302f;
 			position: relative;
 			.heade-info{
 				display: flex;
@@ -151,7 +156,7 @@
 					width:120upx;
 					height:120upx;
 					border-radius: 50%;
-					border: 1px solid #ea302f;
+					// border: 1px solid #ea302f;
 					overflow: hidden;
 				}
 				text,.nickName{
@@ -166,7 +171,7 @@
 			.bg{
 				width: 100%;
 				height: 98upx;
-				background-image: url('../../../static/images/head_06.gif');
+				// background-image: url('../../../static/images/head_06.gif');
 				background-repeat: no-repeat;
 				background-size: cover;
 				position: absolute;
@@ -216,7 +221,7 @@
 		.sure{
 			width:232upx;
 			line-height:70upx;
-			background:rgba(234,91,66,1);
+			background:rgba(255,255,255,1) linear-gradient(39deg,rgba(103,130,235,1) 0%,rgba(164,146,248,1) 100%);
 			border-radius:35upx;
 			font-size:28upx;
 			font-weight:400;

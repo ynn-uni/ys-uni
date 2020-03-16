@@ -1,57 +1,14 @@
 <template>
 	<view class="infodetail">
-		<!-- <view class="info-detail">
-			
 		
-		<view class="title">
-			{{detailData.title}}
-		</view>
-		
-		<image class="cover" :src="detailData.cover" mode=""></image>
-		<view class="content">
-			{{detailData.brief}}
-		</view>
-		</view> -->
-		<!-- <image src='' bindload="imageLoad" ></image> -->
-		
+		<cu-custom :isBack="true" bgColor="bg-e" >
+			<block slot="backText">返回</block>
+			<block slot="content">产品详情</block>
+		</cu-custom>
 		<view class="img-box" :style="{width:imgwidth,height:imgheight}">
 			<image class="img-content" :src="detailData.content"  @load="imageLoad" ></image>
 		</view>
-		<!-- <view class="feature">
-			<view class="fe-title">
-				<view class="fe-line"></view>
-				<text>产品特点</text>
-				<view class="fe-line"></view>
-			</view>
-			<view class="icon-list">
-				<view class="icon-item">
-					<image src="../../st../../../static/images/fe2.png" mode=""></image>
-					<text>产品特点1</text>
-				</view>
-				<view class="icon-item">
-					<image src="../../st../../../static/images/fe2.png" mode=""></image>
-					<text>产品特点2</text>
-				</view>
-				<view class="icon-item">
-					<image src="../../st../../../static/images/fe3.png" mode=""></image>
-					<text>产品特点3</text>
-				</view>
-				<view class="icon-item">
-					<image src="../../st../../../static/images/fe4.png" mode=""></image>
-					<text>产品特点4</text>
-				</view>
-			</view>
-			<view class="fe-title">
-				<view class="fe-line"></view>
-				<text>联系我们</text>
-				<view class="fe-line"></view>
-			</view>
-			<image class="connect" src="../../../static/images/product2.png" mode=""></image>
-			<view class="tel">
-				<image src="../../../static/images/tel01.png" mode=""></image>
-				<text>400-457-8754</text>
-			</view>
-		</view> -->
+		
 	</view>
 </template>
 
@@ -66,12 +23,7 @@
 				id:''
 			}
 		},
-		// imageLoad: function(e) {
-		//     var $width = e.detail.width; //获取图片真实宽度
-		//     var $height = e.detail.height; //获取图片真实高度
-		// 	console.log($height)
-		   
-		//   },
+		
 		
 		
 		onLoad(option){
@@ -105,6 +57,7 @@
 
 <style lang="scss" scoped>
 	.infodetail{
+		min-height: 100vh;
 		background: #fff;
 		.info-detail{
 			display: flex;

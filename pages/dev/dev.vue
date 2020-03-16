@@ -1,32 +1,50 @@
 <template>
 	<view class="dev bg-height">
-		<cu-custom  >
+		<cu-custom  bgColor="bg-white">
 			<block slot="content">永生仪器</block>
 		</cu-custom>
-		<view class="content">
-			<showDevData :data="tData" v-if="TabCur===0"></showDevData>
-			<showDevData :data="hData" v-if="TabCur===1"></showDevData>
-			<scroll-view scroll-x class="bg-white nav margin-tb">
-				<view class="flex text-center tablist">
-					<view class="cu-item flex-sub" :class="index==TabCur?'activeTab':''" v-for="(item,index) in tabList" :key="index" @tap="tabSelect" :data-id="index">
-						<view :class="'iconfont '+item.icon"></view>
-						{{item.name}}
+		<button open-type="openSetting" bindopensetting="callback">打开设置页</button>
+		<noLogin v-if="!isLogin" @haslogin="handelLogin"></noLogin>
+		<!-- <noLogin v-if="!haveDev"></noLogin> -->
+		<view v-if="isLogin" class="dev-content animation-slide-right">
+			
+		
+			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
+				<button class="cu-btn changedev text-center">
+					{{devList[index].title}}
+				</button>
+			</picker>
+			<view class="content">
+				<showDevData :datas="tData" v-if="TabCur===0"></showDevData>
+				<showDevData :datas="hData" v-if="TabCur===1"></showDevData>
+				<showWaringData v-if="TabCur===2"></showWaringData>
+				<showChartLine v-if="TabCur===3"></showChartLine>
+				<scroll-view scroll-x class="bg-white nav margin-tb">
+					<view class="flex text-center tablist">
+						<view class="cu-item flex-sub" :class="index==TabCur?'activeTab':''" v-for="(item,index) in tabList" :key="index" @tap="tabSelect" :data-id="index">
+							<view :class="'iconfont '+item.icon"></view>
+							{{item.name}}
+						</view>
 					</view>
-				</view>
-			</scroll-view>
+				</scroll-view>
+			</view>
 		</view>
-		<button class="cu-btn changedev text-center">
-			永生仪器BH20190001
-		</button>
 		
 	</view>
 </template>
 
 <script>
 	import showDevData  from './components/showDevData.vue'
+	import showWaringData  from './components/showWaringData.vue'
+	import showChartLine  from './components/showChartLine.vue'
+	import noLogin  from '@/components/noLogin.vue'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
 		data() {
 			return {
+				index:0,
+				isLogin:false,
+				haveDev:false,
 				TabCur: 0,
 				scrollLeft: 0,
 				tabIndex:0,
@@ -50,29 +68,77 @@
 					
 				],
 				tData: {
-					out:40,
-					real:0.29,
-					set:60,
 					realname:'实时温度',
 					setname:'设定温度'
 				},
 				hData: {
-					out:30,
-					real:0.59,
-					set:50,
 					realname:'实时湿度',
 					setname:'设定湿度'
 				}
 			};
 		},
 		components: {
-			showDevData
+			showDevData,
+			showWaringData,
+			showChartLine,
+			noLogin
 		},
+		computed:{
+			 ...mapGetters(['token', 'devList','devListMac','userInfo']),
+			 picker(){
+				 let list=[]
+				 this.devList.forEach((val)=>{
+					 list.push(val.title)
+				 })
+				 return list;
+			 }
+			
+		},
+		onLoad() {
+			this.initWebsocket().then(instance => {
+				// instance.onopen=evt=>{}
+			  instance.onopen = evt => {
+			    instance.send({mac:this.devListMac})
+			  };
+			   
+			});
+		},
+		 onShow() {
+			// setTimeout(()=>{
+				this.checkUserLogin()
+			// },2000)
+		  this.devList.forEach((val,index)=>{
+				 if(val.mac==this.devListMac){
+					 this.index=index
+				 }else{
+					 this.index=0
+				 }
+		  })
+		 },
 		methods: {
+			...mapActions('dev', ['initWebsocket', 'closeWebsocket']),
+			...mapMutations('user', ['updateDevListMac']),
+			...mapActions('user', [
+			  'fatchDevListByToken'
+			]),
+			checkUserLogin(data) {
+				if(this.token&&this.devList.length>0){
+					 this.isLogin=true
+				 }else{
+					this.isLogin=false	
+				 }
+			},
 			tabSelect(e) {
-				console.log(e)
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			PickerChange(e) {//选择设备
+				this.index = e.detail.value//index为选择序列下标
+				this.updateDevListMac(this.devList[this.index].mac)
+				console.log(this.index)
+			},
+			handelLogin(){
+				this.isLogin=true
 			}
 		}
 	}
@@ -82,8 +148,10 @@
 	.dev{
 		min-height: 100vh;
 		background-color: #fff;
+		overflow: auto;
+		// padding-bottom: 100upx;
 		.tablist{
-			padding: 30upx 20upx;
+			padding: 25upx 20upx;
 			.cu-item{
 				// margin: 10upx 0;
 				display: flex;
@@ -121,6 +189,8 @@
 			color:rgba(51,51,51,1);
 			line-height:70upx;
 			letter-spacing:2upx;
+			margin-top: 20upx;
+			margin-bottom: 20upx;
 		}
 		
 	}

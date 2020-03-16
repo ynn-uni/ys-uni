@@ -1,5 +1,6 @@
 <template>
 	<view class="infodetail">
+		
 		<view class="title">
 			{{detailData.title}}
 		</view>

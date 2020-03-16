@@ -1,9 +1,13 @@
 <template>
 	
 	<view class="repair">
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">报修列表</block>
+		</cu-custom>
 	<view class="add">
-		<button class="cu-btn round bg-red add-btn" @tap="handelRepair">
-			<image class="addicon" src="../../../static/images/add.png" mode=""></image>
+		<button class="cu-btn round  add-btn" @tap="handelRepair">
+			<text class="cuIcon-add"></text>
 			添加报修
 		</button>
 		<!-- <button @tap="delDevice()">del</button> -->
@@ -48,6 +52,7 @@
 </template>
 
 <script>
+	import {getRepairList} from '../../../apis/index.js'
 	export default {
 		data() {
 			return {
@@ -58,18 +63,16 @@
 			}
 		},
 		onShow() {
-			this.getRepairList(this.page,this.size)
+			console.log(',,')
+			this.getmyRepairList(this.page,this.size)
 		},
 		methods: {
-			getRepairList(page,size){
+			getmyRepairList(page,size){
 				var that=this;
-				that.req.httpTokenRequest(
-				{url:'/Api/Repair/getRepairList',method:'GET'},
-				{page:page,size:size}).then((res)=>{
-					
-					that.repairList=res.data.data.data;
-					console.log(that.repairList)
+				getRepairList({page,size}).then((res)=>{
+					that.repairList=res.data.data;
 				})
+				
 			},
 			handelDetail(data){
 				uni.navigateTo({
@@ -98,7 +101,7 @@
 				display: flex;
 				justify-content: space-between;
 				width:190upx;
-				background:linear-gradient(137deg,rgba(234,93,67,1) 0%,rgba(231,67,53,1) 100%);
+				background:rgba(255,255,255,1) linear-gradient(39deg,rgba(103,130,235,1) 0%,rgba(164,146,248,1) 100%);
 				border-radius:33upx;
 				font-size:26upx;
 				font-weight:500;

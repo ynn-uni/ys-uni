@@ -1,19 +1,17 @@
 <template>
 	<view class="historyData">
-		<!-- <view class="classify">
-			<text>统计分类：</text>
-			<text class="classify-item" :class="classifyType=='year'?'ci-active':''" @tap="handelType('year')">按年统计</text>
-			<text class="classify-item" :class="classifyType=='month'?'ci-active':''" @tap="handelType('month')">按月统计</text>
-		    <text class="classify-item" :class="classifyType=='day'?'ci-active':''" @tap="handelType('day')">按日统计</text>
-			
-		</view> -->
+		<cu-custom :isBack="true" bgColor="bg-e">
+			<block slot="backText">返回</block>
+			<block slot="content">历史数据</block>
+		</cu-custom>
+		
+		
 		<view class="pick">
-			<!-- <view class="line">
-				
-			</view> -->
+			
+			
 			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
 				<view class="picker">
-					{{devTitle}}
+					{{devList[index].title}}
 					<text class="cuIcon-triangledownfill arrow-bot"></text>
 				</view>
 				
@@ -24,57 +22,24 @@
 					<text class="cuIcon-triangledownfill arrow-bot"></text>
 				</view>
 			</picker>
-			<!-- <view class="line">
-				
-			</view> -->
+			
 		</view>
-		<!-- <view class="dev">
-			选择设备:
-			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
-				<view class="devTitle">
-					{{devTitle}}
-				</view>
-				
-			</picker>
-		</view> -->
 		
-		<!-- <view class="choosedata">
-			<picker mode="date" :value="startDate" start="2015-09-01" end="2020-09-01" @change="startDateChange" fields="day">
-				<view class="picker">
-					{{startDate}}
-				</view>
-			</picker>
-			
-			至
-			<picker mode="date" :value="endDate" :start="startDate" end="2020-09-01" @change="endDateChange" fields="day">
-				<view class="picker">
-					{{endDate}}
-				</view>
-			</picker>
-			<text @tap="handelDate">
-				确定
-			</text>
-			
-			<view class="cuIcon-delete del" @tap="delDate">
-				
-			</view>
-			
-			
-		</view> -->
+		
 		<view class="charts" v-show="!noData">
 			<canvas canvas-id="canvasArea1" id="canvasArea1" class="charts"  @touchstart="touchLineA" disable-scroll=true @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
 		<view class="bottom" v-show="noData">
 			该设备该时间段无数据
 		</view>
-		<!-- <Chart :startdate='startDate' :enddate='endDate' :cWidth='cWidth' :cHeight='cHeight'></Chart> -->
 		
 	</view>
 </template>
 
 <script>
 	import uCharts from '@/components/u-charts/u-charts.js';
-	// import Chart from '@/components/chart.vue'
+	import {getDataList} from '../../../apis/index.js'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	var _self;
 	var canvaArea=null;
 	export default {
@@ -83,8 +48,8 @@
 				noData:false,
 				devTitle:'',
 				devlist:[],
-				index: null,//设备索引
-				picker: [],//替换设备下弹框信息列表
+				index: 0,//设备索引
+				// picker: [],//替换设备下弹框信息列表
 				classifyType:'year',
 				showDate:'',
 				startDate: '开始时间',
@@ -100,14 +65,18 @@
 				{name:'输出湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
 			}
 		},
-		
+		computed:{
+			 ...mapGetters([ 'devList','devListMac','userInfo']),
+			 picker(){
+				 let list=[];
+				 this.devList.forEach((val)=>{
+					 list.push(val.title)
+				 })
+				 return list
+			 }
+		},
 		mounted() {
-			var shshmyDate = new Date();
-			console.log(shshmyDate)
-			this.showDate=shshmyDate.getFullYear()+'年'+(shshmyDate.getMonth()+1)+'月'+shshmyDate.getDate()+'日';
-			this.startDate=shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()+' 00:00:00'
-			this.endDate =shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()+' 23:59:59'
-			this.end=this.endDate;
+			
 			 _self=this;
 			//#ifdef MP-ALIPAY
 			uni.getSystemInfo({
@@ -124,49 +93,37 @@
 			this.cWidth=uni.upx2px(740);
 			this.cHeight=uni.upx2px(800);
 			
-			var that=this;
-			if(that.$store.state.devIndex!='*'){
-				that.index=that.$store.state.devIndex;
-			}else{
-				that.index=0;
-			}
-			that.req.httpTokenRequest({
-				url:'/Api/Device/getDeviceList',
-				method:'GET'
-			}).then((res)=>{ 
-				 console.log(res)
-				var devlist=res.data.data;
-				that.devlist=devlist;
-				that.picker.splice(0)
-				for(var i in devlist){
-					that.picker.push(devlist[i].title)
-				}
-				console.log(that.picker)
-				that.devTitle=that.picker[that.index]
-				that.getHistoryData(that.startDate,that.endDate,devlist[that.index].mac);
-			})
+			this.initTime()
+			
+			this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
+			
 		},
 		methods: {
+			initTime(){
+				var shshmyDate = new Date();
+				this.showDate=shshmyDate.getFullYear()+'年'+(shshmyDate.getMonth()+1)+'月'+shshmyDate.getDate()+'日';
+				this.startDate=shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()+' 00:00:00'
+				this.endDate =shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()+' 23:59:59'
+				this.end=this.endDate;
+			},
 			getHistoryData(start,end,mac){
 				uni.showLoading()
 				var that=this;
-				that.req.httpTokenRequest(
-				{url:'/Api/Data/getDataList',method:'GET'},
-				{start:start,end:end,mac:mac}).then((res)=>{
+				getDataList({start:start,end:end,mac:mac}).then((res)=>{
 					console.log(res)
-					if(res.data.data&&res.data.data.length>0){
+					if(res.data&&res.data.length>0){
 						that.noData=false;
 						that.Area.categories.splice(0);
 						that.Area.series[0].data.splice(0);
 						that.Area.series[1].data.splice(0);
 						that.Area.series[2].data.splice(0);
 						that.Area.series[3].data.splice(0);
-						for(var i in res.data.data){
+						for(var i in res.data){
 							that.Area.categories.push(i);
-							that.Area.series[0].data.push(Math.round((res.data.data[i].ta)*10)/10);
-							that.Area.series[1].data.push(res.data.data[i].to);
-							that.Area.series[2].data.push(Math.round((res.data.data[i].ha)*10)/10);
-							that.Area.series[3].data.push(res.data.data[i].ho);
+							that.Area.series[0].data.push(Math.round((res.data[i].ta)*10)/10);
+							that.Area.series[1].data.push(res.data[i].to);
+							that.Area.series[2].data.push(Math.round((res.data[i].ha)*10)/10);
+							that.Area.series[3].data.push(res.data[i].ho);
 						}
 						that.showArea('canvasArea1',this.Area);
 					}else{
@@ -175,28 +132,20 @@
 					
 					uni.hideLoading()
 				})
+				
 			},
 			PickerChange(e) {//选择设备
-			var that=this;
+				var that=this;
 				this.index = e.detail.value//index为选择序列下标
-				that.getHistoryData(that.startDate,that.endDate,that.devlist[that.index].mac);
+				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac);
 			},
 			delDate(){
 				this.startDate='开始时间'
 				this.endDate='结束时间'
 			},
-			handelDate(){
-				console.log('提交日期',this.startDate,this.endDate)
-			},
-			toggleTab(item, index) {
-			        this.$refs.dateTime.show();  
-					
-			    }, 
-			 onConfirm(e) {
-			            console.log(e.selectRes);
-						this.startTime=e.selectRes;
-						this.endTime=this.startTime;
-			        },
+
+
+			
 			startDateChange(e) {
 				var that=this;
 				console.log(e.detail.value)
@@ -207,31 +156,12 @@
 				
 				this.startDate = e.detail.value+' 00:00:00'
 				this.endDate =e.detail.value+' 23:59:59'
-				that.getHistoryData(that.startDate,that.endDate,that.devlist[that.index].mac);
+				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac);
 			},
 			endDateChange(e) {
 				this.endDate = e.detail.value
 			},
-			handelType(str){
-				this.classifyType=str;
-				console.log(str)
-				var shshmyDate = new Date();
-				
-				
-				if(str=='year'){
-					this.showDate=shshmyDate.getFullYear()+'年';
-					this.startDate=shshmyDate.getFullYear()
-					this.endDate =this.startDate
-				}else if(str=='month'){
-					this.showDate=shshmyDate.getFullYear()+'年'+(shshmyDate.getMonth()+1)+'月';
-					this.startDate=shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)
-					this.endDate =this.startDate
-				}else if(str=='day'){
-					this.showDate=shshmyDate.getFullYear()+'年'+(shshmyDate.getMonth()+1)+'月'+shshmyDate.getDate()+'日';
-					this.startDate=shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()
-					this.endDate =this.startDate
-				}
-			},
+			
 			showArea(canvasId,chartData){//绘制图表
 				
 				canvaArea=new uCharts({
@@ -299,23 +229,7 @@
 				});
 				
 			},
-			// touchArea(e) {
-			// 	console.log("0")
-			// 	// canvaArea.touchLegend(e);
-			// 	var i=0;
-			// 	canvaArea.showToolTip(e, {
-			// 		format: function (item, category) {
-			// 			var str='';
-			// 			if(i==0||i==1){
-			// 				str='℃'
-			// 			}else{
-			// 				str='%'
-			// 			}
-			// 			i++
-			// 			return item.name + ':' + item.data +str
-			// 		}
-			// 	});
-			// },
+			
 			touchLineA(e){
 				canvaArea.scrollStart(e);
 			},
@@ -338,11 +252,8 @@
 
 <style scoped lang="scss">
 	.historyData{
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		width: 100%;
-		background-color: #fff;
+		min-height: 100vh;
+		background-color: #FFFFFF;
 		.classify{
 			padding: 0 20upx;
 			display: flex;
@@ -378,6 +289,8 @@
 			justify-content: space-between;
 			margin-top: 20upx;
 			padding: 0 40upx;
+			position: relative;
+			z-index: 1000;
 			.picker{
 				display: flex;
 				align-items: center;

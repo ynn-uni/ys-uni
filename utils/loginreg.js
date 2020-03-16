@@ -23,10 +23,7 @@ export const isAuthorized=(code)=>{
 							 data.encryptedData=res.encryptedData;
 							 data.iv=res.iv;
 							 // 获取授权后向后台发送code
-								//  getPhoneNumber().then(res=>{
-								// 	console.log(res);
-								// 	resolve(res);
-								// })
+								
 								console.log(data);
 								req.httpRequest({
 									url:'/Api/User/registerWithWechat',
@@ -35,17 +32,7 @@ export const isAuthorized=(code)=>{
 									console.log(r)
 										resolve(r.data.data.token);
 								})
-								// uni.request({
-								// 	 url: 'http://192.168.1.65/Api/User/registerWithWechat',
-									
-								// 	 method:'POST',
-								// 	 data: data,
-								// 	  success(r) {
-								// 			console.log(r)
-										
-								// 				resolve(r.data.result.token);						
-								// 	  }
-								// })
+								
 						   }
 						 })
 						 

@@ -1,13 +1,12 @@
 <template>
 	<view class="waring">
-		<!-- <view class="classify">
-			<text>统计分类：</text>
-			<text class="classify-item ci-active" @tap="handelType('year')">按年统计</text>
-			<text class="classify-item" @tap="handelType('month')">按月统计</text>
-		    <text class="classify-item" @tap="handelType('data')">按日统计</text>
-		</view> -->
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">历史预警</block>
+		</cu-custom>
+		
 		<view class="choosedata">
-			<!-- <text>选择时间：</text> -->
+			
 			<picker mode="date" :value="startDate" start="2015-09-01" end="2050-12-31" @change="startDateChange" fields="day">
 				<view class="picker">
 					<text class="cuIcon-calendar icon-time"></text>
@@ -24,9 +23,7 @@
 					{{endDate}}
 				</view>
 			</picker>
-			<!-- <text @tap="handelDate">
-				确定
-			</text> -->
+			
 			
 			<view class="cuIcon-close del" @tap="delDate">
 				
@@ -83,14 +80,7 @@
 			this.getInfoList(this.page,this.size,'','');
 		},
 		mounted() {
-			// var shshmyDate = new Date();
-			// let year=shshmyDate.getFullYear()
-			// let month=(shshmyDate.getMonth()+1);
-			// month=month>10?month:'0'+month;
-			// let date=shshmyDate.getDate();
-			// date=date>10?date:'0'+date
-			// this.startDate=year+'-'+month+'-'+date
-			// this.endDate=this.startDate
+			
 			this.getInfoList(1,10);
 		},
 		methods: {
@@ -133,14 +123,9 @@
 					var data=res.data.data.data
 					if(data&&data.length>0){
 						var newData=[];
-						// console.log(data)
+						
 						for(var i in data){
-							// var date='';
-							// date=data[i].time.split(' ')[0];
-							// var time=data[i].time.split(' ')[1];
-							// var arr=date.split('-');
-							// var datetime=arr[0]+'年'+arr[1]+'月'+arr[2]+'日'
-							//status=1未读
+							
 							newData[i]={contentl:data[i].content,time:data[i].time,status:data[i].status,id:data[i].id},
 							that.isChecked[i]=false
 						}

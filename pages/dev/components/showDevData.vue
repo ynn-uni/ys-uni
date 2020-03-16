@@ -12,7 +12,7 @@
 			<view class="text margin-lr">
 				50%
 				<view class="name">
-					设定温度
+					{{datas.setname}}
 				</view>
 			</view>
 			
@@ -25,7 +25,7 @@
 		<view class="precent flex margin-top justify-center align-center">
 			<view class="margin-right-xs out">输出</view>
 			<view class="cu-progress round bg-bgc">
-				<view class="bg-percent" :style="[{ width:'80%'}]"></view>
+				<view class="bg-percent" :style="[{ width:width||'0%'}]"></view>
 			</view>
 			<view class="margin-left-xs">80%</view>
 		</view>
@@ -43,6 +43,7 @@
 	export default {
 		data() {
 			return {
+				width:'20%',
 				cWidth3:'',//圆弧进度图
 				cHeight3:'',//圆弧进度图
 				arcbarWidth:'',//圆弧进度图，进度条宽度,此设置可使各端宽度一致
@@ -66,22 +67,15 @@
 			}
 		},
 		props:{
-			data:{
+			datas:{
 				type:Object,
 				default:()=>{}
 			}
 		},
-		computed:{
-			chartdata(){
-				this.chartData.series[0].data=this.data.real
-				this.chartData.series[0].name=this.data.relname
-				return this.chartData;
-			}
-		},
-		components: {
-			cmdCircle
-		},
+		
+		
 		mounted() {
+			this.initdata()
 			// console.log(this.data)
 			// this.chartData.series[0].data=this.data.real
 			// this.chartData.series[0].name=this.data.realname
@@ -100,10 +94,14 @@
 			this.cWidth3=uni.upx2px(600);//这里要与样式的宽高对应
 			this.cHeight3=uni.upx2px(500);//这里要与样式的宽高对应
 			this.arcbarWidth=uni.upx2px(38);
-			this.showArcbar("canvasGauge",this.chartdata)
+			this.showArcbar("canvasGauge",this.chartData)
 		},
 		
 		methods: {
+			initdata(){
+				this.chartData.series[0].name=this.datas.realname
+				this.chartData.series[0].data=0.2
+			},
 			showArcbar(canvasId,chartData){
 				canvaArcbar1=new uCharts({
 					$this:_self,
@@ -143,7 +141,8 @@
 
 <style lang="scss" scoped>
 	.showdev{
-		margin-top: 40upx;
+		// margin-top: 40upx;
+		height: 690upx;
 		.qiun-columns{
 			.qiun-charts {
 				width: 600upx;

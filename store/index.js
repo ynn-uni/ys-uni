@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import getters from './getters';
+import dev from './modules/dev';
+import user from './modules/user';
+
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
 		isLogin:false,//是否登录
 		haveDev:'',
 		loginStatu:true,//登录状态
-		token:'',
+		// token:'',
 		devIndex:'*',//设备索引
 		oldIndex:'',//上一个设备索引
 		devMac:'',//设备MAC
@@ -22,7 +26,10 @@ const store = new Vuex.Store({
 		// realData:{},
 		// waringInfo:[]
 	},
-    mutations: {},
-    actions: {}
+   modules: {
+	 dev,
+	 user
+   },
+   getters
 })
 export default store

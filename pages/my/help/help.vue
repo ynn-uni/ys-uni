@@ -1,7 +1,10 @@
 <template>
 	
 	<view class="devlist">
-	
+	<cu-custom :isBack="true">
+		<block slot="backText">返回</block>
+		<block slot="content">故障引导列表</block>
+	</cu-custom>
 		<view class=" menu-avatar cu-list">
 			
 			<view class=" dl-item" v-for="(item,index) in data" :key='index' @tap="handelDetail">

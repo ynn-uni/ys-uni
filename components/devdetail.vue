@@ -171,7 +171,7 @@
 				index: null,//设备索引
 				picker: [],//替换设备下弹框信息列表
 				// isActive:true,//温湿度图表切换标志
-				Area:{categories:[],series:[{name:'实时温度',data:[]},{name:'输出温度',data:[]},{name:'实时湿度',data:[]},{name:'输出湿度',data:[]}]},//图表数据对象
+				Area:{categories:[1,2,3],series:[{name:'实时温度',data:[10,20,50]},{name:'输出温度',data:[30,40,30]},{name:'实时湿度',data:[50,60,60]},{name:'输出湿度',data:[70,80,10]}]},//图表数据对象
 				AreaH:{categories:[],series:[{name:'实时湿度',data:[]},{name:'输出湿度',data:[]}]},
 				limit:0,//设置重连次数（断开后超过一定次数不再重连每次间隔5秒）
 				heartCheck:heartcheck,//心跳链接对象,
@@ -193,7 +193,7 @@
 			_self=this;
 			var that=this;
 			
-			uni.showLoading()
+			// uni.showLoading()
 				
 				
 				//#ifdef MP-ALIPAY
@@ -210,7 +210,7 @@
 				//#endif
 				this.cWidth=uni.upx2px(750);
 				this.cHeight=uni.upx2px(600);
-				
+				// this.showArea("canvasArea1",that.Area);
 				
 				console.log('devdetail-monted');
 				console.log(that.$store.state.token);

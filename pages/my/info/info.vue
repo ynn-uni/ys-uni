@@ -1,5 +1,9 @@
 <template>
 	<view class="info">
+		<cu-custom :isBack="true">
+			<block slot="backText">返回</block>
+			<block slot="content">消息中心</block>
+		</cu-custom>
 		<!-- <view class="notice" >
 			<view class="notice-item" @tap="handelAllInfoStatu">
 				<view class="cuIcon-notice">

@@ -1,5 +1,9 @@
 <template>
 	<view class="set">
+		<cu-custom :isBack="true" bgColor="bg-e">
+			<block slot="backText">返回</block>
+			<block slot="content">设置</block>
+		</cu-custom>
 		<view class="cu-form-group"  @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd" >
 			<view class="cu-left">
 				<view class="title">个人中心</view>
@@ -28,6 +32,8 @@
 </template>
 
 <script>
+	import {getUserReceives,setUserReceives} from '../../../apis/index.js'
+	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -42,14 +48,14 @@
 				lastTapTime: 0 // 最后一次单击事件点击发生时间
 			}
 		},
+		computed:{
+			 ...mapGetters([ 'userInfo'])
+		},
 		onShow() {
-			// let tel=this.$store.state.tel;
-			// if(tel){
-			// 	this.switchA=true;
-			// }
+			
 			let that=this;
-			let tel=this.$store.state.tel;
-			let email=this.$store.state.email;
+			let tel=this.userInfo.phone;
+			let email=this.userInfo.email;
 			console.log(tel,email)
 			if(tel){
 				this.haveTel=false;
@@ -58,17 +64,13 @@
 				this.haveEmail=false;
 			}
 			//获取并设置用户状态信息
-			this.req.httpTokenRequest({
-				url:'/Api/User/getUserReceives',
-				method:'GET'
-			}).then((res)=>{
-				console.log(res.data.data)
-				that.telstatus=res.data.data.s1
-				that.emailstatus=res.data.data.s2
-				that.switchA=res.data.data.s1==1?true:false;
-				that.switchB=res.data.data.s2==1?true:false;
-				
+			getUserReceives().then((res)=>{
+				that.telstatus=res.data.s1
+				that.emailstatus=res.data.s2
+				that.switchA=res.data.s1==1?true:false;
+				that.switchB=res.data.s2==1?true:false;
 			})
+			
 		},
 		methods: {
 			handelSwitch(str){
@@ -88,26 +90,12 @@
 				let that=this;
 				let status=e.detail.value?1:0;
 				that.telstatus=status;
-				let tel=this.$store.state.tel;
+				let tel=this.userInfo.phone;
 				console.log(status,tel)
 				if(tel){
-					
-					
-					this.req.httpTokenRequest({
-						url:'/Api/User/setUserReceives',
-						method:'GET'
-					},{
-						s1:that.telstatus,
-						s2:that.emailstatus
-					}
-					).then((res)=>{
-						console.log(res)
-						
-							
-						that.switchA = e.detail.value
+					setUserReceives({s1:that.telstatus,s2:that.emailstatus}).then((res)=>{
+						that.switchA = status
 					})
-					
-					
 				}
 				
 			},
@@ -116,22 +104,12 @@
 				let that=this;
 				let status=e.detail.value?1:0;
 				that.emailstatus=status
-				let email=this.$store.state.email;
+				let email=this.userInfo.email;
 				console.log(status,email)
 				if(email){
-					
-					that.req.httpTokenRequest({
-						url:'/Api/User/setUserReceives',
-						method:'GET'
-					},{
-						s1:that.telstatus,
-						s2:that.emailstatus
-					}
-					).then((res)=>{
-						console.log(res)
-						this.switchB = e.detail.value
+					setUserReceives({s1:that.telstatus,s2:that.emailstatus}).then((res)=>{
+						this.switchB = status
 					})
-					
 				}
 				
 			},
