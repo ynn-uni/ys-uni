@@ -109,7 +109,7 @@ export default {
   onLoad() {
     this.initWebsocket().then(instance => {
       instance.onopen = evt => {
-        instance.send({ mac: this.devListMac })
+        instance.send({ mac: this.devListMac /*|| '00:60:65:4E:B4:AF'*/})
       }
       instance.onmessage = evt => {
         // console.log(evt.data);
