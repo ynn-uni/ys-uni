@@ -10,8 +10,8 @@
         <text class="cuIcon-move"></text>
       </button>
       <view class="text margin-lr">
-        50%
-        <view class="name">{{datas.setname}}</view>
+        {{ datas.setting }}
+        <view class="name">设定{{ datas.label }}</view>
       </view>
 
       <button class="cu-btn des-btn">
@@ -24,7 +24,7 @@
       <view class="cu-progress round bg-bgc">
         <view class="bg-percent" :style="[{ width:width||'0%'}]"></view>
       </view>
-      <view class="margin-left-xs">80%</view>
+      <view class="margin-left-xs">{{ datas.output }}</view>
     </view>
   </view>
 </template>
@@ -66,22 +66,27 @@ export default {
   props: {
     datas: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {
+          label: '湿度',
+          setting: '',
+          current: '',
+          output: ''
+        }
+      }
     }
   },
-  computed: {
-    ...mapGetters(['socketInstance'])
-  },
-  created() {
-    this.socketInstance.onmessage = evt => {
-      console.log(evt)
+  watch: {
+    datas() {
+      this.initdata()
+      this.showArcbar('canvasGauge', this.chartData)
     }
   },
   mounted() {
+    setTimeout(() => {
+      console.log(this.datas)
+    }, 1000)
     this.initdata()
-    // console.log(this.data)
-    // this.chartData.series[0].data=this.data.real
-    // this.chartData.series[0].name=this.data.realname
     _self = this
     //#ifdef MP-ALIPAY
     uni.getSystemInfo({
@@ -102,8 +107,8 @@ export default {
 
   methods: {
     initdata() {
-      this.chartData.series[0].name = this.datas.realname
-      this.chartData.series[0].data = 0.2
+      this.chartData.series[0].name = '实时' + this.datas.label
+      this.chartData.series[0].data = this.datas.current
     },
     showArcbar(canvasId, chartData) {
       canvaArcbar1 = new uCharts({
