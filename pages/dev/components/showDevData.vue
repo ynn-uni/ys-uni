@@ -68,10 +68,11 @@ export default {
       type: Object,
       default: () => {
         return {
-          label: '湿度',
+          label: '',
           setting: '',
           current: '',
-          output: ''
+          output: '',
+          unit: ''
         }
       }
     }
@@ -125,7 +126,7 @@ export default {
         height: _self.cHeight3 * _self.pixelRatio,
         dataLabel: true,
         title: {
-          name: Math.round(chartData.series[0].data * 100) + '%',
+          name: Math.round(chartData.series[0].data * 100) + _self.datas.unit,
           color: '#333333',
           fontSize: 65 * _self.pixelRatio
         },
