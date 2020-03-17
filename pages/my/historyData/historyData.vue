@@ -4,17 +4,12 @@
 			<block slot="backText">返回</block>
 			<block slot="content">历史数据</block>
 		</cu-custom>
-		
-		
 		<view class="pick">
-			
-			
 			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
 				<view class="picker">
 					{{devList[index].title}}
 					<text class="cuIcon-triangledownfill arrow-bot"></text>
 				</view>
-				
 			</picker>
 			<picker  mode="date" :value="startDate" start="2015-09-01" :end="end" @change="startDateChange" fields="day">
 				<view class="picker">
@@ -22,21 +17,15 @@
 					<text class="cuIcon-triangledownfill arrow-bot"></text>
 				</view>
 			</picker>
-			
 		</view>
-		
-		
-		<view class="charts" v-show="!noData">
+		<view class="charts" v-show="!haveData">
 			<canvas canvas-id="canvasArea1" id="canvasArea1" class="charts"  @touchstart="touchLineA" disable-scroll=true @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
-		<view class="bottom" v-show="noData">
-			该设备该时间段无数据
-		</view>
-		
+		<noData v-if="haveData" :text="'该设备该时间段无数据'"></noData>
 	</view>
 </template>
-
 <script>
+	import noData from '@/components/noData.vue'
 	import uCharts from '@/components/u-charts/u-charts.js';
 	import {getDataList} from '../../../apis/index.js'
 	import { mapGetters, mapActions, mapMutations } from 'vuex';
@@ -45,11 +34,10 @@
 	export default {
 		data() {
 			return {
-				noData:false,
+				haveData:false,
 				devTitle:'',
 				devlist:[],
 				index: 0,//设备索引
-				// picker: [],//替换设备下弹框信息列表
 				classifyType:'year',
 				showDate:'',
 				startDate: '开始时间',
@@ -75,28 +63,15 @@
 				 return list
 			 }
 		},
+		components:{
+			noData
+		},
 		mounted() {
-			
 			 _self=this;
-			//#ifdef MP-ALIPAY
-			uni.getSystemInfo({
-				success: function (res) {
-					if(res.pixelRatio>1){
-						//正常这里给2就行，如果pixelRatio=3性能会降低一点
-						//_self.pixelRatio =res.pixelRatio;
-						_self.pixelRatio =2;
-						// this.linkSocket();
-					}
-				}
-			});
-			//#endif
 			this.cWidth=uni.upx2px(740);
 			this.cHeight=uni.upx2px(800);
-			
 			this.initTime()
-			
 			this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
-			
 		},
 		methods: {
 			initTime(){
@@ -110,9 +85,8 @@
 				uni.showLoading()
 				var that=this;
 				getDataList({start:start,end:end,mac:mac}).then((res)=>{
-					console.log(res)
 					if(res.data&&res.data.length>0){
-						that.noData=false;
+						that.haveData=false;
 						that.Area.categories.splice(0);
 						that.Area.series[0].data.splice(0);
 						that.Area.series[1].data.splice(0);
@@ -127,9 +101,8 @@
 						}
 						that.showArea('canvasArea1',this.Area);
 					}else{
-						that.noData=true;
+						that.haveData=true;
 					}
-					
 					uni.hideLoading()
 				})
 				
@@ -143,17 +116,11 @@
 				this.startDate='开始时间'
 				this.endDate='结束时间'
 			},
-
-
-			
 			startDateChange(e) {
 				var that=this;
-				console.log(e.detail.value)
 				var classifyType=this.classifyType;
-				
-					var time=e.detail.value.split('-');
-					this.showDate=time[0]+'年'+time[1]+'月'+time[2]+'日'
-				
+				var time=e.detail.value.split('-');
+				this.showDate=time[0]+'年'+time[1]+'月'+time[2]+'日'
 				this.startDate = e.detail.value+' 00:00:00'
 				this.endDate =e.detail.value+' 23:59:59'
 				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac);
@@ -161,9 +128,7 @@
 			endDateChange(e) {
 				this.endDate = e.detail.value
 			},
-			
 			showArea(canvasId,chartData){//绘制图表
-				
 				canvaArea=new uCharts({
 					$this:_self,
 					canvasId: canvasId,
@@ -178,8 +143,7 @@
 						itemGap:60,
 						padding:0,
 						lineHeight:22,
-						margin:0,
-						
+						margin:0
 					},
 					dataLabel:false,
 					dataPointShape:false,
@@ -191,11 +155,8 @@
 					enableScroll: true,//开启图表拖动
 					xAxis: {
 						disabled:true,
-						
 						gridColor:'#fff',
-						
 						dashLength:10,
-						
 						type:'grid',
 						gridType:'dash',
 						itemCount:50,
@@ -203,7 +164,6 @@
 						scrollAlign:'right'
 					},
 					yAxis: {
-						// disabled:true,
 						axisLine:true,
 						gridType:'dash',
 						gridColor:'#fff',
@@ -211,9 +171,6 @@
 						splitNumber:5,
 						fontSize:0,
 						titleFontColor:'#fff'
-						// format: function (val) {
-						// 	return val + '℃ '
-						// }
 					},
 					width: _self.cWidth*_self.pixelRatio,
 					height: _self.cHeight*_self.pixelRatio,
@@ -227,9 +184,7 @@
 						}
 					}
 				});
-				
 			},
-			
 			touchLineA(e){
 				canvaArea.scrollStart(e);
 			},
@@ -291,6 +246,7 @@
 			padding: 0 40upx;
 			position: relative;
 			z-index: 1000;
+			margin-bottom: 20upx;
 			.picker{
 				display: flex;
 				align-items: center;
@@ -327,9 +283,6 @@
 				margin: 0 10upx;
 				color: #1e1e1e;
 			}
-			.del{
-				
-			}
 		}
 		.charts {
 			margin-top: 120upx;
@@ -349,12 +302,6 @@
 				height: 800upx;
 				background-color: #FFFFFF;
 			}
-		}
-		.bottom{
-			margin-top: 10upx;
-			text-align: center;
-			font-size: 28upx;
-			color: #a8aeb8;
 		}
 	}
 </style>

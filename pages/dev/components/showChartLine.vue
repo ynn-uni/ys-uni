@@ -7,11 +7,9 @@
     </view>
   </view>
 </template>
-
 <script>
 import uCharts from '@/components/u-charts/u-charts.js'
 import { isJSON } from '@/common/checker.js'
-
 var _self
 var canvaArea = null
 export default {
@@ -22,12 +20,12 @@ export default {
       pixelRatio: 1,
       textarea: '',
       Area: {
-        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         series: [
-          { name: '实时温度', data: [10, 20, 50, 10, 20, 50, 10, 20, 50, 10] },
-          { name: '输出温度', data: [30, 40, 30, 30, 40, 30, 30, 40, 30, 30] },
-          { name: '实时湿度', data: [50, 60, 90, 50, 60, 90, 50, 60, 90, 20] },
-          { name: '输出湿度', data: [70, 80, 10, 70, 80, 10, 70, 80, 10, 80] }
+          { name: '实时温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '输出温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '实时湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '输出湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
         ]
       } //图表数据对象
     }
@@ -36,7 +34,6 @@ export default {
 	  datas: {
 	    type: Array,
 	    default: () => []
-	    
 	  }
   },
   watch:{
@@ -47,43 +44,28 @@ export default {
   },
   mounted() {
     _self = this
-    //#ifdef MP-ALIPAY
-    uni.getSystemInfo({
-      success: function(res) {
-        if (res.pixelRatio > 1) {
-          //正常这里给2就行，如果pixelRatio=3性能会降低一点
-          //_self.pixelRatio =res.pixelRatio;
-          _self.pixelRatio = 2
-        }
-      }
-    })
-    //#endif
     this.cWidth = uni.upx2px(750)
     this.cHeight = uni.upx2px(660)
-	this.initData()
-	this.showArea('canvasArea1', this.Area)
-    // _self.showArea('canvasArea1', _self.Area)
+	  this.initData()
+	  this.showArea('canvasArea1', this.Area)
   },
   methods: {
 	  initData(){
+      if(this.datas.length<=0) return;
 		  this.Area.categories=[]
-		  this.Area.series=[]
+      this.Area.series=[]
 		  for(var i=0;i<this.datas[0].data.length;i++){
 			  this.Area.categories.push(i)
 		  }
 		  this.Area.series=this.datas
-		  
 	  },
     showArea(canvasId, chartData) {
-      //绘制温度图表
-
       canvaArea = new uCharts({
         $this: _self,
         canvasId: canvasId,
         type: 'area',
         fontSize: 12,
         padding: [8, 8, 8, 8],
-        // padding:[0,0,0,0],
         legend: {
           show: true,
           position: 'top',
@@ -110,7 +92,6 @@ export default {
           boundaryGap: 'justify'
         },
         yAxis: {
-          // disabled:true,
           axisLine: true,
           gridType: 'dash',
           gridColor: '#fff',
@@ -118,9 +99,6 @@ export default {
           splitNumber: 5,
           fontSize: 0,
           titleFontColor: '#fff'
-          // format: function (val) {
-          // 	return val + '℃ '
-          // }
         },
         width: _self.cWidth * _self.pixelRatio,
         height: _self.cHeight * _self.pixelRatio,
@@ -136,8 +114,6 @@ export default {
       })
     },
     touchArea(e) {
-      console.log('0')
-      // canvaArea.touchLegend(e);
       var i = 0
       canvaArea.showToolTip(e, {
         format: function(item, category) {

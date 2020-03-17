@@ -52,6 +52,10 @@ export function getProductCategoryList(data = {}) {
 export function getProductDetails(data = {}) {
   return getAction('/Api/Product/getProductDetails', data);
 }
+//获取产品列表 
+export function getProductList(data = {}) {
+  return getAction('/Api/Product/getProductList', data);
+}
 //添加报修 /Api/Repair/addRepair
 export function addRepair(data = {}) {
   return getAction('/Api/Repair/addRepair', data);

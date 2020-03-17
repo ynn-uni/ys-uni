@@ -119,7 +119,6 @@
 <script>
 	// import req from '@/request/request.js'
 	import modelre from '@/components/modelre.vue'
-	import {isAuthorized} from '@/utils/loginreg.js'
 	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
 		data() {

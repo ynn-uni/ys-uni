@@ -1,6 +1,5 @@
 <template>
 	<view class="infodetail">
-		
 		<cu-custom :isBack="true" bgColor="bg-e" >
 			<block slot="backText">返回</block>
 			<block slot="content">产品详情</block>
@@ -8,7 +7,6 @@
 		<view class="img-box" :style="{width:imgwidth,height:imgheight}">
 			<image class="img-content" :src="detailData.content"  @load="imageLoad" ></image>
 		</view>
-		
 	</view>
 </template>
 
@@ -23,9 +21,6 @@
 				id:''
 			}
 		},
-		
-		
-		
 		onLoad(option){
 			var that=this;
 			this.id=option.id;

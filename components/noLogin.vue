@@ -120,7 +120,6 @@
 						password:this.devPwd
 					}
 					addDevice(data).then((res)=>{
-						console.log(res)
 						if(res.msg==='添加设备数据成功'){
 							this.fatchDevListByToken()
 							this.$emit('haslogin')

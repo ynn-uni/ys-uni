@@ -4,9 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">历史故障</block>
 		</cu-custom>
-		
 		<view class="choosedata">
-			
 			<picker mode="date" :value="startDate" start="2015-09-01" end="2050-12-31" @change="startDateChange" fields="day">
 				<view class="picker">
 					<text class="cuIcon-calendar icon-time"></text>
@@ -16,20 +14,13 @@
 			<view class="line">
 				——
 			</view>
-			
 			<picker mode="date" :value="endDate" :start="startDate" end="2050-12-31" @change="endDateChange" fields="day">
 				<view class="picker">
 					<text class="cuIcon-calendar icon-time"></text>
 					{{endDate}}
 				</view>
 			</picker>
-			
-			
-			<view class="cuIcon-close del" @tap="delDate">
-				
-			</view>
-			
-			
+			<view class="cuIcon-close del" @tap="delDate"></view>
 		</view>
 		<view class="content">
 			<view class="item" v-for="(item,index) in infoList" :key="index">
@@ -39,7 +30,6 @@
 					</view>
 					<view class="time">
 						{{item.time}}
-						
 					</view>
 				</view>
 				<view class="dis">
@@ -47,22 +37,18 @@
 					{{item.contentl}}
 				</view>
 			</view>
-			
-			
 		</view>
-	
-		<view class="bottom" >
-			没有更多数据了
-		</view>
+		<noData v-if="isNoData" :text="infoList.length<=0?'没有故障信息！':'没有更多数据啦！'"></noData>
 	</view>
 </template>
 
 <script>
+	import noData from '@/components/noData.vue'
 	import {getNoticeList} from '../../../apis/index.js'
 	export default {
 		data() {
 			return {
-				isNoData:true,
+				isNoData:false,
 				page:1,
 				size:10,
 				startDate: '开始时间',
@@ -74,13 +60,14 @@
 				infoList:[]
 			}
 		},
+		components:{
+			noData
+		},
 		onReachBottom() {
-			console.log('refresh');
 			this.page++
 			this.getInfoList(this.page,this.size,'','');
 		},
 		mounted() {
-			
 			this.getInfoList(1,10);
 		},
 		methods: {
@@ -88,17 +75,13 @@
 				this.startDate=''
 				this.endDate=''
 			},
-			handelDate(){
-				console.log('提交日期',this.startDate,this.endDate)
-			},
 			toggleTab(item, index) {  
-			        this.$refs.dateTime.show();  
-					
-			    }, 
-			 onConfirm(e) {
-						this.startTime=e.selectRes;
-						this.endTime=this.startTime;
-			        },
+				this.$refs.dateTime.show();
+			}, 
+			onConfirm(e) {
+				this.startTime=e.selectRes;
+				this.endTime=this.startTime;
+			},
 			startDateChange(e) {
 				this.startDate = e.detail.value
 				this.endDate =e.detail.value
@@ -227,12 +210,6 @@
 					text-align: justify;
 				}
 			}
-		}
-		.bottom{
-			margin-top: 10upx;
-			text-align: center;
-			font-size: 28upx;
-			color: #a8aeb8;
 		}
 	}
 </style>

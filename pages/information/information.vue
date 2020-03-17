@@ -47,32 +47,24 @@
 							<view class="text-title">
 								{{item.title}}
 							</view>
-							<view class="text-contents">{{item.brief}}</view>							
-							<!-- <view class="user-info" v-if="item.userInfo">
-								<image :src="item.userInfo.imgUrl"></image>
-								<view class="text">
-									<text>{{item.userInfo.name}}</text>
-									<text>{{item.userInfo.time}}</text>
-								</view>
-							</view> -->
+							<view class="text-contents">{{item.brief}}</view>
 						</view>
-						
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="bottom" v-if="isNoData">
-			没有更多数据了
-		</view>
+		<noData v-if="isNoData"></noData>
 	</view>
 </template>
 
 <script>
-  import {getProductCategoryList} from '@/apis'
+  import noData from '@/components/noData.vue'
+  import {getProductCategoryList,getProductList} from '@/apis'
 	import xflSelect from '@/components/xfl-select/xfl-select.vue';
 	export default {
 		components:{
-			 xflSelect 
+			 xflSelect,
+			 noData
 		},
 		data() {
 			return {
@@ -179,13 +171,11 @@
 			  }
 			},
 			handelDetail(id){
-				console.log(id)
 				uni.navigateTo({
 				    url: '/pages/information/product/product?id='+id
 				});
 			},
 			handelProduct(id){
-				
 				uni.navigateTo({
 				    url: '/pages/information/infodetail/infodetail?id='+id
 				});
@@ -197,38 +187,29 @@
 				var obj={}
 				if(page==1){
 					this.productList.splice(0)
-					
 				}
 				if(pid){
-					obj={page:page,size:size,type:pid}
-					
+					obj={page,size,type:pid}
 				}else{
-					
 					this.page=page;
 					this.pid='';
-					obj={page:page,size:size}
+					obj={page,size}
 				}
-				
 				var that=this;
-					that.req.httpRequest({
-						url:"/Api/Product/getProductList",
-						method:'GET'
-					},obj).then((res)=>{
-						
-						if(res.data.data.data.length>0){
-								
-							that.productList=that.productList.concat(res.data.data.data)
-							
+				getProductList(obj).then((res)=>{
+					var data=res.data.data
+						if(data.length>0){
+							that.productList=that.productList.concat(data)
 						}else{
 							that.isNoData=true
 						}
-						uni.hideLoading()
+						setTimeout(()=>{
+							uni.hideLoading()
+						},500)
 						
 				})
 			},
 			handelAll(){//点击全部触发
-				
-				// this.dd='xxx'
 				this.isAll='all'//设置isAll值为all,清空选择框内显示值
 				this.list1.name.splice(0)
 				this.all(1,10,'')
@@ -346,11 +327,7 @@
 				
 			}
 		}
-		.bottom{
-			text-align: center;
-			font-size: 30upx;
-			color: #a8aeb8;
-		}
+		
 	}
 	
 	.cu-card.article>.cu-item {
