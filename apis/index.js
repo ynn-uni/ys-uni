@@ -64,3 +64,7 @@ export function addRepair(data = {}) {
 export function getNoticeList(data = {}) {
   return getAction('/Api/Notice/getNoticeList', data);
 }
+//查看设备备注
+export function getDeviceSign(data = {}) {
+  return getAction('/Api/Device/getDeviceSign', data);
+}

@@ -5,7 +5,6 @@
     </cu-custom>
     <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
     <noLogin v-if="devList.length<=0" @haslogin="handelLogin"></noLogin>
-    <!-- <noLogin v-if="!haveDev"></noLogin> -->
     <view v-if="devList.length>0" class="dev-content animation-slide-right">
       <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
         <button class="cu-btn changedev text-center">{{devList[index].title}}</button>
@@ -18,18 +17,24 @@
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
             <view
-              class="cu-item flex-sub"
+              class="cu-item flex-sub cu-avatar"
               :class="index==TabCur?'activeTab':''"
               v-for="(item,index) in tabList"
               :key="index"
               @tap="tabSelect"
               :data-id="index"
             >
-              <view :class="'iconfont '+item.icon"></view>
+              <view :class="'ico iconfont '+item.icon"></view>
               {{item.name}}
+			  <view v-if="index==2&&isWaring" class="cu-tag badge iconfont iconjinggao war">
+				  
+			  </view>
             </view>
           </view>
         </scroll-view>
+      </view>
+      <view @click="handelDevSign">
+        查看备注
       </view>
     </view>
   </view>
@@ -83,7 +88,8 @@ export default {
 				unit: '%'
       },
 	  chartData:[],
-      waringinfo: {}
+      waringinfo: {},
+	  isWaring:false
     }
   },
   components: {
@@ -135,12 +141,21 @@ export default {
           if (evt.data === 'PONG') return
           const json = JSON.parse(evt.data)
           this.waringinfo = json.e
+		  this.checkWaring(this.waringinfo )
           this.tData = this.setTemperatureData(json.t)
           this.hData = this.setHumidityData(json.h)
       	  this.chartData=this.setChartData(json)
         }
       })
     },
+	checkWaring(data){
+		if(data.length<=0) return
+		for(var i in data){
+			if(data[i]==1){
+				this.isWaring=true
+			}
+		}
+	},
     checkUserLogin(data) {
       if (this.devList.length > 0) {
         this.isLogin = true
@@ -191,38 +206,43 @@ export default {
       }
     },
 	
-	setChartData(data){
-		if(!data.t||!data.h) return;
-		let newData=[{ name: '实时温度', data: [] },
-          { name: '输出温度', data: [] },
-          { name: '实时湿度', data: [] },
-          { name: '输出湿度', data: [] }];
-		if(data.t.length>1){
-			this.chartData=[]
-			data.t.forEach((val)=>{
-				newData[0].data.push(parseInt(val.Ta).toFixed(2))
-				newData[1].data.push(val.To)
-			})
-			data.h.forEach((val)=>{
-				newData[2].data.push( parseInt(val.Ha).toFixed(2))
-				newData[3].data.push(val.Ho)
-			})
-		}else{
-			newData=this.chartData
-			this.chartData.forEach((val,index)=>{
-				newData[index].data=val.data.slice(1)
-			})
-			data.t.forEach((val)=>{
-				newData[0].data.push(parseInt(val.Ta).toFixed(2))
-				newData[1].data.push(val.To)
-			})
-			data.h.forEach((val)=>{
-				newData[2].data.push( parseInt(val.Ha).toFixed(2))
-				newData[3].data.push(val.Ho)
-			})
-		}
-		return newData
-	}
+    setChartData(data){
+      if(!data.t||!data.h) return;
+      let newData=[{ name: '实时温度', data: [] },
+            { name: '输出温度', data: [] },
+            { name: '实时湿度', data: [] },
+            { name: '输出湿度', data: [] }];
+      if(data.t.length>1){
+        this.chartData=[]
+        data.t.forEach((val)=>{
+          newData[0].data.push(parseInt(val.Ta).toFixed(2))
+          newData[1].data.push(val.To)
+        })
+        data.h.forEach((val)=>{
+          newData[2].data.push( parseInt(val.Ha).toFixed(2))
+          newData[3].data.push(val.Ho)
+        })
+      }else{
+        newData=this.chartData
+        this.chartData.forEach((val,index)=>{
+          newData[index].data=val.data.slice(1)
+        })
+        data.t.forEach((val)=>{
+          newData[0].data.push(parseInt(val.Ta).toFixed(2))
+          newData[1].data.push(val.To)
+        })
+        data.h.forEach((val)=>{
+          newData[2].data.push( parseInt(val.Ha).toFixed(2))
+          newData[3].data.push(val.Ho)
+        })
+      }
+      return newData
+    },
+    handelDevSign(){
+      uni.navigateTo({
+        url:'/pages/dev/Remarks/Remarks'
+      })
+    }
   }
 }
 </script>
@@ -235,7 +255,7 @@ export default {
   // padding-bottom: 100upx;
   .tablist {
     padding: 25upx 20upx;
-    .cu-item {
+    /deep/.cu-item,.cu-avatar {
       // margin: 10upx 0;
       display: flex;
       flex-direction: column;
@@ -246,15 +266,26 @@ export default {
       height: 200upx;
       box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
       border-radius: 15upx;
-      view {
+	  background-color: #fff;
+	  font-size: 34upx;
+	  color: #333333;
+      .ico {
         font-size: 60upx;
         color: $primaryColor;
       }
+	  .war{
+		  width: 30upx;
+		  height: 30upx;
+		  line-height: 30upx;
+		  font-size: 34upx;
+		  left: 5upx;
+		  top:5upx
+	  }
     }
     .activeTab {
       color: #ffffff;
       background: linear-gradient(135deg, #7285ed 0%, #b791f7 100%);
-      view {
+      .ico {
         color: #ffffff;
       }
     }
