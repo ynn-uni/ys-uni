@@ -2,7 +2,7 @@
 	<view class="waring">
 		<cu-custom :isBack="true">
 			<block slot="backText">返回</block>
-			<block slot="content">历史预警</block>
+			<block slot="content">历史故障</block>
 		</cu-custom>
 		
 		<view class="choosedata">
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-	
+	import {getNoticeList} from '../../../apis/index.js'
 	export default {
 		data() {
 			return {
@@ -96,19 +96,16 @@
 					
 			    }, 
 			 onConfirm(e) {
-			            console.log(e);
 						this.startTime=e.selectRes;
 						this.endTime=this.startTime;
 			        },
 			startDateChange(e) {
 				this.startDate = e.detail.value
 				this.endDate =e.detail.value
-				console.log('选择开始时间')
 				this.getInfoList(this.page,this.size,this.startDate,this.endDate);
 			},
 			endDateChange(e) {
 				this.endDate = e.detail.value
-				console.log('选择结束时间')
 				this.getInfoList(this.page,this.size,this.startDate,this.endDate);
 			},
 			getInfoList(page,size,start,end){
@@ -116,35 +113,27 @@
 					uni.showLoading()
 				}
 				var that=this;
-				that.req.httpTokenRequest(
-				{url:'/Api/Notice/getNoticeList',method:'GET'},
-				{page:page,size:size,start:start,end:end}).then((res)=>{
-					console.log(res)
-					var data=res.data.data.data
+				getNoticeList({page,size,start,end}).then((res)=>{
+					var data=res.data.data
 					if(data&&data.length>0){
 						var newData=[];
-						
 						for(var i in data){
-							
 							newData[i]={contentl:data[i].content,time:data[i].time,status:data[i].status,id:data[i].id},
 							that.isChecked[i]=false
 						}
-						
-						console.log(newData)
 						if(page>1){
 							that.infoList=that.infoList.concat(newData)
-							
 						}else if(page==1){
 							that.infoList.splice(0);
 							that.infoList=newData
 						}
-						console.log(that.infoList)
 						that.isNoData=false
 					}else{
 						that.isNoData=true
 					}
 					uni.hideLoading()
 				})
+				
 			}
 		}
 	}

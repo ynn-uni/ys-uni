@@ -56,7 +56,7 @@
 			let that=this;
 			let tel=this.userInfo.phone;
 			let email=this.userInfo.email;
-			console.log(tel,email)
+			
 			if(tel){
 				this.haveTel=false;
 			}
@@ -91,7 +91,7 @@
 				let status=e.detail.value?1:0;
 				that.telstatus=status;
 				let tel=this.userInfo.phone;
-				console.log(status,tel)
+				
 				if(tel){
 					setUserReceives({s1:that.telstatus,s2:that.emailstatus}).then((res)=>{
 						that.switchA = status
@@ -105,7 +105,7 @@
 				let status=e.detail.value?1:0;
 				that.emailstatus=status
 				let email=this.userInfo.email;
-				console.log(status,email)
+				
 				if(email){
 					setUserReceives({s1:that.telstatus,s2:that.emailstatus}).then((res)=>{
 						this.switchB = status
@@ -114,12 +114,12 @@
 				
 			},
 			touchStart(e) {
-				console.log(e.timeStamp)
+				
 				
 			  this.touchStartTime = e.timeStamp;
 			},
 			touchEnd(e) {
-				console.log(e.timeStamp)
+				
 				
 			  this.touchEndTime = e.timeStamp;
 			},
@@ -128,7 +128,7 @@
 			  // 控制点击事件在350ms内触发，加这层判断是为了防止长按时会触发点击事件
 			  if (vm.touchEndTime - vm.touchStartTime < 350) {
 			    // 当前点击的时间
-				console.log(e)
+				
 				var path=e.currentTarget.dataset.path
 			    var currentTime = e.timeStamp;
 			    var lastTapTime = vm.lastTapTime;
@@ -144,7 +144,7 @@
 			 
 			},
 			handelUserInfo(){
-				console.log("click")
+				
 				uni.navigateTo({
 					url:'/pages/my/set/userInfo/userInfo'
 				})

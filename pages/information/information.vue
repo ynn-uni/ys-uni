@@ -164,8 +164,7 @@
 			  var vm = this;
 			  // 控制点击事件在350ms内触发，加这层判断是为了防止长按时会触发点击事件
 			  if (vm.touchEndTime - vm.touchStartTime < 350) {
-			    // 当前点击的时间
-				console.log(e)
+			   
 				var id=e.currentTarget.dataset.proid
 			    var currentTime = e.timeStamp;
 			    var lastTapTime = vm.lastTapTime;
@@ -174,7 +173,7 @@
 			    // 如果两次点击时间在300毫秒内，则认为是双击事件
 			    if (currentTime - lastTapTime > 350) {
 			      // do something 点击事件具体执行那个业务
-				  console.log(id)
+				 
 				  vm.handelDetail(id)
 			    }
 			  }
@@ -209,21 +208,17 @@
 					this.pid='';
 					obj={page:page,size:size}
 				}
-				// if(!pid&&page==1){
-				// 	console.log('kkkk')
-				// 	this.placeholder='请选择'
-				// }
+				
 				var that=this;
 					that.req.httpRequest({
 						url:"/Api/Product/getProductList",
 						method:'GET'
 					},obj).then((res)=>{
-						console.log(res)
+						
 						if(res.data.data.data.length>0){
 								
 							that.productList=that.productList.concat(res.data.data.data)
 							
-							console.log(that.productList)
 						}else{
 							that.isNoData=true
 						}

@@ -10,20 +10,11 @@
 			<text class="cuIcon-add"></text>
 			添加报修
 		</button>
-		<!-- <button @tap="delDevice()">del</button> -->
-		
 	</view>
 		<view class=" menu-avatar cu-list">
-			
 			<view class=" dl-item" v-for="(item,index) in repairList" :key='index' @tap="handelDetail(item)">
-			
 				<view class="info" >
-					<!-- <view class="num">
-						{{index>10?index+1:'0'+(index+1)}}
-					</view>
-					<view class="line"></view> -->
 					<view class="dis">
-						<!-- {{item.name}} -->
 						<view class="inf">
 							<view class="name">
 								{{item.name}}
@@ -32,7 +23,6 @@
 								{{item.time}}
 							</view>
 						</view>
-						
 						<view class="contentl">
 							{{item.content}}
 						</view>
@@ -63,7 +53,6 @@
 			}
 		},
 		onShow() {
-			console.log(',,')
 			this.getmyRepairList(this.page,this.size)
 		},
 		methods: {

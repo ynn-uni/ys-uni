@@ -5,8 +5,6 @@
 			<block slot="content">报修详情</block>
 		</cu-custom>
 		<view class="rep">
-			
-		
 		<form >
 			<view class="in-group">
 				<view class="text">
@@ -54,8 +52,7 @@
 				status:null
 			}
 		},
-		onLoad(option) { 
-			console.log( option.data)
+		onLoad(option) {
 			var data=JSON.parse(option.data);
 		          this.name=data.name;
 				  this.tel=data.phone;
@@ -64,9 +61,6 @@
 				  this.status=data.status;
 		        },  
 		methods: {
-			
-			            
-			 
 		}
 	}
 </script>
@@ -94,8 +88,10 @@
 						opacity:0.34;
 						color: #000;
 						border:1px solid rgba(110,116,123,1);
+						padding-left: 10upx;
 					}
 					textarea{
+						padding-left: 10upx;
 						margin-top: 6upx;
 						width:100%;
 						height:240upx;

@@ -1,31 +1,23 @@
 <template>
-	
 	<view class="devlist">
 	<cu-custom :isBack="true">
 		<block slot="backText">返回</block>
 		<block slot="content">故障引导列表</block>
 	</cu-custom>
-		<view class=" menu-avatar cu-list">
-			
-			<view class=" dl-item" v-for="(item,index) in data" :key='index' @tap="handelDetail">
-			
-				<view class="info" >
-					<view class="num">
-						{{index>10?index+1:'0'+(index+1)}}
-					</view>
-					<view class="line"></view>
+	<view class=" menu-avatar cu-list">
+		<view class=" dl-item" v-for="(item,index) in data" :key='index' @tap="handelDetail">
+			<view class="info" >
+				<view class="num">
+					{{index>10?index+1:'0'+(index+1)}}
+				</view>
+				<view class="line"></view>
 					<view class="name">
 						{{item.name}}
 					</view>
 					<text class="cuIcon-right"></text>
-					
 				</view>
-				
 			</view>
-			
 		</view>
-		
-		
 	</view>
 </template>
 
@@ -48,11 +40,9 @@
 
 <style lang="scss" scoped>
 	.devlist{
-		
 		.cu-list{
 			margin: 0 34upx;
 			overflow: hidden;
-			
 			.dl-item{
 				background:rgba(255,255,255,1);
 				box-shadow:0px 2upx 4upx 0px rgba(236,236,236,0.5);
@@ -60,7 +50,6 @@
 				border:1px solid rgba(234,234,234,1);
 				line-height: 100upx;
 				margin-top: 26upx;
-				// margin-left: 2upx;
 				.info{
 					display: flex;
 					align-items: center;
@@ -92,7 +81,6 @@
 						color:rgba(168,174,184,1);
 					}
 				}
-				
 			}
 		}
 	}

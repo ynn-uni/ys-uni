@@ -52,4 +52,11 @@ export function getProductCategoryList(data = {}) {
 export function getProductDetails(data = {}) {
   return getAction('/Api/Product/getProductDetails', data);
 }
-
+//添加报修 /Api/Repair/addRepair
+export function addRepair(data = {}) {
+  return getAction('/Api/Repair/addRepair', data);
+}
+//历史故障列表 getNoticeList
+export function getNoticeList(data = {}) {
+  return getAction('/Api/Notice/getNoticeList', data);
+}

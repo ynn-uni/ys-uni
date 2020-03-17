@@ -157,17 +157,17 @@
 			// console.log(this.list.indexOf(this.selectText))
 			// 二级联动处理清空问题
 			var taht=this;
-			console.log(this.selectText)
+			
 			
 			if(this.list.indexOf(this.selectText)===-1){
-				console.log('ffff')
+				
 				taht.selectText='请选择';
 				this.clearItemActive(); // 清空列表框中的所有活动项
 				this.clearInput(); // 清空输入框中的显示
 				this.$emit('clear');
 				
 			}
-			console.log(this.isAll)
+			
 			if(this.isAll=='all'){
 				taht.selectText='请选择';
 				this.clearItemActive(); // 清空列表框中的所有活动项
@@ -361,7 +361,7 @@
 					return;
 				}
 				if( !this.itemIsActive(index) ){  //如果点在非选中项上
-				console.log("没点再选中项上");
+				
 				    this.clearItemActive(); // 清空其它的选中的列表项
 					this.setItemActive(index, value); // 将这一项设置为选中项
 					this.$emit('change', {newVal: value, oldVal: this.selectText, 

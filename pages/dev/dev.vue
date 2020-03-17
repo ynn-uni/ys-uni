@@ -107,17 +107,11 @@ export default {
       this.initsocket()
     }
   },
-  onLoad() {
-    // if (!this.$store.state.isAppHide) {
-    //   this.initsocket()
-    // }
-  },
   onShow() {
     this.checkUserLogin()
     if (this.$store.state.isAppHide) {
       this.initsocket()
     }
-
     this.devList.forEach((val, index) => {
       if (val.mac == this.devListMac) {
         this.index = index
@@ -144,7 +138,6 @@ export default {
           this.tData = this.setTemperatureData(json.t)
           this.hData = this.setHumidityData(json.h)
       	  this.chartData=this.setChartData(json)
-      	// this.chartData=
         }
       })
     },
@@ -163,7 +156,6 @@ export default {
       //选择设备
       this.index = e.detail.value //index为选择序列下标
       this.updateDevListMac(this.devList[this.index].mac)
-      console.log(this.index)
     },
     handelLogin() {
       this.isLogin = true
@@ -201,7 +193,6 @@ export default {
 	
 	setChartData(data){
 		if(!data.t||!data.h) return;
-		console.log(data)
 		let newData=[{ name: '实时温度', data: [] },
           { name: '输出温度', data: [] },
           { name: '实时湿度', data: [] },

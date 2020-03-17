@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	// import req from '@/request/request.js'
+	import {addRepair} from '../../../../apis/index.js'
 	export default {
 		data() {
 			return {
@@ -51,15 +51,7 @@
 				address:'',
 				dis:''
 			}
-		},
-		mounted() {  
-		            // uni.login({  
-		            //     success: function(res) {  
-		            //         // 获取code  
-		            //         console.log(JSON.stringify(res));  
-		            //     }  
-		            // });  
-		        },  
+		}, 
 		methods: {
 			makesure(){
 				console.log("mak")
@@ -70,14 +62,8 @@
 						address:this.address,
 						content:this.dis
 					};
-					console.log(obj)
-					this.req.httpTokenRequest({
-						'url':'/Api/Repair/addRepair',
-						'method':'GET',
-						// 'contentType':'multipart/form-data'
-					},obj).then((res)=>{
-						console.log(res)
-						if(res.data.status==0){
+					addRepair(obj).then((res)=>{
+						if(res.status==0){
 							uni.showToast({
 								title:'已成功提交报修',
 								icon:'none'
@@ -87,10 +73,7 @@
 							},1500)
 						}
 					})
-					
-					
 				}else{
-					
 					uni.showToast({
 						title:'请填写基本信息',
 						icon:'none'
@@ -125,6 +108,7 @@
 					line-height:33upx;
 				}
 				input{
+					padding-left: 10upx;
 					margin-top: 6upx;
 					width:688upx;
 					height:60upx;
@@ -132,6 +116,7 @@
 					border:1px solid rgba(110,116,123,1);
 				}
 				textarea{
+					padding-left: 10upx;
 					margin-top: 6upx;
 					width:100%;
 					height:240upx;

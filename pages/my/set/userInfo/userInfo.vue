@@ -7,53 +7,34 @@
 		</cu-custom>
 		<view class="bank">
 			<view class="heade-info">
-				
 				<view  class="head-img">
 					<open-data type="userAvatarUrl"></open-data>    
 				</view>
-				
-				<open-data  type="userNickName" lang="zh_CN" class="nickName"></open-data> 
-				<!-- <text >18323084462</text> -->
+				<open-data  type="userNickName" lang="zh_CN" class="nickName"></open-data>
 			</view>
 			<view class="bg">
 			</view>
 		</view>
 		<form >
 		<view class="otherinfo my-box">
-			
-					<view class="cu-form-group" data-path="/pages/my/devlist/devlist">
-						<view class="cu-left">
-							<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
-							<view class="title">电话</view>
-							<input type="text" value="" v-model="tel" />
-						</view>
-						
-						<button class="cu-btn cuIcon cu-right" @tap="handelClear('tel')">
-							<text class="cuIcon-close"></text>
-						</button>
-							
-						
-					</view>
-					<!-- <view class="cu-form-group margin-top">
-						<view class="title">邮件</view>
-						<input placeholder="两字短标题" name="input"></input>
-					</view> -->
-					<view class="cu-form-group" data-path="/pages/my/waring/waring">
-						<view class="cu-left">
-							<!-- <image src="../../static/images/waring1.png" mode=""></image> -->
-							<view class="title">邮箱</view>
-							<input type="text" value="" v-model="email"/>
-						</view>
-						<button class="cu-btn cuIcon cu-right" @tap="handelClear('email')">
-							<text class="cuIcon-close"></text>
-						</button>
-					</view>
-					
-				
-				
-			
-		
-			
+			<view class="cu-form-group" data-path="/pages/my/devlist/devlist">
+				<view class="cu-left">
+					<view class="title">电话</view>
+					<input type="text" value="" v-model="tel" />
+				</view>
+				<button class="cu-btn cuIcon cu-right" @tap="handelClear('tel')">
+					<text class="cuIcon-close"></text>
+				</button>
+			</view>
+			<view class="cu-form-group" data-path="/pages/my/waring/waring">
+				<view class="cu-left">
+					<view class="title">邮箱</view>
+					<input type="text" value="" v-model="email"/>
+				</view>
+				<button class="cu-btn cuIcon cu-right" @tap="handelClear('email')">
+					<text class="cuIcon-close"></text>
+				</button>
+			</view>
 		</view>
 		<button class="sure" @tap="handelMakeSure">确认修改</button>
 		</form>
@@ -122,10 +103,6 @@
 						this.userInfo.email=this.email
 						this.updateUserInfo(this.userInfo)
 					})
-					
-					
-					
-					
 				}
 			}
 		}
