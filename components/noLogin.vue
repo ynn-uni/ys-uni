@@ -4,13 +4,11 @@
 			<image class="logo" src="../static/images/nodev1.png" mode=""></image>
 			<text class="welcome">嗨，欢迎使用永生仪器！</text>
 			<view class="flex flex-wrap justify-between align-center bg-white btn-box">
-				
 				<button v-if="!token" class="cu-btn btn active animation-slide-right" open-type="getUserInfo"
 				@getuserinfo="getUserInfo">点击登录/注册</button>
 				<!-- <button v-if="token&&!userInfo.phone"  class="cu-btn btn active animation-slide-right" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">获取手机号</button> -->
 				<button v-if="token&&devList.length<=0" class="cu-btn btn active animation-slide-right" @tap="handelDev">添加设备</button>
 			</view>
-			
 		</view>
 		<modelre v-on:ListenChild="ShowChild" :modalname="modalName"></modelre>
 		<view class="cu-modal model" :class="modalName=='DialogModal3'?'show':''">
@@ -22,7 +20,6 @@
 					</view>
 				</view>
 				<view class="form-box">
-					<!-- <form @submit="" @reset=""> -->
 					<form >
 						<view class="form-input">
 							<view class="">
@@ -72,9 +69,6 @@
 		props:{
 			text:{}
 		},
-		mounted() {
-			
-		},
 		methods:{
 			...mapMutations('user', ['updateUserInfo']),
 			...mapActions('user', [
@@ -82,21 +76,17 @@
 			  'loginWithUserInfo'
 			]),
 			getUserInfo(evt) {
-				
 			  const {iv, encryptedData,errMsg} = evt.detail;
 			  if (errMsg === 'getUserInfo:ok') {
 				this.loginWithUserInfo({ iv, encryptedData });
-				
 			  }
 			},
 			handelDev(){
 				var that=this
 				that.modalName = 'DialogModal3'
-				
 			},
 			getPhoneNumber(e){
 				let data={}
-				console.log(this.userInfo)
 				data.sessionKey=this.userInfo.key;
 				data.iv=e.detail.iv;
 				data.encryptedData=e.detail.encryptedData;
@@ -107,8 +97,6 @@
 			},
 			hideModal(){
 				this.modalName = null;
-				// this.$emit("ListenChild","I am child.vue")
-				
 			},
 			makesure(){//添加设备
 				var that=this;
@@ -125,7 +113,6 @@
 							this.$emit('haslogin')
 						}
 					})
-					
 				}else{
 					uni.showToast({
 						title:'请输入设备信息',

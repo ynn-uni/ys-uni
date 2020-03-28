@@ -6,7 +6,7 @@
       </view>
     </view>
     <view class="desi flex justify-center align-center">
-      <button class="cu-btn des-btn">
+      <button class="cu-btn des-btn" @click="handelTemperature('-')">
         <text class="cuIcon-move"></text>
       </button>
       <view class="text margin-lr">
@@ -14,7 +14,7 @@
         <view class="name">设定{{ datas.label }}</view>
       </view>
 
-      <button class="cu-btn des-btn">
+      <button class="cu-btn des-btn" @click="handelTemperature('+')">
         <text class="cuIcon-add"></text>
       </button>
     </view>
@@ -89,6 +89,10 @@ export default {
       this.chartData.series[0].name = '实时' + this.datas.label
       this.chartData.series[0].data = this.datas.current
     },
+	handelTemperature(str){
+		this.$emit('changetemperature',str)
+		
+	},
     showArcbar(canvasId, chartData) {
       canvaArcbar1 = new uCharts({
         $this: _self,

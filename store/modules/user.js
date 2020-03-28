@@ -41,8 +41,11 @@ export default {
         if (error) {
           console.error(error);
         }
+		if(data.code){
+			commit('updateCodeOnce', data.code);
+		}
 		
-        commit('updateCodeOnce', data.code);
+        
 		
       });
     },
@@ -55,9 +58,7 @@ export default {
         if (error) {
           console.error(error);
         }
-		// console.log("已经授权",data)
         if (data.authSetting['scope.userInfo']) {
-			console.log("已经授权",data)
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称
           dispatch('getWxUserInfo');
         }
@@ -88,16 +89,13 @@ export default {
     loginWithUserInfo({ state, commit, dispatch },payload) {
       return login({
         code: state.code
-      }).then(res => {
+      }).then(res => {//mp8KZtZdvMLE40nIsPAMFQ==
         // commit('updateCodeOnce', null);
 		const {email,phone,key}=res.data;
 		const userinfo= {email,phone,key};
-		
 		commit('updateUserInfo', userinfo);
-		console.log(state.userInfo)
 		if(res.status===0){
 			commit('updateToken', res.data.token);
-			
 			dispatch('fatchDevListByToken');
 		}else{
 			dispatch('registerWithUserInfo',payload);
@@ -106,7 +104,6 @@ export default {
       });
     },
 	registerWithUserInfo({ state, commit, dispatch }, payload) {
-		// console.log(state.code)
 	  return register({
 	    sessionKey: state.userInfo.key,
 	    ...payload // iv, encryptedData
@@ -123,12 +120,10 @@ export default {
     // 从后端获取用户信息
     fatchDevListByToken({ state,commit }) {
       getDeviceList().then(res => {
-        console.log(res);
         commit('updateDevList', res.data);
 		if(res.data.length>0&&state.devListMac==''){
 			commit('updateDevListMac', res.data[0].mac);
 		}
-		
       });
     }
   }

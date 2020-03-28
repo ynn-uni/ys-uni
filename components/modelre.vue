@@ -42,7 +42,7 @@
 			
 		},
 		computed:{
-			 ...mapGetters([ 'userInfo']),
+			 ...mapGetters([ 'userInfo','code']),
 		},
 		props:{
 			// modalname:'',
@@ -66,6 +66,7 @@
 			getPhoneNumber(e){
 				let data={}
 				data.sessionKey=this.userInfo.key;
+				// data.sessionKey=this.code;
 				data.iv=e.detail.iv;
 				data.encryptedData=e.detail.encryptedData;
 				setUserPhone(data).then((res)=>{

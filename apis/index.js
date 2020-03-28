@@ -68,3 +68,7 @@ export function getNoticeList(data = {}) {
 export function getDeviceSign(data = {}) {
   return getAction('/Api/Device/getDeviceSign', data);
 }
+//设定温湿度
+export function setDeviceTemperatureOrHumidity(data = {}) {
+  return getAction('/Api/Device/setDeviceTemperatureOrHumidity', data);
+}

@@ -21,7 +21,7 @@
 		<view class="charts" v-show="!haveData">
 			<canvas canvas-id="canvasArea1" id="canvasArea1" class="charts"  @touchstart="touchLineA" disable-scroll=true @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
-		<noData v-if="haveData" :text="'该设备该时间段无数据'"></noData>
+		<noData v-if="haveData" :text="'没有找到相关数据'"></noData>
 	</view>
 </template>
 <script>

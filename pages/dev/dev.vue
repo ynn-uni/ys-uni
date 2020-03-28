@@ -3,14 +3,14 @@
     <cu-custom bgcolor="bg-white">
       <block slot="content">永生仪器</block>
     </cu-custom>
-    <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
+    <button open-type="openSetting" bindopensetting="callback">打开设置页</button>
     <noLogin v-if="devList.length<=0" @haslogin="handelLogin"></noLogin>
     <view v-if="devList.length>0" class="dev-content animation-slide-right">
       <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
         <button class="cu-btn changedev text-center">{{devList[index].title}}</button>
       </picker>
       <view class="content">
-        <showDevData :datas="tData" v-if="TabCur===0"></showDevData>
+        <showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData>
         <showDevData :datas="hData" v-if="TabCur===1"></showDevData>
         <showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
         <showChartLine v-if="TabCur===3" :datas="chartData"></showChartLine>
@@ -45,6 +45,7 @@ import showDevData from './components/showDevData.vue'
 import showWaringData from './components/showWaringData.vue'
 import showChartLine from './components/showChartLine.vue'
 import noLogin from '@/components/noLogin.vue'
+import {setDeviceTemperatureOrHumidity} from '../../apis/index.js'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
@@ -205,7 +206,15 @@ export default {
 				unit: '%'
       }
     },
-	
+	designTemperature(str){
+		console.log(str,this.tData)
+		if(str=='-'){
+			
+		}else{
+			
+		}
+		
+	},
     setChartData(data){
       if(!data.t||!data.h) return;
       let newData=[{ name: '实时温度', data: [] },

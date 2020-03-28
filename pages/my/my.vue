@@ -12,8 +12,8 @@
 		<view class="bank">
 			<view class="heade-info">
 				<image src="../../static/images/head_03.gif" mode="" v-if="!token"></image>
-				<text v-if="!token">匿名用户</text>
-				<text v-if="!token">电话号码</text>
+				<text v-if="!token" @click="showModal">登录/注册</text>
+				<!-- <text v-if="!token">电话号码</text> -->
 				<view  class="head-img" v-if="token" @tap="handelUserInfo">
 					<open-data type="userAvatarUrl"></open-data>    
 				</view>
@@ -117,7 +117,6 @@
 </template>
 
 <script>
-	// import req from '@/request/request.js'
 	import modelre from '@/components/modelre.vue'
 	import { mapGetters, mapActions, mapMutations } from 'vuex';
 	export default {
@@ -170,13 +169,9 @@
 				})
 			},
 			touchStart(e) {
-				console.log(e.timeStamp)
-				
 			  this.touchStartTime = e.timeStamp;
 			},
 			touchEnd(e) {
-				console.log(e.timeStamp)
-				
 			  this.touchEndTime = e.timeStamp;
 			},
 			doubleTap(e) {
@@ -184,7 +179,6 @@
 			  // 控制点击事件在350ms内触发，加这层判断是为了防止长按时会触发点击事件
 			  if (vm.touchEndTime - vm.touchStartTime < 350) {
 			    // 当前点击的时间
-				console.log(e)
 				var path=e.currentTarget.dataset.path
 			    var currentTime = e.timeStamp;
 			    var lastTapTime = vm.lastTapTime;
@@ -198,7 +192,6 @@
 				  }else{
 					  vm.handelInfo(path)
 				  }
-				  
 			    }
 			  }
 			},
@@ -206,13 +199,11 @@
 				var that=this
 				if(that.token){
 					// 已经登陆
-					console.log("已经登陆")
 					uni.navigateTo({
 						 url: path
 					});
 				}else{
 					that.$refs.regist.showModal()
-					
 				}
 					
 			},
@@ -223,14 +214,9 @@
 				})
 			},
 			
-			showModal(num) {
-				 this.modalName = 'DialogModal1'
-			},
-			hideModel() {
-			     this.modalName =null
-			},
-			
-			
+			showModal() {
+				this.$refs.regist.showModal()
+			}
 		}
 	}
 </script>
