@@ -5,6 +5,11 @@
 		computed:{
 			...mapGetters(['socketInstance'])
 		},
+		methods:{
+			...mapMutations( ['updateIsAppHide']),
+			...mapActions('user',['wxLogin'])
+			
+		},
 		onLaunch: function() {
 			uni.getSystemInfo({
 			  success: function(e) {
@@ -33,16 +38,14 @@
 			});
 		},
 		onShow: function() {
-			this.$store.dispatch('user/wxLogin');
+			this.wxLogin();
 			console.log('App Show')
 		},
 		onHide: function() {
 			console.log('App Hide')
-			var that=this
-			that.$store.state.isAppHide=false;
-			that.$store.state.isHide=false;
+			this.updateIsAppHide(true)
 			if(this.socketInstance){
-				this.socketInstance.close(this.socketInstance)
+				this.socketInstance.close()
 			}
 			
 			console.log("客户端关闭")

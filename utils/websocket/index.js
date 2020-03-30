@@ -3,8 +3,8 @@ class WebSocketUtils {
   constructor({
     url,
     header = {},
-    pingTimeout = 15000,
-    pongTimeout = 10000,
+    pingTimeout = 25000,
+    pongTimeout = 20000,
     reconnectTimeout = 500,
     pingMsg = 'ping',
     repeatLimit = 1

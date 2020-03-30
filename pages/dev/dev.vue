@@ -3,17 +3,18 @@
     <cu-custom bgcolor="bg-white">
       <block slot="content">永生仪器</block>
     </cu-custom>
-    <button open-type="openSetting" bindopensetting="callback">打开设置页</button>
-    <noLogin v-if="devList.length<=0" @haslogin="handelLogin"></noLogin>
+    <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
+    <noLogin v-if="devList.length<=0" ></noLogin>
     <view v-if="devList.length>0" class="dev-content animation-slide-right">
-      <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
-        <button class="cu-btn changedev text-center">{{devList[index].title}}</button>
-      </picker>
+     
       <view class="content">
-        <showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData>
-        <showDevData :datas="hData" v-if="TabCur===1"></showDevData>
-        <showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
-        <showChartLine v-if="TabCur===3" :datas="chartData"></showChartLine>
+        <nodata v-if="data.t.length<=0" :text="'未获取到相关设备数据,请联系管理员'" :height="true"></nodata>
+		<view v-else>
+			<showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData>
+			<showDevData :datas="hData" v-if="TabCur===1"></showDevData>
+			<showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
+			<showChartLine v-if="TabCur===3" :datas="chartData"></showChartLine>
+		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
             <view
@@ -33,9 +34,12 @@
           </view>
         </scroll-view>
       </view>
-      <view @click="handelDevSign">
+	  <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
+	    <button class="cu-btn changedev text-center">{{devList[index].title}}</button>
+	  </picker>
+      <!-- <view @click="handelDevSign">
         查看备注
-      </view>
+      </view> -->
     </view>
   </view>
 </template>
@@ -45,17 +49,20 @@ import showDevData from './components/showDevData.vue'
 import showWaringData from './components/showWaringData.vue'
 import showChartLine from './components/showChartLine.vue'
 import noLogin from '@/components/noLogin.vue'
+import nodata from '@/components/noData.vue'
 import {setDeviceTemperatureOrHumidity} from '../../apis/index.js'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState ,mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
+      isCanDesign:0,//温湿度是否可修改
       index: 0,
       isLogin: false,
       haveDev: false,
       TabCur: 0,
       scrollLeft: 0,
       tabIndex: 0,
+      data:{},
       tabList: [
         {
           name: '温度',
@@ -88,6 +95,7 @@ export default {
         output: 0,
 				unit: '%'
       },
+	  seeting:{},
 	  chartData:[],
       waringinfo: {},
 	  isWaring:false
@@ -97,10 +105,12 @@ export default {
     showDevData,
     showWaringData,
     showChartLine,
-    noLogin
+    noLogin,
+    nodata
   },
   computed: {
-    ...mapGetters(['token', 'devList', 'devListMac', 'userInfo']),
+    ...mapGetters(['token', 'devList', 'devListMac', 'userInfo','socketInstance']),
+	...mapState (['isAppHide']),
     picker() {
       let list = []
       this.devList.forEach(val => {
@@ -112,36 +122,50 @@ export default {
   watch: {
     devListMac() {
       this.initsocket()
-    }
+    },
+	seeting(){
+	  this.isCanDesign=0
+	}
+  },
+  onLoad() {
+	  
+  	if (!this.isAppHide) {
+	  this.initMac()
+  	  this.initsocket()
+  	}
   },
   onShow() {
-    this.checkUserLogin()
-    if (this.$store.state.isAppHide) {
+	  
+    if (this.isAppHide) {
+	  this.initMac()
       this.initsocket()
     }
-    this.devList.forEach((val, index) => {
-      if (val.mac == this.devListMac) {
-        this.index = index
-      } else {
-        this.index = 0
-      }
-    })
+    
   },
+ 
   methods: {
     ...mapActions('dev', ['initWebsocket', 'closeWebsocket']),
     ...mapMutations('user', ['updateDevListMac']),
-    ...mapActions('user', ['fatchDevListByToken']),
+	...mapMutations( ['updateIsAppHide']),
     initsocket() {
+		if(this.socketInstance){
+			this.socketInstance.close()
+		}
+		
       this.initWebsocket().then(instance => {
-        this.$store.state.isAppHide=false
+		  this.updateIsAppHide(false)
         instance.onopen = evt => {
           instance.send({ mac: this.devListMac })
         }
         instance.onmessage = evt => {
-          console.log(evt);
+			console.log(evt)
           if (evt.data === 'PONG') return
           const json = JSON.parse(evt.data)
-          this.waringinfo = json.e
+          this.data=json
+		  if(json.e.e1!==null){
+			  this.waringinfo = json.e
+		  }
+          
 		  this.checkWaring(this.waringinfo )
           this.tData = this.setTemperatureData(json.t)
           this.hData = this.setHumidityData(json.h)
@@ -157,13 +181,15 @@ export default {
 			}
 		}
 	},
-    checkUserLogin(data) {
-      if (this.devList.length > 0) {
-        this.isLogin = true
-      } else {
-        this.isLogin = false
-      }
-    },
+    initMac(){
+		this.devList.forEach((val, index) => {
+		  if (val.mac == this.devListMac) {
+		    this.index = index
+		  } else {
+		    this.index = 0
+		  }
+		})
+	},
     tabSelect(e) {
       this.TabCur = e.currentTarget.dataset.id
       this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -173,9 +199,7 @@ export default {
       this.index = e.detail.value //index为选择序列下标
       this.updateDevListMac(this.devList[this.index].mac)
     },
-    handelLogin() {
-      this.isLogin = true
-    },
+    
     getLastData(data) {
       if (Array.isArray(data)) {
         const length = data.length
@@ -185,7 +209,7 @@ export default {
       }
     },
     setTemperatureData(data) {
-      if (!data) return
+      if (!data.length) return
       data = this.getLastData(data)
       return {
         label: '温度',
@@ -196,7 +220,7 @@ export default {
       }
     },
     setHumidityData(data) {
-      if (!data) return
+      if (!data.length) return
       data = this.getLastData(data)
       return {
         label: '湿度',
@@ -207,12 +231,31 @@ export default {
       }
     },
 	designTemperature(str){
-		console.log(str,this.tData)
-		if(str=='-'){
-			
-		}else{
-			
+		console.log(str,this.isCanDesign)
+		let t=this.tData.setting
+		let h=this.hData.setting
+		if(this.isCanDesign){
+		  return uni.showToast({
+		  	title:'温度设定中',
+			  icon:'none'
+		  })
 		}
+		if(str=='-'){
+			t--
+		}else{
+			t++
+		}
+		this.setDevTandH(t,h)
+	},
+	setDevTandH(t,h){
+		let obj={
+			mac:this.devListMac,
+			temperature:t,
+			humidity:h
+		}
+		setDeviceTemperatureOrHumidity(obj).then((res)=>{
+			this.isCanDesign=1
+		})
 		
 	},
     setChartData(data){
@@ -231,6 +274,7 @@ export default {
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
           newData[3].data.push(val.Ho)
         })
+		this.isCanDesign=0
       }else{
         newData=this.chartData
         this.chartData.forEach((val,index)=>{

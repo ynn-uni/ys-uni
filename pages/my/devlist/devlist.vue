@@ -131,15 +131,8 @@
 				this.listTouchDirection = null
 			},
 			showModal() {
-				let tel=this.userInfo.phone;
-				console.log(tel)
-				if(tel){
-					this.modalName = 'DialogModal3'
-				}else{
-					
-					this.$refs.adddev.showModalPhone()
-					
-				}
+				this.modalName = 'DialogModal3'
+				
 			},
 			hideModal(){
 				this.modalName = null;
@@ -219,6 +212,7 @@
 			
 			devDetail(index){
 				this.updateDevListMac(this.devList[index].mac)
+				this.$store.state.changeDev=true
 				uni.reLaunch({
 					url:'/pages/dev/dev'
 				})

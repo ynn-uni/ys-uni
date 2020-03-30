@@ -1,4 +1,4 @@
-import { register,login, getDeviceList } from '../../apis';
+import { loginOrRegisterWithWechat, getDeviceList } from '../../apis';
 export default {
   namespaced: true,
   state: {
@@ -44,9 +44,6 @@ export default {
 		if(data.code){
 			commit('updateCodeOnce', data.code);
 		}
-		
-        
-		
       });
     },
     // 检查用户授权设置
@@ -87,37 +84,23 @@ export default {
     },
     // 在后端登录或注册
     loginWithUserInfo({ state, commit, dispatch },payload) {
-      return login({
-        code: state.code
+      return loginOrRegisterWithWechat({
+        code: state.code,
+		...payload
       }).then(res => {//mp8KZtZdvMLE40nIsPAMFQ==
-        // commit('updateCodeOnce', null);
-		const {email,phone,key}=res.data;
-		const userinfo= {email,phone,key};
-		commit('updateUserInfo', userinfo);
+        commit('updateCodeOnce', null);
+		const {email,phone}=res.data.data;
+		const userinfo= {email,phone};
 		if(res.status===0){
-			commit('updateToken', res.data.token);
+			commit('updateToken','Bearer '+res.data.token);
 			dispatch('fatchDevListByToken');
-		}else{
-			dispatch('registerWithUserInfo',payload);
+			commit('updateUserInfo', userinfo);
 		}
         
       });
     },
-	registerWithUserInfo({ state, commit, dispatch }, payload) {
-	  return register({
-	    sessionKey: state.userInfo.key,
-	    ...payload // iv, encryptedData
-	  }).then(res => {
-		  console.log(res)
-	    commit('updateCodeOnce', null);
-	    commit('updateToken', res.data.token);
-	    const {email,phone}=res.data;
-	    const userinfo= {email,phone};
-	    commit('updateUserInfo', userinfo);
-		dispatch('fatchDevListByToken');
-	  });
-	},
-    // 从后端获取用户信息
+	
+ 
     fatchDevListByToken({ state,commit }) {
       getDeviceList().then(res => {
         commit('updateDevList', res.data);

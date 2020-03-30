@@ -1,11 +1,7 @@
 import { getAction, postAction } from '../utils/request';
-//注册
-export function register(data = {}) {
-  return postAction('/Api/User/registerWithWechat', data);
-}
-//登录
-export function login(data = {}) {
-  return getAction('/Api/User/loginWithWechat', data);
+//登录/注册
+export function loginOrRegisterWithWechat(data = {}) {
+  return postAction('/Api/User/loginOrRegisterWithWechat', data);
 }
 //设备列表
 export function getDeviceList(data = {}) {

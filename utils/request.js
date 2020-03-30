@@ -7,7 +7,7 @@ export async function request(url = '', method = 'GET', data = {}, token = '') {
       url: `${baseUrl}${url}`,
       data,
       header: {
-        token: store.state.user.token
+        Authorization: store.state.user.token
       },
       method
     })
