@@ -10,25 +10,25 @@
 				<view class="text">
 					联系人
 				</view>
-				<input type="text" value="" v-model="name"/>
+				<input type="text" value="" v-model="name" disabled />
 			</view>
 			<view class="in-group">
 				<view class="text">
 					联系电话
 				</view>
-				<input type="tel" value="" v-model="tel"/>
+				<input type="tel" value="" v-model="tel" disabled />
 			</view>
 			<view class="in-group">
 				<view class="text">
 					联系地址
 				</view>
-				<input type="text" value="" v-model="address"/>
+				<input type="text" value="" v-model="address" disabled />
 			</view>
 			<view class="in-group">
 				<view class="text">
 					详细信息:
 				</view>
-				<textarea value="" v-model="dis"/>
+				<textarea value="" v-model="dis" disabled />
 			</view>
 			
 			<view class="">
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-	// import req from '@/request/request.js'
 	export default {
 		data() {
 			return {

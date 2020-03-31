@@ -1,5 +1,9 @@
 # uni-app 进度环插件uni-app 进度环插件
 ------------
+项目名称：永生仪器
+蓝湖地址：(https://lanhuapp.com/url/reJoL-nqOXg)
+
+
 
 ### 使用说明：
 参考pages/xiaoran-circle/xiaoran-circle.vue引入组件

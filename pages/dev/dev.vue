@@ -6,14 +6,24 @@
     <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
     <noLogin v-if="devList.length<=0" ></noLogin>
     <view v-if="devList.length>0" class="dev-content animation-slide-right">
-     
+    <!-- <view class="dev-content animation-slide-right"> -->
+		
       <view class="content">
+		  <view class="cu-btn changedev text-center flex align-center">
+			 <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
+				{{devList[index].title}}
+			  </picker>
+			  <view class="remark cuIcon-more" @click="handelDevSign">
+			  </view>
+		  </view>
         <nodata v-if="data.t.length<=0" :text="'未获取到相关设备数据,请联系管理员'" :height="true"></nodata>
 		<view v-else>
-			<showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData>
-			<showDevData :datas="hData" v-if="TabCur===1"></showDevData>
-			<showWaringData v-if="TabCur===2" :waringinfo="waringinfo"></showWaringData>
-			<showChartLine v-if="TabCur===3" :datas="chartData"></showChartLine>
+			<showDev :datas="tData" :hdatas="hData" v-if="TabCur===0" @changetemperature="design"></showDev>
+			<!-- <showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData> -->
+			
+			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
+			<showChartLine v-if="TabCur===2" :datas="chartData"></showChartLine>
+			<showDevData  v-if="TabCur===3"></showDevData>
 		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
@@ -25,27 +35,23 @@
               @tap="tabSelect"
               :data-id="index"
             >
-              <view :class="'ico iconfont '+item.icon"></view>
+              <view v-if="index==0" :class="'ico myico iconfont '+item.icon"></view>
+			  <view v-else :class="'ico iconfont '+item.icon"></view>
               {{item.name}}
-			  <view v-if="index==2&&isWaring" class="cu-tag badge iconfont iconjinggao war">
+			  <view v-if="index==1&&isWaring" class="cu-tag badge iconfont iconjinggao war">
 				  
 			  </view>
             </view>
           </view>
         </scroll-view>
       </view>
-	  <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
-	    <button class="cu-btn changedev text-center">{{devList[index].title}}</button>
-	  </picker>
-      <!-- <view @click="handelDevSign">
-        查看备注
-      </view> -->
     </view>
   </view>
 </template>
 
 <script>
 import showDevData from './components/showDevData.vue'
+import showDev from './components/showDev.vue'
 import showWaringData from './components/showWaringData.vue'
 import showChartLine from './components/showChartLine.vue'
 import noLogin from '@/components/noLogin.vue'
@@ -65,13 +71,10 @@ export default {
       data:{},
       tabList: [
         {
-          name: '温度',
-          icon: 'iconwendukongzhi'
+          name: '温/湿度',
+          icon: 'iconwenshiduchuanganqi_o'
         },
-        {
-          name: '湿度',
-          icon: 'iconshidukongzhi'
-        },
+        
         {
           name: '预警',
           icon: 'iconyujing'
@@ -79,7 +82,11 @@ export default {
         {
           name: '数据',
           icon: 'iconshuju'
-        }
+        },
+		// {
+		//   name: '其他',
+		//   icon: 'iconshidukongzhi'
+		// }
       ],
       tData: {
         label: '温度',
@@ -95,7 +102,8 @@ export default {
         output: 0,
 				unit: '%'
       },
-	  seeting:{},
+	  seetingt:{},
+	  seetingh:{},
 	  chartData:[],
       waringinfo: {},
 	  isWaring:false
@@ -106,12 +114,14 @@ export default {
     showWaringData,
     showChartLine,
     noLogin,
-    nodata
+    nodata,
+	showDev
   },
   computed: {
     ...mapGetters(['token', 'devList', 'devListMac', 'userInfo','socketInstance']),
 	...mapState (['isAppHide']),
     picker() {
+	  if(!this.devList) return
       let list = []
       this.devList.forEach(val => {
         list.push(val.title)
@@ -121,18 +131,15 @@ export default {
   },
   watch: {
     devListMac() {
+	  this.initMac()
       this.initsocket()
     },
-	seeting(){
+	seetingt(){
+	  this.isCanDesign=0
+	},
+	seetingh(){
 	  this.isCanDesign=0
 	}
-  },
-  onLoad() {
-	  
-  	if (!this.isAppHide) {
-	  this.initMac()
-  	  this.initsocket()
-  	}
   },
   onShow() {
 	  
@@ -211,9 +218,10 @@ export default {
     setTemperatureData(data) {
       if (!data.length) return
       data = this.getLastData(data)
+	  this.seetingt=data.Ts
       return {
         label: '温度',
-        current: +(data.Ta / 100).toFixed(2),
+        current: Number(data.Ta).toFixed(1),
         setting: data.Ts,
 				output: data.To,
 				unit: '℃'
@@ -222,30 +230,40 @@ export default {
     setHumidityData(data) {
       if (!data.length) return
       data = this.getLastData(data)
+	  this.seetingh=data.Hs
       return {
         label: '湿度',
-        current: +(data.Ha / 100).toFixed(2),
+        current: Number(data.Ha).toFixed(1),
         setting: data.Hs,
 				output: data.Ho,
 				unit: '%'
       }
     },
-	designTemperature(str){
-		console.log(str,this.isCanDesign)
+	design(obj){
+		console.log(obj,this.isCanDesign)
 		let t=this.tData.setting
 		let h=this.hData.setting
 		if(this.isCanDesign){
 		  return uni.showToast({
-		  	title:'温度设定中',
+		  	title:'设定中，请稍后再试',
 			  icon:'none'
 		  })
 		}
-		if(str=='-'){
-			t--
+		if(obj.name=='t'){
+			if(obj.seeting=='-'){
+				t--
+			}else{
+				t++
+			}
 		}else{
-			t++
+			if(obj.seeting=='-'){
+				h--
+			}else{
+				h++
+			}
 		}
-		this.setDevTandH(t,h)
+		
+		// this.setDevTandH(t,h)
 	},
 	setDevTandH(t,h){
 		let obj={
@@ -307,7 +325,7 @@ export default {
   overflow: auto;
   // padding-bottom: 100upx;
   .tablist {
-    padding: 25upx 20upx;
+    padding: 20upx 20upx;
     /deep/.cu-item,.cu-avatar {
       // margin: 10upx 0;
       display: flex;
@@ -315,17 +333,21 @@ export default {
       justify-content: center;
       align-items: center;
       line-height: 70upx;
-      width: 100upx;
+      width: 100upx !important;
       height: 200upx;
       box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
       border-radius: 15upx;
 	  background-color: #fff;
 	  font-size: 34upx;
 	  color: #333333;
+	  margin: 0 30upx;
       .ico {
         font-size: 60upx;
         color: $primaryColor;
       }
+	  .myico{
+	      font-size: 80upx;
+	  }
 	  .war{
 		  width: 30upx;
 		  height: 30upx;
@@ -340,23 +362,31 @@ export default {
       background: linear-gradient(135deg, #7285ed 0%, #b791f7 100%);
       .ico {
         color: #ffffff;
+		
       }
+	  
     }
   }
   .changedev {
-    display: block;
-    margin: 0 auto;
-    width: 690upx;
-    height: 80upx;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
-    border-radius: 14upx;
-    font-size: 30upx;
-    color: rgba(51, 51, 51, 1);
-    line-height: 70upx;
-    letter-spacing: 2upx;
-    margin-top: 20upx;
-    margin-bottom: 20upx;
+		margin: 0 auto;
+		width: 690upx;
+		height: 80upx;
+		background: rgba(255, 255, 255, 1);
+		box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
+		border-radius: 14upx;
+		font-size: 30upx;
+		color: rgba(51, 51, 51, 1);
+		line-height: 70upx;
+		letter-spacing: 2upx;
+		margin-top: 20upx;
+		margin-bottom: 20upx;
+		position: relative;
+		.remark{
+			font-size: 40upx;
+			position: absolute;
+			right: 20upx;
+			width: 80upx;
+		}
   }
 }
 </style>

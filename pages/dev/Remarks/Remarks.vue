@@ -8,8 +8,8 @@
 			<view class="title">
 				备注{{index+1}}
 			</view>
-			<view class="dis">
-				{{item}}
+			<view class="dis" v-text="item">
+				<!-- {{item}} -->
 			</view>
 		</view>
 	</view>

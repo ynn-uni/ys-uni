@@ -33,9 +33,9 @@ export default {
     // 登录
     wxLogin({ commit, dispatch }) {
       dispatch('getWxCode');
-      dispatch('checkUserSetting');
+      
     },
-    getWxCode({state, commit }) {
+    getWxCode({state, commit ,dispatch}) {
       return uni.login().then(res => {
         const [error, data] = res;
         if (error) {
@@ -43,6 +43,9 @@ export default {
         }
 		if(data.code){
 			commit('updateCodeOnce', data.code);
+			dispatch('checkUserSetting');
+		}else{
+			dispatch('wxLogin');
 		}
       });
     },
@@ -88,6 +91,7 @@ export default {
         code: state.code,
 		...payload
       }).then(res => {//mp8KZtZdvMLE40nIsPAMFQ==
+	   if(!res.data) return
         commit('updateCodeOnce', null);
 		const {email,phone}=res.data.data;
 		const userinfo= {email,phone};
@@ -104,6 +108,7 @@ export default {
     fatchDevListByToken({ state,commit }) {
       getDeviceList().then(res => {
         commit('updateDevList', res.data);
+		if(!res.data) return
 		if(res.data.length>0&&state.devListMac==''){
 			commit('updateDevListMac', res.data[0].mac);
 		}
