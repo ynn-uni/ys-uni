@@ -19,7 +19,7 @@
 	  	  <button class="cu-btn des-btn" @click="handelTemperature('-')">
 	  	    <text class="cuIcon-move"></text>
 	  	  </button>
-	  	  <view class="text margin-lr">
+	  	  <view class="text margin-lr" @click="showModel('designT')">
 	  	    {{ datas.setting }}
 	  	    <view class="name">设定{{ datas.label }}</view>
 	  	  </view>
@@ -27,6 +27,7 @@
 	  	  <button class="cu-btn des-btn" @click="handelTemperature('+')">
 	  	    <text class="cuIcon-add"></text>
 	  	  </button>
+		  
 	  	</view>
 	  	
 	  	<view class="precent flex justify-center align-center">
@@ -57,7 +58,7 @@
 	  	  <button class="cu-btn des-btn" @click="handelHu('-')">
 	  	    <text class="cuIcon-move"></text>
 	  	  </button>
-	  	  <view class="text margin-lr">
+	  	  <view class="text margin-lr" @click="showModel('designH')">
 	  	    {{ hdatas.setting }}
 	  	    <view class="name">设定{{ hdatas.label }}</view>
 	  	  </view>
@@ -75,7 +76,7 @@
 	  	  <view class="margin-left-xs">{{ hdatas.output }}%</view>
 	  	</view>
 	  </view>
-    
+		
   </view>
 </template>
 
@@ -89,6 +90,7 @@ var canvaArcbar1 = null
 export default {
   data() {
     return {
+	  
       cWidth3: '', //圆弧进度图
       cHeight3: '', //圆弧进度图
       arcbarWidth: '', //圆弧进度图，进度条宽度,此设置可使各端宽度一致
@@ -147,6 +149,10 @@ export default {
   },
 
   methods: {
+	
+	 showModel(str){
+		 this.$emit('changetemperature',{name:'t',seeting:str})
+	 },
     initdata() {
       this.chartData.series[0].name = '实时' + this.datas.label
       this.chartData.series[0].data = this.datas.current
@@ -212,6 +218,7 @@ export default {
       }
     }
   }
+  
   .box{
 	  width:690upx;
 	  height:335upx;
@@ -219,7 +226,9 @@ export default {
 	  border-radius:12upx;
 	  box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
 	  padding-bottom: 10upx;
+	  
   }
+  
   .real{
 	  .left{
 		  font-size:144upx;

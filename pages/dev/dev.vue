@@ -23,7 +23,8 @@
 			
 			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
 			<showChartLine v-if="TabCur===2" :datas="chartData"></showChartLine>
-			<showDevData  v-if="TabCur===3"></showDevData>
+			<showOtherChartLine v-if="TabCur===3" :datas="chartData"></showOtherChartLine>
+			<!-- <showDevData  v-if="TabCur===3"></showDevData> -->
 		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
@@ -46,10 +47,60 @@
         </scroll-view>
       </view>
     </view>
+	  <view class="cu-modal model mymodel" :class="modalName=='designT'?'show':''">
+	  	<view class="cu-dialog bg-white">
+	  		<view class="cu-bar bg-white justify-end cu-height">
+	  			<view class="content">设定温度</view>
+	  			<view class="action" @tap="hideModal">
+	  				<text class="cuIcon-close text-gray"></text>
+	  			</view>
+	  		</view>
+	  		<view class="bg-white">
+	  			<form class="form-box ">
+	  				<view class="form-input">
+	  					<view class="flex justify-center">
+	  						<input v-model="t" value="" placeholder="输入设定温度" type="number" />
+	  					</view>
+	  					
+	  				</view>
+	  				<view class="addbtn">
+						<button class="cu-btn round sure" @tap="hideModal">取消</button>
+	  					<button class="cu-btn round sure bg-linear" @tap="makesure('t')">确认</button>
+	  				</view>
+	  			</form>
+	  		</view>
+	  	</view>
+	  </view>
+	  <view class="cu-modal model mymodel" :class="modalName=='designH'?'show':''">
+	  	<view class="cu-dialog bg-white">
+	  		<view class="cu-bar bg-white justify-end cu-height">
+	  			<view class="content">设定湿度</view>
+	  			<view class="action" @tap="hideModal">
+	  				<text class="cuIcon-close text-gray"></text>
+	  			</view>
+	  		</view>
+	  		<view class="bg-white">
+	  			<form class="form-box ">
+	  				<view class="form-input">
+	  					<view class="flex justify-center">
+	  						<input v-model="h" value="" placeholder="输入设定湿度" type="number" />
+	  					</view>
+	  					
+	  				</view>
+	  				<view class="addbtn">
+	  						<button class="cu-btn round sure" @tap="hideModal">取消</button>
+	  					<button class="cu-btn round sure bg-linear" @tap="makesure('h')">确认</button>
+	  				</view>
+	  			</form>
+	  		</view>
+	  	</view>
+	  </view>
+	
   </view>
 </template>
 
 <script>
+import showOtherChartLine from './components/showOtherChartLine.vue'
 import showDevData from './components/showDevData.vue'
 import showDev from './components/showDev.vue'
 import showWaringData from './components/showWaringData.vue'
@@ -61,11 +112,14 @@ import { mapState ,mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
+	  modalName:null,
       isCanDesign:0,//温湿度是否可修改
       index: 0,
       isLogin: false,
       haveDev: false,
       TabCur: 0,
+	  t:null,
+	  h:null,
       scrollLeft: 0,
       tabIndex: 0,
       data:{},
@@ -83,6 +137,10 @@ export default {
           name: '数据',
           icon: 'iconshuju'
         },
+		{
+		  name: '其他',
+		  icon: 'iconshuju'
+		},
 		// {
 		//   name: '其他',
 		//   icon: 'iconshidukongzhi'
@@ -113,6 +171,7 @@ export default {
     showDevData,
     showWaringData,
     showChartLine,
+	showOtherChartLine,
     noLogin,
     nodata,
 	showDev
@@ -222,7 +281,7 @@ export default {
       return {
         label: '温度',
         current: Number(data.Ta).toFixed(1),
-        setting: data.Ts,
+        setting: Number(data.Ts).toFixed(1),
 				output: data.To,
 				unit: '℃'
       }
@@ -234,13 +293,12 @@ export default {
       return {
         label: '湿度',
         current: Number(data.Ha).toFixed(1),
-        setting: data.Hs,
+        setting: Number(data.Hs).toFixed(1),
 				output: data.Ho,
 				unit: '%'
       }
     },
 	design(obj){
-		console.log(obj,this.isCanDesign)
 		let t=this.tData.setting
 		let h=this.hData.setting
 		if(this.isCanDesign){
@@ -252,18 +310,46 @@ export default {
 		if(obj.name=='t'){
 			if(obj.seeting=='-'){
 				t--
-			}else{
+			}else if(obj.seeting=='+'){
 				t++
+			}else{
+				this.showHModel(obj.seeting)
 			}
 		}else{
 			if(obj.seeting=='-'){
 				h--
-			}else{
+			}else if(obj.seeting=='+'){
 				h++
+			}else{//designT
+				this.showHModel(obj.seeting)
 			}
 		}
-		
-		// this.setDevTandH(t,h)
+		console.log(t,h)
+	},
+	makesure(str){
+		if(str=='t'&&!this.t){
+			uni.showToast({
+				title:'请填写设定温度',
+				icon:'none'
+			})
+			return false
+		}else if(str=='h'&&!this.h){
+			uni.showToast({
+				title:'请填写设定湿度',
+				icon:'none'
+			})
+			return false
+		}
+		let t=this.t?this.t:this.tData.setting
+		let h=this.h?this.h:this.hData.setting
+		console.log(t,h)
+		this.hideModal()
+	},
+	showHModel(str){
+		this.modalName=str
+	},
+	hideModal(){
+		this.modalName=null
 	},
 	setDevTandH(t,h){
 		let obj={
@@ -325,47 +411,46 @@ export default {
   overflow: auto;
   // padding-bottom: 100upx;
   .tablist {
-    padding: 20upx 20upx;
-    /deep/.cu-item,.cu-avatar {
-      // margin: 10upx 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      line-height: 70upx;
-      width: 100upx !important;
-      height: 200upx;
-      box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
-      border-radius: 15upx;
-	  background-color: #fff;
-	  font-size: 34upx;
-	  color: #333333;
-	  margin: 0 30upx;
-      .ico {
-        font-size: 60upx;
-        color: $primaryColor;
-      }
-	  .myico{
-	      font-size: 80upx;
-	  }
-	  .war{
-		  width: 30upx;
-		  height: 30upx;
-		  line-height: 30upx;
+     padding: 20upx 20upx;
+		/deep/.cu-item,.cu-avatar {
+		  // margin: 10upx 0;
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  align-items: center;
+		  line-height: 70upx;
+		  width: 100upx !important;
+		  height: 200upx;
+		  box-shadow: 0px 0px 20upx 0px rgba(120, 134, 238, 0.22);
+		  border-radius: 15upx;
+		  background-color: #fff;
 		  font-size: 34upx;
-		  left: 5upx;
-		  top:5upx
-	  }
-    }
-    .activeTab {
-      color: #ffffff;
-      background: linear-gradient(135deg, #7285ed 0%, #b791f7 100%);
-      .ico {
-        color: #ffffff;
-		
-      }
+		  color: #333333;
+		  .ico {
+			font-size: 60upx;
+			color: $primaryColor;
+		  }
+		  .myico{
+			  font-size: 80upx;
+		  }
+		  .war{
+			  width: 30upx;
+			  height: 30upx;
+			  line-height: 30upx;
+			  font-size: 34upx;
+			  left: 5upx;
+			  top:5upx
+		  }
+		}
+     .activeTab {
+		  color: #ffffff;
+		  background: linear-gradient(135deg, #7285ed 0%, #b791f7 100%);
+			  .ico {
+				color: #ffffff;
+				
+			  }
 	  
-    }
+		}
   }
   .changedev {
 		margin: 0 auto;
@@ -387,6 +472,34 @@ export default {
 			right: 20upx;
 			width: 80upx;
 		}
-  }
+    }
+	.mymodel{
+		
+		.form-box{
+			height: 400upx;
+			background-color: #fff;
+			.form-input{
+				margin-top: 50upx;
+				input{
+					text-align: left;
+					background-color: #fff;
+					width: 60%;
+					padding-left: 10upx;
+					height: 60upx;
+					border: 1px solid #EEEEEE;
+					border-radius: 10upx;
+				}
+			}
+			.addbtn{
+				background-color: #fff;
+				margin-top: 80upx;
+				margin-bottom: 30upx;
+				button{
+					margin: 0 40upx;
+				}
+			}
+		}
+		
+	}
 }
 </style>
