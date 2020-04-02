@@ -1,5 +1,6 @@
 <template>
   <view class="showdev animation-fade flex align-center flex-direction justify-between">
+	
 	  <view class="box flex align-center flex-direction">
 	  	<view class="real flex align-center justify-center">
 	  		<view class="left">
@@ -90,7 +91,8 @@ var canvaArcbar1 = null
 export default {
   data() {
     return {
-	  
+		t:{},
+		h:{},
       cWidth3: '', //圆弧进度图
       cHeight3: '', //圆弧进度图
       arcbarWidth: '', //圆弧进度图，进度条宽度,此设置可使各端宽度一致
@@ -134,29 +136,24 @@ export default {
 	}
   },
   watch: {
-    "datas.current"() {
-      this.initdata()
-      this.showArcbar('canvasGauge', this.chartData)
-    }
+    datas() {
+      this.t=this.datas
+	  console.log(this.datas)
+    },
+	hdatas() {
+		this.h=this.hdatas
+		console.log(this.hdatas)
+	}
   },
   mounted() {
-    this.initdata()
-    _self = this
-    this.cWidth3 = uni.upx2px(600) //这里要与样式的宽高对应
-    this.cHeight3 = uni.upx2px(500) //这里要与样式的宽高对应
-    this.arcbarWidth = uni.upx2px(38)
-    this.showArcbar('canvasGauge', this.chartData)
+    console.log(this.datas)
+	console.log(this.hdatas)
   },
 
   methods: {
-	
-	 showModel(str){
-		 this.$emit('changetemperature',{name:'t',seeting:str})
-	 },
-    initdata() {
-      this.chartData.series[0].name = '实时' + this.datas.label
-      this.chartData.series[0].data = this.datas.current
-    },
+	showModel(str){
+		this.$emit('changetemperature',{seeting:str})
+	},
 	handelTemperature(str){
 		this.$emit('changetemperature',{name:'t',seeting:str})
 		
@@ -165,38 +162,7 @@ export default {
 		this.$emit('changetemperature',{name:'h',seeting:str})
 		
 	},
-    showArcbar(canvasId, chartData) {
-      canvaArcbar1 = new uCharts({
-        $this: _self,
-        canvasId: canvasId,
-        type: 'arcbar',
-        fontSize: 12,
-        legend: { show: false },
-        background: '#FFFFFF',
-        pixelRatio: _self.pixelRatio,
-        series: chartData.series,
-        animation: true,
-        width: _self.cWidth3 * _self.pixelRatio,
-        height: _self.cHeight3 * _self.pixelRatio,
-        dataLabel: true,
-        title: {
-          name: Math.round(chartData.series[0].data * 100) + _self.datas.unit,
-          color: '#333333',
-          fontSize: 65 * _self.pixelRatio
-        },
-        subtitle: {
-          name: chartData.series[0].name,
-          color: '#333333',
-          fontSize: 25 * _self.pixelRatio
-        },
-        extra: {
-          arcbar: {
-            type: 'default',
-            width: _self.arcbarWidth * _self.pixelRatio //圆弧的宽度
-          }
-        }
-      })
-    }
+  
   }
 }
 </script>

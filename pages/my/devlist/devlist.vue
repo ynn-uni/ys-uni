@@ -74,9 +74,9 @@
 </template>
 
 <script>
-	import {setUserPhone,addDevice,delDevice} from '../../../apis/index.js'
+	import {setUserPhone,addDevice,delDevice,} from '../../../apis/index.js'
 	import modelre from '@/components/modelre.vue'
-	import { mapGetters, mapActions, mapMutations } from 'vuex';
+	import { mapGetters, mapActions, mapMutations ,mapState} from 'vuex';
 	export default {
 		data() {
 			return {
@@ -96,6 +96,7 @@
 		},
 		computed:{
 			 ...mapGetters([ 'devList','devListMac','userInfo']),
+			 ...mapState (['isAppHide']),
 		},
 		components:{
 			modelre
@@ -108,6 +109,7 @@
 			...mapActions('user', [
 			  'fatchDevListByToken'
 			]),
+			...mapMutations(['updateIsAppHide']),
 			// ListTouch触摸开始
 			ListTouchStart(e) {
 				
@@ -124,7 +126,6 @@
 				
 				if (this.listTouchDirection == 'left') {
 					this.modalName = e.currentTarget.dataset.target
-					console.log(e.currentTarget.dataset.target)
 				} else {
 					this.modalName = null
 				}
@@ -138,11 +139,9 @@
 				this.modalName = null;
 			},
 			touchStart(e) {
-				console.log(e.timeStamp)
 			  this.touchStartTime = e.timeStamp;
 			},
 			touchEnd(e) {
-				console.log(e.timeStamp)
 			  this.touchEndTime = e.timeStamp;
 			},
 			doubleTap(e) {
@@ -150,7 +149,6 @@
 			  // 控制点击事件在350ms内触发，加这层判断是为了防止长按时会触发点击事件
 			  if (vm.touchEndTime - vm.touchStartTime < 350) {
 			    // 当前点击的时间
-				console.log(e)
 			    var currentTime = e.timeStamp;
 			    var lastTapTime = vm.lastTapTime;
 			    // 更新最后一次点击时间
@@ -207,15 +205,16 @@
 				
 				delDevice({id:this.delid}).then((res)=>{
 					this.fatchDevListByToken()
+					this.updateIsAppHide(true)
 				})
 			},
 			
 			devDetail(index){
-				this.updateDevListMac(this.devList[index].mac)
-				this.$store.state.changeDev=true
+				this.updateIsAppHide(true)
 				uni.reLaunch({
 					url:'/pages/dev/dev'
 				})
+				this.updateDevListMac(this.devList[index].mac)
 			},
 			getDevList(){
 				this.devlist=this.devList

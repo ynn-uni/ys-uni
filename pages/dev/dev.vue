@@ -19,12 +19,9 @@
         <nodata v-if="data.t.length<=0" :text="'未获取到相关设备数据,请联系管理员'" :height="true"></nodata>
 		<view v-else>
 			<showDev :datas="tData" :hdatas="hData" v-if="TabCur===0" @changetemperature="design"></showDev>
-			<!-- <showDevData :datas="tData" v-if="TabCur===0" @changetemperature="designTemperature"></showDevData> -->
-			
 			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
 			<showChartLine v-if="TabCur===2" :datas="chartData"></showChartLine>
 			<showOtherChartLine v-if="TabCur===3" :datas="chartData"></showOtherChartLine>
-			<!-- <showDevData  v-if="TabCur===3"></showDevData> -->
 		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
@@ -164,6 +161,7 @@ export default {
 	  seetingh:{},
 	  chartData:[],
       waringinfo: {},
+	  otherData:[],
 	  isWaring:false
     }
   },
@@ -189,9 +187,10 @@ export default {
     }
   },
   watch: {
-    devListMac() {
-	  this.initMac()
-      this.initsocket()
+    devListMac(val,old) {
+		if(val!=old){
+			this.initsocket()
+		}
     },
 	seetingt(){
 	  this.isCanDesign=0
@@ -202,10 +201,9 @@ export default {
   },
   onShow() {
 	  
-    if (this.isAppHide) {
+    if(this.isAppHide) {
 	  this.initMac()
-      this.initsocket()
-    }
+	}
     
   },
  
@@ -219,7 +217,6 @@ export default {
 		}
 		
       this.initWebsocket().then(instance => {
-		  this.updateIsAppHide(false)
         instance.onopen = evt => {
           instance.send({ mac: this.devListMac })
         }
@@ -231,11 +228,16 @@ export default {
 		  if(json.e.e1!==null){
 			  this.waringinfo = json.e
 		  }
+		  if(json.p){
+			 
+			  console.log( json.p.p4)
+		  }
           
 		  this.checkWaring(this.waringinfo )
           this.tData = this.setTemperatureData(json.t)
           this.hData = this.setHumidityData(json.h)
       	  this.chartData=this.setChartData(json)
+		  this.otherData=this.serOtherData(json.p)
         }
       })
     },
@@ -248,13 +250,18 @@ export default {
 		}
 	},
     initMac(){
-		this.devList.forEach((val, index) => {
-		  if (val.mac == this.devListMac) {
-		    this.index = index
-		  } else {
-		    this.index = 0
-		  }
-		})
+		for(var i=0;i<this.devList.length;i++){
+			if (this.devList[i].mac == this.devListMac) {
+			  this.index = i
+			  this.initsocket()
+			  return
+			}else{
+				this.index = 0
+			}
+		}	
+		this.initsocket()
+		this.updateIsAppHide(false)
+		
 	},
     tabSelect(e) {
       this.TabCur = e.currentTarget.dataset.id
@@ -282,7 +289,7 @@ export default {
         label: '温度',
         current: Number(data.Ta).toFixed(1),
         setting: Number(data.Ts).toFixed(1),
-				output: data.To,
+				output: Number(data.To).toFixed(1),
 				unit: '℃'
       }
     },
@@ -294,7 +301,7 @@ export default {
         label: '湿度',
         current: Number(data.Ha).toFixed(1),
         setting: Number(data.Hs).toFixed(1),
-				output: data.Ho,
+				output: Number(data.Ho).toFixed(1),
 				unit: '%'
       }
     },
@@ -395,7 +402,60 @@ export default {
       }
       return newData
     },
-    handelDevSign(){
+    serOtherData(data){
+		if(!data) return;
+		let newData=[
+			{ name: 'p1', data: [] },
+			{ name: 'p2', data: [] },
+			{ name: 'p3', data: [] },
+			{ name: 'p4', data: [] },
+			{ name: 'p5', data: [] },
+			{ name: 'p6', data: [] },
+			{ name: 'p7', data: [] },
+			{ name: 'p8', data: [] },
+			{ name: 'p9', data: [] },
+			{ name: 'p10', data: [] },
+			{ name: 'p11', data: [] },
+			{ name: 'p12', data: [] },
+			{ name: 'p13', data: [] },
+			{ name: 'p14', data: [] },
+			{ name: 'p15', data: [] },
+			{ name: 'p16', data: [] },
+			{ name: 'p17', data: [] },
+			{ name: 'p18', data: [] }];
+			data.forEach((val)=>{
+				console.log(val)
+			})
+			
+			// if(data.length<20){
+			//   data.t.forEach((val)=>{
+			//     newData[0].data.push(parseInt(val.Ta).toFixed(2))
+			//     newData[1].data.push(val.To)
+			//   })
+			//   data.h.forEach((val)=>{
+			//     newData[2].data.push( parseInt(val.Ha).toFixed(2))
+			//     newData[3].data.push(val.Ho)
+			//   })
+			// 		this.isCanDesign=0
+			// }else{
+			//   newData=this.chartData
+			//   this.chartData.forEach((val,index)=>{
+			//     newData[index].data=val.data.slice(1)
+			//   })
+			//   data.t.forEach((val)=>{
+			//     newData[0].data.push(parseInt(val.Ta).toFixed(2))
+			//     newData[1].data.push(val.To)
+			//   })
+			//   data.h.forEach((val)=>{
+			//     newData[2].data.push( parseInt(val.Ha).toFixed(2))
+			//     newData[3].data.push(val.Ho)
+			//   })
+			// }
+			return newData
+			
+			
+	},
+	handelDevSign(){
       uni.navigateTo({
         url:'/pages/dev/Remarks/Remarks'
       })

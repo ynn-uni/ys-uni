@@ -19,6 +19,8 @@ var canvaArea = null
 export default {
   data() {
     return {
+		n:0,
+		size:2,
 	  statr:0,
       cWidth: '',
       cHeight: '',
@@ -27,10 +29,10 @@ export default {
       Area: {
         categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         series: [
-          { name: '实时温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '输出温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '实时湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '输出湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+          { name: '传感器1温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '传感器1湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '传感器2温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '传感器2湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
         ]
       } //图表数据对象
     }
@@ -43,26 +45,48 @@ export default {
   },
   watch:{
 	  datas() {
-	    this.initData()
+		let n=this.n
+	    this.initData(n)
 	    this.showArea('canvasArea1', this.Area)
+	  },
+	  n() {
+	  		let n=this.n
+			this.initData(n)
+			this.showArea('canvasArea1', this.Area)
 	  }
   },
   mounted() {
 	  _self = this
 	  this.cWidth = uni.upx2px(750)
 	  this.cHeight = uni.upx2px(660)
-	  this.initData()
+	  let n=this.n
+	  this.initData(n)
 	  this.showArea('canvasArea1', this.Area)
   },
   methods: {
-	  initData(){
-      if(this.datas.length<=0) return;
+	  before(){
+		  if(this.n==0){
+			  this.n=2
+		  }else{
+			 this.n=this.n-this.size
+		  }
+		  
+	  },
+	  next(){
+		  if(this.n==2){
+		  	this.n=0
+		  }else{
+		  	this.n=this.n+this.size
+		  }
+	  },
+	  initData(n){
+        if(this.datas.length<=0) return;
 		  this.Area.categories=[]
           this.Area.series=[]
 		  for(var i=0;i<this.datas[0].data.length;i++){
 			  this.Area.categories.push(i)
 		  }
-		  this.Area.series=this.datas
+		  this.Area.series=this.datas.slice(n,n+this.size)
 	  },
     showArea(canvasId, chartData) {
       canvaArea = new uCharts({
@@ -103,7 +127,10 @@ export default {
           dashLength: 10,
           splitNumber: 5,
           fontSize: 0,
-          titleFontColor: '#fff'
+          titleFontColor: '#fff',
+		  format:(e)=>{
+			  return e.toFixed(0)
+		  }
         },
         width: _self.cWidth * _self.pixelRatio,
         height: _self.cHeight * _self.pixelRatio,
