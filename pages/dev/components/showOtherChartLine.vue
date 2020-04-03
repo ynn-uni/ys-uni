@@ -4,10 +4,18 @@
 			<button class="cu-btn round sure" @tap="before">上一组</button>
 			<button class="cu-btn round sure" @tap="next">下一组</button>
 	  </view>
-    <view class="qiun-charts flex justify-center align-center">
-      <view class="charts flex justify-center align-center">
+    <view class="qiun-charts flex justify-around flex-direction align-center">
+		<view class="item flex align-center" v-for="(item,index) in Area.series" :key="index">
+			<view class="name">
+				{{item.name}}:
+			</view>
+			<view class="num">
+				{{item.data[19]||'0'}}
+			</view>
+		</view>
+     <!-- <view class="charts flex justify-center align-center">
         <canvas canvas-id="canvasArea1" id="canvasArea1" class="chartsCan" @touchstart="touchArea"></canvas>
-      </view>
+      </view> -->
     </view>
   </view>
 </template>
@@ -20,7 +28,7 @@ export default {
   data() {
     return {
 		n:0,
-		size:2,
+		size:6,
 	  statr:0,
       cWidth: '',
       cHeight: '',
@@ -47,12 +55,12 @@ export default {
 	  datas() {
 		let n=this.n
 	    this.initData(n)
-	    this.showArea('canvasArea1', this.Area)
+	    // this.showArea('canvasArea1', this.Area)
 	  },
 	  n() {
 	  		let n=this.n
 			this.initData(n)
-			this.showArea('canvasArea1', this.Area)
+			// this.showArea('canvasArea1', this.Area)
 	  }
   },
   mounted() {
@@ -61,19 +69,19 @@ export default {
 	  this.cHeight = uni.upx2px(660)
 	  let n=this.n
 	  this.initData(n)
-	  this.showArea('canvasArea1', this.Area)
+	  // this.showArea('canvasArea1', this.Area)
   },
   methods: {
 	  before(){
 		  if(this.n==0){
-			  this.n=2
+			  this.n=12
 		  }else{
 			 this.n=this.n-this.size
 		  }
 		  
 	  },
 	  next(){
-		  if(this.n==2){
+		  if(this.n==12){
 		  	this.n=0
 		  }else{
 		  	this.n=this.n+this.size
@@ -87,6 +95,7 @@ export default {
 			  this.Area.categories.push(i)
 		  }
 		  this.Area.series=this.datas.slice(n,n+this.size)
+		  console.log(this.Area.series)
 	  },
     showArea(canvasId, chartData) {
       canvaArea = new uCharts({
@@ -149,14 +158,8 @@ export default {
       var i = 0
       canvaArea.showToolTip(e, {
         format: function(item, category) {
-          var str = ''
-          if (i == 0 || i == 1) {
-            str = '℃'
-          } else {
-            str = '%'
-          }
-          i++
-          return item.name + ':' + item.data + str
+			
+          return item.name + ':' + item.data
         }
       })
     }
@@ -178,16 +181,34 @@ export default {
 	  width: 100%;
 	  position: absolute;
 	  bottom: 0;
-	  z-index: 100;
+	  // z-index: 10;
 	  button{
 		  height: 40upx;
 	  }
   }
   .qiun-charts {
     width: 100%;
-    height: 660upx;
+    height: 620upx;
     background-color: #ffffff;
     position: relative;
+	top: -40upx;
+	.item{
+		width: 500upx;
+		.name{
+			font-size: 40rpx;
+			font-weight: bold;
+			color: #545454;
+			line-height: 59rpx;
+			margin-right: 20rpx;
+		}
+		.num{
+			font-size: 32rpx;
+			font-weight: 500;
+			color: #545454;
+			line-height: 45rpx;
+			width: 458rpx;
+		}
+	}
     .charts {
       width: 100%;
       height: 660upx;

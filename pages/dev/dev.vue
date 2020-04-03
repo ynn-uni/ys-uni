@@ -21,7 +21,7 @@
 			<showDev :datas="tData" :hdatas="hData" v-if="TabCur===0" @changetemperature="design"></showDev>
 			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
 			<showChartLine v-if="TabCur===2" :datas="chartData"></showChartLine>
-			<showOtherChartLine v-if="TabCur===3" :datas="chartData"></showOtherChartLine>
+			<showOtherChartLine v-if="TabCur===3" :datas="otherData"></showOtherChartLine>
 		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
@@ -34,7 +34,7 @@
               :data-id="index"
             >
               <view v-if="index==0" :class="'ico myico iconfont '+item.icon"></view>
-			  <view v-else :class="'ico iconfont '+item.icon"></view>
+			  <view v-else :class="'ico '+item.icon"></view>
               {{item.name}}
 			  <view v-if="index==1&&isWaring" class="cu-tag badge iconfont iconjinggao war">
 				  
@@ -61,7 +61,7 @@
 	  					
 	  				</view>
 	  				<view class="addbtn">
-						<button class="cu-btn round sure" @tap="hideModal">取消</button>
+						<button class="cu-btn round sure " @tap="hideModal">取消</button>
 	  					<button class="cu-btn round sure bg-linear" @tap="makesure('t')">确认</button>
 	  				</view>
 	  			</form>
@@ -128,15 +128,15 @@ export default {
         
         {
           name: '预警',
-          icon: 'iconyujing'
+          icon: 'iconfont iconyujing'
         },
         {
           name: '数据',
-          icon: 'iconshuju'
+          icon: 'iconfont iconshuju'
         },
 		{
 		  name: '其他',
-		  icon: 'iconshuju'
+		  icon: 'cuIcon-cascades'
 		},
 		// {
 		//   name: '其他',
@@ -228,10 +228,6 @@ export default {
 		  if(json.e.e1!==null){
 			  this.waringinfo = json.e
 		  }
-		  if(json.p){
-			 
-			  console.log( json.p.p4)
-		  }
           
 		  this.checkWaring(this.waringinfo )
           this.tData = this.setTemperatureData(json.t)
@@ -310,46 +306,55 @@ export default {
 		let h=this.hData.setting
 		if(this.isCanDesign){
 		  return uni.showToast({
-		  	title:'设定中，请稍后再试',
+		  	title:'有数据设定中，请稍后再试',
 			  icon:'none'
 		  })
 		}
 		if(obj.name=='t'){
 			if(obj.seeting=='-'){
 				t--
+				this.isCanDesign=1
 			}else if(obj.seeting=='+'){
 				t++
+				this.isCanDesign=1
 			}else{
 				this.showHModel(obj.seeting)
 			}
 		}else{
 			if(obj.seeting=='-'){
 				h--
+				this.isCanDesign=1
 			}else if(obj.seeting=='+'){
 				h++
+				this.isCanDesign=1
 			}else{//designT
 				this.showHModel(obj.seeting)
 			}
 		}
+		// this.isCanDesign=1
 		console.log(t,h)
+		// this.setDevTandH(t,h)
 	},
 	makesure(str){
+		console.log(this.isCanDesign)
 		if(str=='t'&&!this.t){
-			uni.showToast({
+			return uni.showToast({
 				title:'请填写设定温度',
 				icon:'none'
 			})
-			return false
 		}else if(str=='h'&&!this.h){
-			uni.showToast({
+			return uni.showToast({
 				title:'请填写设定湿度',
 				icon:'none'
 			})
-			return false
+		}else{
+			this.isCanDesign=1
+			let t=this.t?this.t:this.tData.setting
+			let h=this.h?this.h:this.hData.setting
+			console.log(t,h)
 		}
-		let t=this.t?this.t:this.tData.setting
-		let h=this.h?this.h:this.hData.setting
-		console.log(t,h)
+		
+		
 		this.hideModal()
 	},
 	showHModel(str){
@@ -385,7 +390,7 @@ export default {
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
           newData[3].data.push(val.Ho)
         })
-		this.isCanDesign=0
+		
       }else{
         newData=this.chartData
         this.chartData.forEach((val,index)=>{
@@ -404,6 +409,7 @@ export default {
     },
     serOtherData(data){
 		if(!data) return;
+		const e=2.718281828459
 		let newData=[
 			{ name: 'p1', data: [] },
 			{ name: 'p2', data: [] },
@@ -423,34 +429,40 @@ export default {
 			{ name: 'p16', data: [] },
 			{ name: 'p17', data: [] },
 			{ name: 'p18', data: [] }];
-			data.forEach((val)=>{
-				console.log(val)
-			})
+			// data.forEach((val)=>{
+			// 	console.log(val)
+			// })
+			// var math=new Math()
+			if(data.length){
+				this.otherData=[]
+				data.forEach((val,index)=>{
+					for(var i in val){
+						newData.forEach((el)=>{
+							if(el.name==i){
+								// el.data.push(parseInt(val[i]).toFixed(2))
+								el.data.push(val[i])
+							}
+						})
+						
+					}
+				})
+				
+			}else{
+				newData=this.otherData
+				this.otherData.forEach((val,index)=>{
+				  newData[index].data=val.data.slice(1)
+				})
+				for(var i in data){
+					newData.forEach((el)=>{
+						if(el.name==i){
+							// el.data.push(parseInt(data[i]).toFixed(2))
+							el.data.push(data[i])
+						}
+					})
+					
+				}
+			}
 			
-			// if(data.length<20){
-			//   data.t.forEach((val)=>{
-			//     newData[0].data.push(parseInt(val.Ta).toFixed(2))
-			//     newData[1].data.push(val.To)
-			//   })
-			//   data.h.forEach((val)=>{
-			//     newData[2].data.push( parseInt(val.Ha).toFixed(2))
-			//     newData[3].data.push(val.Ho)
-			//   })
-			// 		this.isCanDesign=0
-			// }else{
-			//   newData=this.chartData
-			//   this.chartData.forEach((val,index)=>{
-			//     newData[index].data=val.data.slice(1)
-			//   })
-			//   data.t.forEach((val)=>{
-			//     newData[0].data.push(parseInt(val.Ta).toFixed(2))
-			//     newData[1].data.push(val.To)
-			//   })
-			//   data.h.forEach((val)=>{
-			//     newData[2].data.push( parseInt(val.Ha).toFixed(2))
-			//     newData[3].data.push(val.Ho)
-			//   })
-			// }
 			return newData
 			
 			
