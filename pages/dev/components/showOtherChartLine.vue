@@ -5,17 +5,17 @@
 			<button class="cu-btn round sure" @tap="next">下一组</button>
 	  </view>
     <view class="qiun-charts flex justify-around flex-direction align-center">
-		<view class="item flex align-center" v-for="(item,index) in Area.series" :key="index">
+		<!-- <view class="item flex align-center" v-for="(item,index) in Area.series" :key="index">
 			<view class="name">
 				{{item.name}}:
 			</view>
 			<view class="num">
 				{{item.data[19]||'0'}}
 			</view>
-		</view>
-     <!-- <view class="charts flex justify-center align-center">
+		</view> -->
+     <view class="charts flex justify-center align-center">
         <canvas canvas-id="canvasArea1" id="canvasArea1" class="chartsCan" @touchstart="touchArea"></canvas>
-      </view> -->
+      </view>
     </view>
   </view>
 </template>
@@ -55,21 +55,21 @@ export default {
 	  datas() {
 		let n=this.n
 	    this.initData(n)
-	    // this.showArea('canvasArea1', this.Area)
+	    this.showArea('canvasArea1', this.Area)
 	  },
 	  n() {
 	  		let n=this.n
 			this.initData(n)
-			// this.showArea('canvasArea1', this.Area)
+			this.showArea('canvasArea1', this.Area)
 	  }
   },
   mounted() {
 	  _self = this
 	  this.cWidth = uni.upx2px(750)
-	  this.cHeight = uni.upx2px(660)
+	  this.cHeight = uni.upx2px(640)
 	  let n=this.n
 	  this.initData(n)
-	  // this.showArea('canvasArea1', this.Area)
+	  this.showArea('canvasArea1', this.Area)
   },
   methods: {
 	  before(){
@@ -156,10 +156,16 @@ export default {
     },
     touchArea(e) {
       var i = 0
+	  
       canvaArea.showToolTip(e, {
         format: function(item, category) {
-			
-          return item.name + ':' + item.data
+			let str=null
+			if(item.name.indexOf('温度')>0){
+				str='℃'
+			}else if(item.name.indexOf('湿度')>0){
+				str='%'
+			}
+          return item.name + ':' + item.data+str
         }
       })
     }
@@ -181,14 +187,14 @@ export default {
 	  width: 100%;
 	  position: absolute;
 	  bottom: 0;
-	  // z-index: 10;
+	  z-index: 10;
 	  button{
 		  height: 40upx;
 	  }
   }
   .qiun-charts {
     width: 100%;
-    height: 620upx;
+    height: 640upx;
     background-color: #ffffff;
     position: relative;
 	top: -40upx;

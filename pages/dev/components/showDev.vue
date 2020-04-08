@@ -138,16 +138,15 @@ export default {
   watch: {
     datas() {
       this.t=this.datas
-	  console.log(this.datas)
+	  
     },
 	hdatas() {
 		this.h=this.hdatas
-		console.log(this.hdatas)
+		
 	}
   },
   mounted() {
-    console.log(this.datas)
-	console.log(this.hdatas)
+    
   },
 
   methods: {

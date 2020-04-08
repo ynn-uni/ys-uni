@@ -111,6 +111,7 @@ export default {
     return {
 	  modalName:null,
       isCanDesign:0,//温湿度是否可修改
+	  u:0,
       index: 0,
       isLogin: false,
       haveDev: false,
@@ -234,6 +235,10 @@ export default {
           this.hData = this.setHumidityData(json.h)
       	  this.chartData=this.setChartData(json)
 		  this.otherData=this.serOtherData(json.p)
+		  if(json.u){
+			   this.u=json.u
+		  }
+		 
         }
       })
     },
@@ -304,36 +309,39 @@ export default {
 	design(obj){
 		let t=this.tData.setting
 		let h=this.hData.setting
-		if(this.isCanDesign){
+		console.log(this.u)
+		if(this.isCanDesign||this.u==0){
 		  return uni.showToast({
 		  	title:'有数据设定中，请稍后再试',
 			  icon:'none'
 		  })
-		}
-		if(obj.name=='t'){
-			if(obj.seeting=='-'){
-				t--
-				this.isCanDesign=1
-			}else if(obj.seeting=='+'){
-				t++
-				this.isCanDesign=1
-			}else{
-				this.showHModel(obj.seeting)
-			}
 		}else{
-			if(obj.seeting=='-'){
-				h--
-				this.isCanDesign=1
-			}else if(obj.seeting=='+'){
-				h++
-				this.isCanDesign=1
-			}else{//designT
-				this.showHModel(obj.seeting)
+			if(obj.name=='t'){
+				if(obj.seeting=='-'){
+					t--
+					this.setDevTandH(t,h)
+				}else if(obj.seeting=='+'){
+					t++
+					this.setDevTandH(t,h)
+				}else{
+					this.showHModel(obj.seeting)
+				}
+			}else{
+				if(obj.seeting=='-'){
+					h--
+					this.setDevTandH(t,h)
+				}else if(obj.seeting=='+'){
+					h++
+					this.setDevTandH(t,h)
+				}else{//designT
+					this.showHModel(obj.seeting)
+				}
 			}
 		}
+		
 		// this.isCanDesign=1
 		console.log(t,h)
-		// this.setDevTandH(t,h)
+		
 	},
 	makesure(str){
 		console.log(this.isCanDesign)
@@ -411,36 +419,36 @@ export default {
 		if(!data) return;
 		const e=2.718281828459
 		let newData=[
-			{ name: 'p1', data: [] },
-			{ name: 'p2', data: [] },
-			{ name: 'p3', data: [] },
-			{ name: 'p4', data: [] },
-			{ name: 'p5', data: [] },
-			{ name: 'p6', data: [] },
-			{ name: 'p7', data: [] },
-			{ name: 'p8', data: [] },
-			{ name: 'p9', data: [] },
-			{ name: 'p10', data: [] },
-			{ name: 'p11', data: [] },
-			{ name: 'p12', data: [] },
-			{ name: 'p13', data: [] },
-			{ name: 'p14', data: [] },
-			{ name: 'p15', data: [] },
-			{ name: 'p16', data: [] },
-			{ name: 'p17', data: [] },
-			{ name: 'p18', data: [] }];
-			// data.forEach((val)=>{
-			// 	console.log(val)
-			// })
-			// var math=new Math()
+			{ name: '传感器1温度', data: [] },
+			{ name: '传感器1湿度', data: [] },
+			{ name: '传感器2温度', data: [] },
+			{ name: '传感器2湿度', data: [] },
+			{ name: '传感器3温度', data: [] },
+			{ name: '传感器3湿度', data: [] },
+			{ name: '传感器4温度', data: [] },
+			{ name: '传感器4湿度', data: [] },
+			{ name: '传感器5温度', data: [] },
+			{ name: '传感器5湿度', data: [] },
+			{ name: '传感器6温度', data: [] },
+			{ name: '传感器6湿度', data: [] },
+			{ name: '传感器7温度', data: [] },
+			{ name: '传感器7湿度', data: [] },
+			{ name: '传感器8温度', data: [] },
+			{ name: '传感器8湿度', data: [] },
+			{ name: '传感器9温度', data: [] },
+			{ name: '传感器9湿度', data: [] }];
+			
 			if(data.length){
+				console.log('length')
 				this.otherData=[]
 				data.forEach((val,index)=>{
 					for(var i in val){
-						newData.forEach((el)=>{
-							if(el.name==i){
-								// el.data.push(parseInt(val[i]).toFixed(2))
-								el.data.push(val[i])
+						newData.forEach((el,index2)=>{
+							
+							if(i.split('p')[1]==(index2+1)){
+								
+								el.data.push(Number(val[i]).toFixed(1))
+								// el.data.push(val[i])
 							}
 						})
 						
@@ -448,15 +456,16 @@ export default {
 				})
 				
 			}else{
+				
 				newData=this.otherData
 				this.otherData.forEach((val,index)=>{
 				  newData[index].data=val.data.slice(1)
 				})
 				for(var i in data){
-					newData.forEach((el)=>{
-						if(el.name==i){
-							// el.data.push(parseInt(data[i]).toFixed(2))
-							el.data.push(data[i])
+					newData.forEach((el,index2)=>{
+						if(i.split('p')[1]==(index2+1)){
+							el.data.push(Number(data[i]).toFixed(1))
+							// el.data.push(data[i])
 						}
 					})
 					

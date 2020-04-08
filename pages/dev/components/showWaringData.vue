@@ -1,7 +1,7 @@
 <template>
   <view class="showwaring animation-fade">
     <view class="box">
-      <uni-grid :column="5" :show-border="false" :square="false" class="gride">
+      <uni-grid :column="4" :show-border="false" :square="false" class="gride">
         <uni-grid-item v-for="(item,index) in waringData" :key="index">
           <view
             class="gride-item flex justify-center align-center flex-direction my-item"
@@ -114,7 +114,13 @@ export default {
           name: '湿度控制',
           icon: 'iconshidukongzhi',
           status: 0 //正常
-        }
+        },
+		{
+		  id: 'e16',
+		  name: '状态16',
+		  icon: 'iconshidukongzhi',
+		  status: 0 //正常
+		}
       ]
     }
   },
@@ -135,9 +141,11 @@ export default {
 
   methods: {
     init() {
+		if(!this.waringinfo) return
       this.waringData.map(i => {
         i.status = this.waringinfo[i.id]
       })
+	  console.log(this.waringinfo)
     }
   }
 }
