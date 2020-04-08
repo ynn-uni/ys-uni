@@ -1,7 +1,10 @@
 <template>
   <view class="showwaring animation-fade">
     <view class="box">
-      <uni-grid :column="4" :show-border="false" :square="false" class="gride">
+		<!-- <view class="title">
+			预警状态
+		</view> -->
+      <uni-grid :column="5" :show-border="false" :square="false" class="gride">
         <uni-grid-item v-for="(item,index) in waringData" :key="index">
           <view
             class="gride-item flex justify-center align-center flex-direction my-item"
@@ -13,6 +16,24 @@
           </view>
         </uni-grid-item>
       </uni-grid>
+	  <view class="border-top">
+	  	
+	  </view>
+	  <!-- <view class="title">
+	  	开关状态
+	  </view> -->
+	  <uni-grid :column="5" :show-border="false" :square="false" class="gride ">
+	    <uni-grid-item v-for="(item,index) in waringDataStatus" :key="index">
+	      <view
+	        class="gride-item flex justify-center align-center flex-direction my-item status-default"
+	        :class="{'status-success' : item.status}"
+	      >
+	        <view v-if="item.icon==='sos'" class="myicon">{{item.name}}</view>
+	        <view v-else :class="'myicon iconfont '+item.icon "></view>
+	        <view class="text">{{item.name}}</view>
+	      </view>
+	    </uni-grid-item>
+	  </uni-grid>
     </view>
   </view>
 </template>
@@ -73,55 +94,55 @@ export default {
           icon: 'iconneicuncuowu',
           status: 0 //正常
         },
-        {
-          id: 'e9',
-          name: '系统错误',
-          icon: 'iconxitongcuowu',
-          status: 0 //正常
-        },
-        {
-          id: 'e10',
-          name: '压缩机一',
-          icon: 'iconyasuoji',
-          status: 0 //正常
-        },
-        {
-          id: 'e11',
-          name: '压缩机二',
-          icon: 'iconyasuoji',
-          status: 0 //正常
-        },
-        {
-          id: 'e12',
-          name: '风机状态',
-          icon: 'iconfengji',
-          status: 0 //正常
-        },
-        {
-          id: 'e13',
-          name: '照明状态',
-          icon: 'iconzhaoming',
-          status: 0 //正常
-        },
-        {
-          id: 'e14',
-          name: '温度控制',
-          icon: 'iconwendukongzhi',
-          status: 0 //正常
-        },
-        {
-          id: 'e15',
-          name: '湿度控制',
-          icon: 'iconshidukongzhi',
-          status: 0 //正常
-        },
 		{
-		  id: 'e16',
-		  name: '状态16',
-		  icon: 'iconshidukongzhi',
+		  id: 'e9',
+		  name: '系统错误',
+		  icon: 'iconxitongcuowu',
 		  status: 0 //正常
 		}
-      ]
+		
+        
+      ],
+	  waringDataStatus:[
+		  
+		  {
+		    id: 'e10',
+		    name: '压缩机一',
+		    icon: 'iconyasuoji',
+		    status: 0 //正常
+		  },
+		  {
+		    id: 'e11',
+		    name: '压缩机二',
+		    icon: 'iconyasuoji',
+		    status: 0 //正常
+		  },
+		  {
+		    id: 'e12',
+		    name: '风机',
+		    icon: 'iconfengji',
+		    status: 0 //正常
+		  },
+		  {
+		    id: 'e13',
+		    name: '照明',
+		    icon: 'iconzhaoming',
+		    status: 0 //正常
+		  },
+		  {
+		    id: 'e14',
+		    name: '温度控制',
+		    icon: 'iconwendukongzhi',
+		    status: 0 //正常
+		  },
+		  {
+		    id: 'e15',
+		    name: '湿度控制',
+		    icon: 'iconshidukongzhi',
+		    status: 0 //正常
+		  }
+		  
+	  ]
     }
   },
   props: {
@@ -134,7 +155,11 @@ export default {
     uniGrid,
     uniGridItem
   },
-
+	watch:{
+		waringinfo(){
+			this.init()
+		}
+	},
   mounted() {
     this.init()
   },
@@ -143,9 +168,16 @@ export default {
     init() {
 		if(!this.waringinfo) return
       this.waringData.map(i => {
-        i.status = this.waringinfo[i.id]
+		  if(i.id.split('e')[1]<9){
+			   i.status = this.waringinfo[i.id]
+		  }
+       
       })
-	  console.log(this.waringinfo)
+	  this.waringDataStatus.map(i => {
+		  if(i.id.split('e')[1]>8){
+			  i.status = this.waringinfo[i.id]
+		  }
+	  })
     }
   }
 }
@@ -163,8 +195,17 @@ export default {
   .box {
     width: 100%;
   }
+  .border-top{
+	  border-top: 1px solid #e1e1e1;
+	  margin: 10upx 0;
+  }
+  .title{
+	  font-size: 34upx;
+	  color: $uni-text-color;
+	  padding: 10upx 0;
+  }
   .my-item {
-    margin: 20upx 0;
+    margin: 10upx 0;
     .myicon {
       margin-bottom: 10upx;
       color: $primaryColor;
@@ -186,6 +227,14 @@ export default {
       color: #fff;
       background: #f38181;
     }
+	&.status-default .myicon {
+	  background: #EEEEEE;
+	}
+	&.status-success .myicon {
+	  color: #fff;
+	  background: $uni-color-success;
+	}
+	
   }
 }
 </style>

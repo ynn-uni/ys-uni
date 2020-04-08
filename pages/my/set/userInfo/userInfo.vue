@@ -20,7 +20,7 @@
 			<view class="cu-form-group" data-path="/pages/my/devlist/devlist">
 				<view class="cu-left">
 					<view class="title">电话</view>
-					<input type="text" value="" v-model="tel" />
+					<input type="number" value="" v-model="tel" />
 				</view>
 				<button class="cu-btn cuIcon cu-right" @tap="handelClear('tel')">
 					<text class="cuIcon-close"></text>

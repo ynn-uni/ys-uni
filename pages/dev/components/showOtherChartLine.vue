@@ -5,14 +5,6 @@
 			<button class="cu-btn round sure" @tap="next">下一组</button>
 	  </view>
     <view class="qiun-charts flex justify-around flex-direction align-center">
-		<!-- <view class="item flex align-center" v-for="(item,index) in Area.series" :key="index">
-			<view class="name">
-				{{item.name}}:
-			</view>
-			<view class="num">
-				{{item.data[19]||'0'}}
-			</view>
-		</view> -->
      <view class="charts flex justify-center align-center">
         <canvas canvas-id="canvasArea1" id="canvasArea1" class="chartsCan" @touchstart="touchArea"></canvas>
       </view>
@@ -95,7 +87,6 @@ export default {
 			  this.Area.categories.push(i)
 		  }
 		  this.Area.series=this.datas.slice(n,n+this.size)
-		  console.log(this.Area.series)
 	  },
     showArea(canvasId, chartData) {
       canvaArea = new uCharts({
@@ -198,23 +189,7 @@ export default {
     background-color: #ffffff;
     position: relative;
 	top: -40upx;
-	.item{
-		width: 500upx;
-		.name{
-			font-size: 40rpx;
-			font-weight: bold;
-			color: #545454;
-			line-height: 59rpx;
-			margin-right: 20rpx;
-		}
-		.num{
-			font-size: 32rpx;
-			font-weight: 500;
-			color: #545454;
-			line-height: 45rpx;
-			width: 458rpx;
-		}
-	}
+	
     .charts {
       width: 100%;
       height: 660upx;

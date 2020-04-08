@@ -106,10 +106,12 @@ import noLogin from '@/components/noLogin.vue'
 import nodata from '@/components/noData.vue'
 import {setDeviceTemperatureOrHumidity} from '../../apis/index.js'
 import { mapState ,mapGetters, mapActions, mapMutations } from 'vuex'
+let cc=0
 export default {
   data() {
     return {
 	  modalName:null,
+	  designSuccess:1,
       isCanDesign:0,//温湿度是否可修改
 	  u:0,
       index: 0,
@@ -194,10 +196,11 @@ export default {
 		}
     },
 	seetingt(){
-	  this.isCanDesign=0
+		this.designSuccess=1
+		
 	},
 	seetingh(){
-	  this.isCanDesign=0
+		this.designSuccess=1
 	}
   },
   onShow() {
@@ -226,9 +229,12 @@ export default {
           if (evt.data === 'PONG') return
           const json = JSON.parse(evt.data)
           this.data=json
+		  
 		  if(json.e.e1!==null){
 			  this.waringinfo = json.e
+			  this.isCanDesign=json.e.e16
 		  }
+		  
           
 		  this.checkWaring(this.waringinfo )
           this.tData = this.setTemperatureData(json.t)
@@ -245,7 +251,7 @@ export default {
 	checkWaring(data){
 		if(data.length<=0) return
 		for(var i in data){
-			if(data[i]==1){
+			if(data[i]==1&&i.split('e')[1]<9){
 				this.isWaring=true
 			}
 		}
@@ -310,11 +316,16 @@ export default {
 		let t=this.tData.setting
 		let h=this.hData.setting
 		console.log(this.u)
-		if(this.isCanDesign||this.u==0){
+		if(this.u==0){
 		  return uni.showToast({
-		  	title:'有数据设定中，请稍后再试',
+		  	title:'正在设定数据，请稍后再试',
 			  icon:'none'
 		  })
+		}else if(this.designSuccess==0){
+			return uni.showToast({
+				title:'您设定的数据正在修改中，请稍后再试',
+				icon:'none'
+			})
 		}else{
 			if(obj.name=='t'){
 				if(obj.seeting=='-'){
@@ -339,12 +350,10 @@ export default {
 			}
 		}
 		
-		// this.isCanDesign=1
 		console.log(t,h)
 		
 	},
 	makesure(str){
-		console.log(this.isCanDesign)
 		if(str=='t'&&!this.t){
 			return uni.showToast({
 				title:'请填写设定温度',
@@ -356,10 +365,11 @@ export default {
 				icon:'none'
 			})
 		}else{
-			this.isCanDesign=1
+			
 			let t=this.t?this.t:this.tData.setting
 			let h=this.h?this.h:this.hData.setting
 			console.log(t,h)
+			this.setDevTandH(t,h)
 		}
 		
 		
@@ -378,7 +388,7 @@ export default {
 			humidity:h
 		}
 		setDeviceTemperatureOrHumidity(obj).then((res)=>{
-			this.isCanDesign=1
+			this.designSuccess=0
 		})
 		
 	},
@@ -417,7 +427,6 @@ export default {
     },
     serOtherData(data){
 		if(!data) return;
-		const e=2.718281828459
 		let newData=[
 			{ name: '传感器1温度', data: [] },
 			{ name: '传感器1湿度', data: [] },
@@ -439,7 +448,6 @@ export default {
 			{ name: '传感器9湿度', data: [] }];
 			
 			if(data.length){
-				console.log('length')
 				this.otherData=[]
 				data.forEach((val,index)=>{
 					for(var i in val){

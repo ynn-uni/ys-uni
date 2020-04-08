@@ -25,7 +25,7 @@
 						<view class="cu-left">
 							<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
 							<view class="title">电话</view>
-							<input type="text" value="" v-model="tel" />
+							<input type="number" value="" v-model="tel" />
 						</view>
 						
 						<button class="cu-btn cuIcon cu-right" @tap="handelClear('tel')">
