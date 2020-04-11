@@ -1,5 +1,5 @@
 <template>
-	<view class="nodata flex justify-center align-center" :class="height?'he':''">
+	<view class="nodata flex justify-center align-center" :class="[height?'he':'',mt?'mt':'']">
 		{{text}}
 	</view>
 </template>
@@ -17,6 +17,9 @@
 				default:'没有更多数据啦！'
 				},
 			height:{
+				type:Boolean
+			},
+			mt:{
 				type:Boolean
 			}
 		}
@@ -36,5 +39,8 @@
 		.he{
 			height: 690upx;
 			margin-bottom: 0upx;
+		}
+		.mt{
+			margin-top: 20upx;
 		}
 </style>

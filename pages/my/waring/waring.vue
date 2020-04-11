@@ -26,7 +26,7 @@
 			<view class="item" v-for="(item,index) in infoList" :key="index">
 				<view class="title">
 					<view class="text">
-						设备预警
+						{{item.mac}}
 					</view>
 					<view class="time">
 						{{item.time}}
@@ -38,7 +38,7 @@
 				</view>
 			</view>
 		</view>
-		<noData v-if="isNoData" :text="infoList.length<=0?'没有故障信息！':'没有更多数据啦！'"></noData>
+		<noData v-if="isNoData" :text="infoList.length<1?'没有故障信息！':'没有更多数据啦！'" :mt="true"></noData>
 	</view>
 </template>
 
@@ -98,25 +98,36 @@
 				var that=this;
 				getNoticeList({page,size,start,end}).then((res)=>{
 					var data=res.data.data
-					if(data&&data.length>0){
-						var newData=[];
-						for(var i in data){
-							newData[i]={contentl:data[i].content,time:data[i].time,status:data[i].status,id:data[i].id},
-							that.isChecked[i]=false
-						}
-						if(page>1){
-							that.infoList=that.infoList.concat(newData)
-						}else if(page==1){
-							that.infoList.splice(0);
-							that.infoList=newData
-						}
-						that.isNoData=false
-					}else{
-						that.isNoData=true
+					var newData=[]
+					if(page>1){
+						newData=this.initData(data)
+						that.infoList=that.infoList.concat(newData)
+					}else if(page==1){
+						that.infoList=[]
+						// if(data.length<1){
+						// 	that.isNoData=true
+						// }else{
+							that.infoList=this.initData(data)
+						// 	that.isNoData=false
+						// }
+						
 					}
 					uni.hideLoading()
 				})
 				
+			},
+			initData(data){
+				let newData=[]
+				if(data.length<1) {
+					this.isNoData=true
+				}else{
+					data.forEach((val,index)=>{
+						newData[index]={contentl:val.error,time:val.created_at,mac:val.mac,id:val.id}
+					})
+					this.isNoData=false
+				}
+				
+				return newData;
 			}
 		}
 	}

@@ -58,7 +58,7 @@ export function addRepair(data = {}) {
 }
 //历史故障列表 getNoticeList
 export function getNoticeList(data = {}) {
-  return getAction('/Api/Notice/getNoticeList', data);
+  return getAction('/Api/Notice/getErrorList', data);
 }
 //查看设备备注
 export function getDeviceSign(data = {}) {
