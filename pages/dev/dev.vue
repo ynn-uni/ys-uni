@@ -140,11 +140,7 @@ export default {
 		{
 		  name: '其他',
 		  icon: 'cuIcon-cascades'
-		},
-		// {
-		//   name: '其他',
-		//   icon: 'iconshidukongzhi'
-		// }
+		}
       ],
       tData: {
         label: '温度',
@@ -196,11 +192,15 @@ export default {
 		}
     },
 	seetingt(){
-		this.designSuccess=1
-		
+		if(this.isCanDesign==1){
+			this.designSuccess=1
+		}
 	},
 	seetingh(){
-		this.designSuccess=1
+		if(this.isCanDesign==1){
+			this.designSuccess=1
+		}
+		
 	}
   },
   onShow() {
@@ -249,9 +249,12 @@ export default {
       })
     },
 	checkWaring(data){
+		this.isWaring=false
 		if(data.length<=0) return
 		for(var i in data){
-			if(data[i]==1&&i.split('e')[1]<9){
+			if(data[i]==1&&i.split('e')[1]<9&&i!='e6'){
+				this.isWaring=true
+			}else if(data['e6']==0){
 				this.isWaring=true
 			}
 		}
@@ -315,16 +318,16 @@ export default {
 	design(obj){
 		let t=this.tData.setting
 		let h=this.hData.setting
-		console.log(this.u)
+		console.log('u:'+this.u,'iscandesign:'+this.designSuccess)
 		if(this.u==0){
 		  return uni.showToast({
-		  	title:'正在设定数据，请稍后再试',
+		  	title:'暂时无法设定数据，请稍后再试',
 			  icon:'none'
 		  })
 		}else if(this.designSuccess==0){
 			return uni.showToast({
-				title:'您设定的数据正在修改中，请稍后再试',
-				icon:'none'
+				title:'数据设定中，请稍后再试',
+						  icon:'none'
 			})
 		}else{
 			if(obj.name=='t'){
@@ -349,9 +352,6 @@ export default {
 				}
 			}
 		}
-		
-		console.log(t,h)
-		
 	},
 	makesure(str){
 		if(str=='t'&&!this.t){
@@ -389,6 +389,8 @@ export default {
 		}
 		setDeviceTemperatureOrHumidity(obj).then((res)=>{
 			this.designSuccess=0
+			this.h=null;
+			this.t=null;
 		})
 		
 	},

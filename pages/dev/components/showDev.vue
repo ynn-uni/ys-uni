@@ -17,18 +17,21 @@
 	  		
 	  	</view>
 	  	<view class="desi flex justify-center align-center">
-	  	  <button class="cu-btn des-btn" @click="handelTemperature('-')">
+	  	  <!-- <button class="cu-btn des-btn" @click="handelTemperature('-')">
 	  	    <text class="cuIcon-move"></text>
-	  	  </button>
-	  	  <view class="text margin-lr" @click="showModel('designT')">
-	  	    {{ datas.setting }}
-	  	    <view class="name">设定{{ datas.label }}</view>
+	  	  </button> -->
+	  	  <view class="text margin-lr flex align-center" @click="showModel('designT')">
+	  	    <view class="name">设定{{ datas.label }}:</view>
+			<view class="des">
+				{{ datas.setting }}
+			</view>
+			
 	  	  </view>
 	  	
-	  	  <button class="cu-btn des-btn" @click="handelTemperature('+')">
+	  	  <!-- <button class="cu-btn des-btn" @click="handelTemperature('+')">
 	  	    <text class="cuIcon-add"></text>
 	  	  </button>
-		  
+		  -->
 	  	</view>
 	  	
 	  	<view class="precent flex justify-center align-center">
@@ -56,17 +59,20 @@
 	  		
 	  	</view>
 	  	<view class="desi flex justify-center align-center">
-	  	  <button class="cu-btn des-btn" @click="handelHu('-')">
+	  	  <!-- <button class="cu-btn des-btn" @click="handelHu('-')">
 	  	    <text class="cuIcon-move"></text>
-	  	  </button>
-	  	  <view class="text margin-lr" @click="showModel('designH')">
-	  	    {{ hdatas.setting }}
-	  	    <view class="name">设定{{ hdatas.label }}</view>
+	  	  </button> -->
+	  	  <view class="text margin-lr flex align-center" @click="showModel('designH')">
+	  	   
+	  	    <view class="name">设定{{ hdatas.label }}:</view>
+			<view class="des">
+				 {{ hdatas.setting }}
+			</view>
 	  	  </view>
 	  	
-	  	  <button class="cu-btn des-btn" @click="handelHu('+')">
+	  	 <!-- <button class="cu-btn des-btn" @click="handelHu('+')">
 	  	    <text class="cuIcon-add"></text>
-	  	  </button>
+	  	  </button> -->
 	  	</view>
 	  	
 	  	<view class="precent flex justify-center align-center">
@@ -216,6 +222,7 @@ export default {
 			  font-weight:500;
 			  color:rgba(51,51,51,1);
 		  }
+		  
 	  }
   }
   .desi {
@@ -226,8 +233,14 @@ export default {
       padding: 0 80upx;
       .name {
         color: #a6a6a6;
-        font-size: 24upx;
+        font-size: 34upx;
       }
+	  .des{
+	  	 border:1px solid #eee;
+		 margin-left: 20upx;
+		 border-radius: 10upx;
+		 width: 140upx;
+	  }
     }
     .des-btn {
       width: 68upx;

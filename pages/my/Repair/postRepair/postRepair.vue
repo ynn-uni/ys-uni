@@ -98,7 +98,9 @@
 		bottom: 0;
 		width: 100%;
 		background-color: #fff;
+		
 		form{
+			margin-top: 20upx;
 			.in-group{
 				margin-bottom: 40upx;
 				.text{

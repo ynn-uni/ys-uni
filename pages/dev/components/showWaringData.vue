@@ -66,14 +66,14 @@ export default {
         },
         {
           id: 'e4',
-          name: '湿偏差',
-          icon: 'iconshipiancha',
+          name: '温度错误',//温偏差
+          icon: 'iconwenpiancha',
           status: 0 //正常
         },
         {
           id: 'e5',
-          name: '温偏差',
-          icon: 'iconwenpiancha',
+          name: '湿度错误',//湿偏差
+          icon: 'iconshipiancha',
           status: 0 //正常
         },
         {
@@ -167,6 +167,7 @@ export default {
   methods: {
     init() {
 		if(!this.waringinfo) return
+		this.waringinfo['e6']=this.waringinfo['e6']==0?1:0
       this.waringData.map(i => {
 		  if(i.id.split('e')[1]<9){
 			   i.status = this.waringinfo[i.id]

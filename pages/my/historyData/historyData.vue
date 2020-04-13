@@ -197,7 +197,13 @@
 				canvaArea.touchLegend(e);
 				canvaArea.showToolTip(e, {
 					format: function (item, category) {
-						return item.name + ':' + item.data 
+						let str=null
+						if(item.name.indexOf('温度')>0){
+							str='℃'
+						}else if(item.name.indexOf('湿度')>0){
+							str='%'
+						}
+						return item.name + ':' + item.data +str
 					}
 				});
 			},
