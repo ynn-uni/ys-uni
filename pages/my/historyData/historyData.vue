@@ -46,7 +46,7 @@
 				cWidth:'750',//画布宽
 				cHeight:'800',//画布高
 				pixelRatio:1,//像素比
-				Area:{categories:[1,'','','',5,'','','','',10,'','','','',15,'','','','',20],
+				Area:{categories:['0:00','','','','0:30','','','','','1:00','','','','','1:30','','','','','2:00'],
 				series:[{name:'实时温度',data:[25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25]},
 				{name:'输出温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
 				{name:'实时湿度',data:[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]},
@@ -67,11 +67,14 @@
 			noData
 		},
 		mounted() {
+			
 			 _self=this;
 			this.cWidth=uni.upx2px(740);
 			this.cHeight=uni.upx2px(800);
+			// this.showArea('canvasArea1',this.Area);
 			this.initTime()
 			this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
+			
 		},
 		methods: {
 			initTime(){
@@ -154,7 +157,7 @@
 					animation: false,
 					enableScroll: true,//开启图表拖动
 					xAxis: {
-						disabled:true,
+						// disabled:true,//是否显示x轴
 						gridColor:'#fff',
 						dashLength:10,
 						type:'grid',

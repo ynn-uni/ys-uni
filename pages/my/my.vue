@@ -35,6 +35,16 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/sensor/sensor" @touchstart="touchStart" @touchend="touchEnd">
+				<view class="cu-left">
+					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
+					 <view class="iconfont iconshebeizhongxin"></view>
+					<view class="title">传感器设置</view>
+				</view>
+				<view class="cu-right">
+					<text class="cuIcon-right"></text>
+				</view>
+			</view>
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/devlist/devlist" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
 					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->

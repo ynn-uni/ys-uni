@@ -119,7 +119,7 @@ export default {
 		  },
 		  {
 		    id: 'e12',
-		    name: '风机',
+		    name: '开门',
 		    icon: 'iconfengji',
 		    status: 0 //正常
 		  },
