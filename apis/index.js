@@ -68,3 +68,11 @@ export function getDeviceSign(data = {}) {
 export function setDeviceTemperatureOrHumidity(data = {}) {
   return getAction('/Api/Device/setDeviceTemperatureOrHumidity', data);
 }
+//设定传感器温湿度偏差值Device/setDeviceOffset
+export function setDeviceOffset(data = {}) {
+  return getAction('/Api/Device/setDeviceOffset', data);
+}
+//获取传感器温湿偏差Device/getDeviceOffset
+export function getDeviceOffset(data = {}) {
+  return getAction('/Api/Device/getDeviceOffset', data);
+}

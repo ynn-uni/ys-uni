@@ -7,12 +7,20 @@
 		<view class="content">
 			<form class="flex flex-direction align-center" @submit="makesure()">
 				<view class="item">
-					<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
+					<view class="flex">
+						
+					
+					<picker @change="PickerChangeDev" :value="indexDev" :range="devlist" style-="font-size:30upx">
 						<view class="title text-center">
-							{{sensorData[index].name}}
+							{{devlist[indexDev]}}
 						</view>
 					 </picker>
-					
+					 <picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
+					 	<view class="title text-center">
+					 		{{sensorData[index].name}}
+					 	</view>
+					  </picker>
+					</view>
 					<view class="flex flex-direction align-center justify-center ">
 						<view class="flex margin-tb">
 							<view class="name">
@@ -55,10 +63,13 @@
 </template>
 
 <script>
+	import { mapGetters} from 'vuex'
+	import {setDeviceOffset,getDeviceOffset} from '../../../apis/index.js'
 	export default {
 		data() {
 			return {
 				index:0,
+				indexDev:0,
 				sensorData:[
 					{
 						name:'传感器一',
@@ -126,7 +137,11 @@
 				]
 			}
 		},
+		mounted() {
+			this.getDevSensor()
+		},
 		computed:{
+			...mapGetters([ 'devList']),
 			picker() {
 			  if(this.sensorData.length<1) return
 			  let list = []
@@ -134,16 +149,72 @@
 			    list.push(val.name)
 			  })
 			  return list
+			},
+			devlist(){
+				let list =[]
+				this.devList.forEach((val)=>{
+					list.push(val.title)
+				})
+				return list
 			}
 		},
 		methods: {
+			getDevSensor(){
+				getDeviceOffset({mac:this.devList[this.indexDev].mac}).then((res)=>{
+					console.log(res)
+					this.initSensorData(res.data)
+					console.log(this.sensorData)
+				})
+			},
+			initSensorData(data){
+				for(var i in data){
+					this.sensorData.forEach((val,index)=>{
+						
+						if(i.split('_')[1]==(index+1)){
+							if(i.split('_')[2]==1){
+								val.tTop=data[i]||0
+							}else if(i.split('_')[2]==2){
+								val.tUnder=data[i]||0
+							}else if(i.split('_')[2]==3){
+								val.hTop=data[i]||0
+							}else if(i.split('_')[2]==4){
+								val.hUnder=data[i]||0
+							}
+						}
+					})
+				}
+				
+			},
 			PickerChange(e) {
 			  //选择设备
 			  this.index = e.detail.value //index为选择序列下标
 			  
 			},
+			PickerChangeDev(e) {
+			  //选择设备
+			  this.indexDev = e.detail.value //index为选择序列下标
+			  
+			},
 			makesure(e){
-				console.log(this.sensorData[this.index].tTop,this.sensorData[this.index].tUnder,this.sensorData[this.index].hTop,this.sensorData[this.index].hUnder)
+				let obj={
+					mac:this.devList[this.indexDev].mac,
+					num:parseInt(this.index)+1,
+					p1:this.sensorData[this.index].tTop,
+					p2:this.sensorData[this.index].tUnder,
+					p3:this.sensorData[this.index].hTop,
+					p4:this.sensorData[this.index].hUnder
+				}
+				console.log(obj)
+				setDeviceOffset(obj).then((res)=>{
+					console.log(res)
+					if(res.status==0){
+						uni.showToast({
+							title:'修改成功',
+							icon:'none'
+						})
+					}
+				})
+				// console.log(this.sensorData[this.index].tTop,this.sensorData[this.index].tUnder,this.sensorData[this.index].hTop,this.sensorData[this.index].hUnder)
 			}
 		}
 	}
@@ -165,6 +236,8 @@
 					border-radius: 10upx;
 					line-height: 60upx;
 					margin-bottom: 20px;
+					width: 340upx;
+					margin: 5upx;
 				}
 				.name{
 					

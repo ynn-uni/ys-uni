@@ -7,7 +7,7 @@ import user from './modules/user';
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
-		isAppHide:false,//用户是否推出小程序
+		isAppHide:true,//用户是否退出小程序
 	},
 	mutations:{
 		updateIsAppHide(state,isAppHide){

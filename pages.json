@@ -1,6 +1,13 @@
 {
     "pages" : [
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		
+		{
+		    "path" : "pages/my/my",
+		    "style":{
+		    	"navigationBarTextStyle": "white"
+		    }
+		},
 		{
 		    "path" : "pages/my/sensor/sensor",
 		    "style" : {}
@@ -9,12 +16,7 @@
 		    "path" : "pages/dev/dev",
 		    "style" : {}
 		},
-		{
-		    "path" : "pages/my/my",
-		    "style":{
-		    	"navigationBarTextStyle": "white"
-		    }
-		},
+		
 		{
 		    "path" : "pages/my/historyData/historyData"
 		   
