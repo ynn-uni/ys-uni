@@ -205,7 +205,7 @@ export default {
   },
   onShow() {
 	  
-    if(this.isAppHide) {
+    if(this.isAppHide&&this.devList&&this.devList.length>0) {
 	  this.initMac()
 	}
     
@@ -488,7 +488,7 @@ export default {
 	},
 	handelDevSign(){
       uni.navigateTo({
-        url:'/pages/dev/Remarks/Remarks'
+        url:'/pages/index/Remarks/Remarks'
       })
     }
   }

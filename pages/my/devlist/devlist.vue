@@ -212,7 +212,7 @@
 			devDetail(index){
 				this.updateIsAppHide(true)
 				uni.reLaunch({
-					url:'/pages/dev/dev'
+					url:'/pages/index/index'
 				})
 				this.updateDevListMac(this.devList[index].mac)
 			},

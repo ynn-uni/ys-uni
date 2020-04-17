@@ -157,7 +157,7 @@
 					animation: false,
 					enableScroll: true,//开启图表拖动
 					xAxis: {
-						// disabled:true,//是否显示x轴
+						disabled:true,//是否显示x轴
 						gridColor:'#fff',
 						dashLength:10,
 						type:'grid',

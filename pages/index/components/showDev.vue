@@ -22,9 +22,9 @@
 	  	  </button> -->
 	  	  <view class="text margin-lr flex align-center" @click="showModel('designT')">
 	  	    <view class="name">设定{{ datas.label }}:</view>
-			<view class="des">
-				{{ datas.setting }}
-			</view>
+					<view class="des">
+						{{ datas.setting }}
+					</view>
 			
 	  	  </view>
 	  	
