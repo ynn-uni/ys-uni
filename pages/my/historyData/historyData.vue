@@ -4,7 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">历史数据</block>
 		</cu-custom>
-		<view class="pick">
+		<view class="pick" v-if="devList">
 			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
 				<view class="picker">
 					{{devList[index].title}}
@@ -34,7 +34,7 @@
 	export default {
 		data() {
 			return {
-				haveData:false,
+				haveData:true,
 				devTitle:'',
 				devlist:[],
 				index: 0,//设备索引
@@ -57,9 +57,12 @@
 			 ...mapGetters([ 'devList','devListMac','userInfo']),
 			 picker(){
 				 let list=[];
-				 this.devList.forEach((val)=>{
-					 list.push(val.title)
-				 })
+				 if(this.devList&&this.devList.length){
+					  this.devList.forEach((val)=>{
+							list.push(val.title)
+						})
+				 }
+				
 				 return list
 			 }
 		},
@@ -73,7 +76,10 @@
 			this.cHeight=uni.upx2px(800);
 			// this.showArea('canvasArea1',this.Area);
 			this.initTime()
-			this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
+			if(this.devList&&this.devList.length){
+				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
+			}
+			
 			
 		},
 		methods: {

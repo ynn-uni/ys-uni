@@ -4,7 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">传感器设置</block>
 		</cu-custom>
-		<view class="content">
+		<view class="content" v-if="devList">
 			<form class="flex flex-direction align-center" @submit="makesure()">
 				<view class="item">
 					<view class="flex">
@@ -59,13 +59,18 @@
 			</form>
 			
 		</view>
+		<noData v-else :text="'暂无设备'"></noData>
 	</view>
 </template>
 
 <script>
+	import noData from '@/components/noData.vue'
 	import { mapGetters} from 'vuex'
 	import {setDeviceOffset,getDeviceOffset} from '../../../apis/index.js'
 	export default {
+		components:{
+			noData
+		},
 		data() {
 			return {
 				index:0,

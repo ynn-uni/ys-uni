@@ -26,8 +26,9 @@
 								<view class="">
 									<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" />
 								</view>
-								<view class="">
+								<view class="mac flex align-center">
 									<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" />
+									<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 								</view>
 								<view class="">
 									<input v-model="devName" type="text" value="" placeholder="输入设备用户名" />
@@ -110,6 +111,15 @@
 			  'fatchDevListByToken'
 			]),
 			...mapMutations(['updateIsAppHide']),
+			handelGetMac(){
+				uni.scanCode({
+						success:  (res)=> {
+								console.log('条码类型：' + res.scanType);
+								console.log('条码内容：' + res.result);
+								this.devMac=res.result
+						}
+				});
+			},
 			// ListTouch触摸开始
 			ListTouchStart(e) {
 				
@@ -277,6 +287,22 @@
 										text-align: left;
 										padding-left: 20upx;
 										
+									}
+									.mac{
+										.mybtn{
+											padding: 0;
+											width: 140rpx;
+											margin-left: 10rpx;
+										}
+										input{
+											width: 368upx;
+											height: 58upx;
+											border: 1px solid #d2d3d6;
+											color: #808080;
+											font-size: 26upx;
+											text-align: left;
+											padding-left: 20upx;
+										}
 									}
 								}
 								.addbtn{

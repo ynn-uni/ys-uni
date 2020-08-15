@@ -25,8 +25,9 @@
 							<view class="">
 								<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" />
 							</view>
-							<view class="">
+							<view class="mac flex align-center">
 								<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" />
+								<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 							</view>
 							<view class="">
 								<input v-model="devName" type="text" value="" placeholder="输入设备用户名" />
@@ -75,6 +76,15 @@
 			  'fatchDevListByToken',
 			  'loginWithUserInfo'
 			]),
+			handelGetMac(){
+				uni.scanCode({
+						success:  (res)=> {
+								console.log('条码类型：' + res.scanType);
+								console.log('条码内容：' + res.result);
+								this.devMac=res.result
+						}
+				});
+			},
 			getUserInfo(evt) {
 			  const {iv, encryptedData,errMsg} = evt.detail;
 			  if (errMsg === 'getUserInfo:ok') {
@@ -111,6 +121,11 @@
 						if(res.msg==='添加设备数据成功'){
 							this.fatchDevListByToken()
 							this.$emit('haslogin')
+						}else{
+							uni.showToast({
+								title:'未连接到设备，请查看是否开启设备',
+								icon:'none'
+							})
 						}
 					})
 				}else{
@@ -258,6 +273,22 @@
 									text-align: left;
 									padding-left: 20upx;
 									
+								}
+								.mac{
+									.mybtn{
+										padding: 0;
+										width: 140rpx;
+										margin-left: 10rpx;
+									}
+									input{
+										width: 368upx;
+										height: 58upx;
+										border: 1px solid #d2d3d6;
+										color: #808080;
+										font-size: 26upx;
+										text-align: left;
+										padding-left: 20upx;
+									}
 								}
 							}
 							.addbtn{
