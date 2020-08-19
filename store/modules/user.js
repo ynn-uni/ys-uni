@@ -33,7 +33,6 @@ export default {
     // 登录
     wxLogin({ commit, dispatch }) {
       dispatch('getWxCode');
-      
     },
     getWxCode({state, commit ,dispatch}) {
       return uni.login().then(res => {
@@ -100,18 +99,15 @@ export default {
 			dispatch('fatchDevListByToken');
 			commit('updateUserInfo', userinfo);
 		}
-        
       });
     },
-	
- 
     fatchDevListByToken({ state,commit }) {
       getDeviceList().then(res => {
         commit('updateDevList', res.data);
-		if(!res.data) return
-		if(res.data.length>0&&state.devListMac==''){
-			commit('updateDevListMac', res.data[0].mac);
-		}
+        if(!res.data) return
+        if(res.data.length>0&&state.devListMac==''){
+          commit('updateDevListMac', res.data[0].mac);
+        }
       });
     }
   }

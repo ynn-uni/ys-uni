@@ -150,12 +150,11 @@
 			flex-direction: column;
 			align-items: center;
 			.logo{
-				margin-top: 300upx;
-				width:140upx;
-				height:185upx;
+				margin-top: 100upx;
+				width:300upx;
+				height:300upx;
 			}
 			.welcome{
-				margin-top: 28upx;
 				font-size:24upx;
 				font-weight:400;
 				color:rgba(168,174,184,1);

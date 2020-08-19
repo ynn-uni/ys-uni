@@ -62,7 +62,6 @@
 							list.push(val.title)
 						})
 				 }
-				
 				 return list
 			 }
 		},
@@ -70,7 +69,6 @@
 			noData
 		},
 		mounted() {
-			
 			 _self=this;
 			this.cWidth=uni.upx2px(740);
 			this.cHeight=uni.upx2px(800);
@@ -79,8 +77,6 @@
 			if(this.devList&&this.devList.length){
 				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
 			}
-			
-			
 		},
 		methods: {
 			initTime(){
@@ -114,7 +110,6 @@
 					}
 					uni.hideLoading()
 				})
-				
 			},
 			PickerChange(e) {//选择设备
 				var that=this;
@@ -192,6 +187,14 @@
 							gradient:true
 						}
 					}
+				});
+				//下面是拖动滚动条到尽头的事件，不需要请删除
+				canvaArea.addEventListener('scrollLeft', () => {
+				    console.log("已经到最【左】边啦");
+				});
+				//下面是拖动滚动条到尽头的事件，不需要请删除
+				canvaArea.addEventListener('scrollRight', () => {
+				    console.log("已经到最【右】边啦");
 				});
 			},
 			touchLineA(e){
