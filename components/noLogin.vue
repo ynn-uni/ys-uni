@@ -86,7 +86,8 @@
 				});
 			},
 			getUserInfo(evt) {
-			  const {iv, encryptedData,errMsg} = evt.detail;
+				const {iv, encryptedData,errMsg} = evt.detail;
+				console.log(iv, encryptedData)
 			  if (errMsg === 'getUserInfo:ok') {
 				this.loginWithUserInfo({ iv, encryptedData });
 			  }

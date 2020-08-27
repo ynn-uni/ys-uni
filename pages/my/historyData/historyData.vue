@@ -34,6 +34,9 @@
 	export default {
 		data() {
 			return {
+				dataList:[],
+				page:1,
+				size:500,
 				haveData:true,
 				devTitle:'',
 				devlist:[],
@@ -43,6 +46,7 @@
 				startDate: '开始时间',
 				endDate:'结束时间',
 				end:'',
+				position:'right',
 				cWidth:'750',//画布宽
 				cHeight:'800',//画布高
 				pixelRatio:1,//像素比
@@ -75,7 +79,7 @@
 			// this.showArea('canvasArea1',this.Area);
 			this.initTime()
 			if(this.devList&&this.devList.length){
-				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac);
+				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
 			}
 		},
 		methods: {
@@ -86,27 +90,41 @@
 				this.endDate =shshmyDate.getFullYear()+'-'+(shshmyDate.getMonth()+1)+'-'+shshmyDate.getDate()+' 23:59:59'
 				this.end=this.endDate;
 			},
-			getHistoryData(start,end,mac){
+			getHistoryData(start,end,mac,page,size){
 				uni.showLoading()
 				var that=this;
-				getDataList({start:start,end:end,mac:mac}).then((res)=>{
-					if(res.data&&res.data.length>0){
+				getDataList({start:start,end:end,mac:mac,page,size}).then((res)=>{
+					console.log(res.data.data)
+					this.dataList=res.data.data
+					if(res.data.data&&res.data.data.length>0){
+						console.log(res.data)
 						that.haveData=false;
 						that.Area.categories.splice(0);
 						that.Area.series[0].data.splice(0);
 						that.Area.series[1].data.splice(0);
 						that.Area.series[2].data.splice(0);
 						that.Area.series[3].data.splice(0);
-						for(var i in res.data){
-							that.Area.categories.push(i);
-							that.Area.series[0].data.push(Math.round((res.data[i].ta)*10)/10);
-							that.Area.series[1].data.push(res.data[i].to);
-							that.Area.series[2].data.push(Math.round((res.data[i].ha)*10)/10);
-							that.Area.series[3].data.push(res.data[i].ho);
-						}
+						res.data.data.forEach((val,i)=>{
+							// for(var i in val){
+								// that.Area.categories.push(val['time']);
+								var time=''
+								if(i%100===0){
+									var time=val['time'].split(' ')[1]
+								}
+								that.Area.categories.unshift(time);
+								that.Area.series[0].data.unshift(Math.round((val['ta'])*10)/10);
+								that.Area.series[1].data.unshift(val['to']);
+								that.Area.series[2].data.unshift(Math.round((val['ha'])*10)/10);
+								that.Area.series[3].data.unshift(val['ho']);
+							// }
+						})
+						
 						that.showArea('canvasArea1',this.Area);
 					}else{
-						that.haveData=true;
+						if(this.page===1){
+							that.haveData=true;
+						}
+						
 					}
 					uni.hideLoading()
 				})
@@ -158,14 +176,14 @@
 					animation: false,
 					enableScroll: true,//开启图表拖动
 					xAxis: {
-						disabled:true,//是否显示x轴
+						disabled:false,//是否显示x轴
 						gridColor:'#fff',
 						dashLength:10,
 						type:'grid',
 						gridType:'dash',
 						itemCount:50,
 						scrollShow:true,
-						scrollAlign:'right'
+						scrollAlign:this.position
 					},
 					yAxis: {
 						axisLine:true,
@@ -190,11 +208,24 @@
 				});
 				//下面是拖动滚动条到尽头的事件，不需要请删除
 				canvaArea.addEventListener('scrollLeft', () => {
-				    console.log("已经到最【左】边啦");
+						console.log("已经到最【左】边啦");
+						if(this.dataList.length){
+								this.position='right'
+							this.dataList=[]
+							this.page+=1
+							this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
+						}
+						
 				});
 				//下面是拖动滚动条到尽头的事件，不需要请删除
 				canvaArea.addEventListener('scrollRight', () => {
-				    console.log("已经到最【右】边啦");
+						console.log("已经到最【右】边啦");
+						if(this.page>1){
+							this.position='left'
+							this.page-=1
+							this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
+						}
+						
 				});
 			},
 			touchLineA(e){

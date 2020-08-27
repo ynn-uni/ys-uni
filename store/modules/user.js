@@ -85,7 +85,17 @@ export default {
         });
     },
     // 在后端登录或注册
-    loginWithUserInfo({ state, commit, dispatch },payload) {
+    loginWithUserInfo({ state, commit, dispatch }, payload) {
+      uni.checkSession({
+        success() {
+          console.log('未过期')
+		  console.log(state.code)
+          // session_key 未过期，并且在本生命周期一直有效
+        },
+        fail() {
+          console.log('已过期')
+        }
+      })
       return loginOrRegisterWithWechat({
         code: state.code,
 		...payload
