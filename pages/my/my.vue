@@ -19,7 +19,7 @@
 				</view>
 				
 				<open-data v-if="token" type="userNickName" lang="zh_CN" class="nickName"></open-data> 
-				<text v-if="token">{{userInfo.phone}}</text>
+				<text v-if="token">{{mytel}}</text>
 			</view>
 			<view class="bg">
 			</view>
@@ -144,7 +144,15 @@
 			}
 		},
 		computed:{
-			 ...mapGetters(['token', 'userInfo'])
+			 ...mapGetters(['token', 'userInfo']),
+			 mytel(){
+				 var tel=''
+				 if(this.userInfo.phone){
+					 var phone=this.userInfo.phone
+					 tel=phone.substr(0, 3) + '****' +phone.substr(7)
+				 }
+				 return tel
+			 }
 		},
 		components:{
 			modelre

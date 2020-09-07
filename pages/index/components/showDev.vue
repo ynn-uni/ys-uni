@@ -3,7 +3,7 @@
 	
 	  <view class="box flex align-center flex-direction">
 	  	<view class="real flex align-center justify-center">
-	  		<view class="left">
+	  		<view class="left t">
 	  			{{ datas.current }}
 	  		</view>
 	  		<view class="right">
@@ -37,14 +37,14 @@
 	  	<view class="precent flex justify-center align-center">
 	  	  <view class="margin-right-xs out">输出</view>
 	  	  <view class="cu-progress round bg-bgc">
-	  	    <view class="bg-percent" :style="[{ width: datas.output + '%'||'0%'}]"></view>
+	  	    <view class="bg-percent bg-percent-t" :style="[{ width: datas.output + '%'||'0%'}]"></view>
 	  	  </view>
 	  	  <view class="margin-left-xs">{{ datas.output }}℃</view>
 	  	</view>
 	  </view>
 	  <view class="box flex align-center flex-direction">
 	  	<view class="real flex align-center justify-center">
-	  		<view class="left">
+	  		<view class="left h">
 	  			<!-- 66 -->
 	  			{{ hdatas.current }}
 	  		</view>
@@ -78,7 +78,7 @@
 	  	<view class="precent flex justify-center align-center">
 	  	  <view class="margin-right-xs out">输出</view>
 	  	  <view class="cu-progress round bg-bgc">
-	  	    <view class="bg-percent" :style="[{ width: hdatas.output + '%'||'0%'}]"></view>
+	  	    <view class="bg-percent bg-percent-h" :style="[{ width: hdatas.output + '%'||'0%'}]"></view>
 	  	  </view>
 	  	  <view class="margin-left-xs">{{ hdatas.output }}%</view>
 	  	</view>
@@ -209,6 +209,12 @@ export default {
 		  margin-right: 30upx;
 		  font-style: italic;
 	  }
+		.t{
+			color: #ea5a41;
+		}
+		.h{
+			color: #107aac;
+		}
 	  .right{
 		  .ht{
 			  font-size:48upx;
@@ -266,6 +272,16 @@ export default {
 
   .bg-percent {
     background-color: #838af1;
+    border-radius: 20upx;
+	
+  }
+	.bg-percent-t {
+    background-color: #ea5a41;
+    border-radius: 20upx;
+	
+  }
+	.bg-percent-h {
+    background-color: #107aac;
     border-radius: 20upx;
 	
   }

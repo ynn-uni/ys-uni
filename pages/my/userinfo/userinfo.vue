@@ -67,14 +67,19 @@
 		data(){
 			return{
 				tel:'',
-				email:''
+				email:'',
+				phone:''
 			}
 		},
 		computed:{
 			 ...mapGetters([ 'userInfo'])
 		},
 		onShow() {
-			this.tel=this.userInfo.phone;
+			if(this.userInfo.phone){
+					this.phone=JSON.parse(JSON.stringify(this.userInfo.phone));
+					this.tel=this.phone.substr(0, 3) + '****' + this.phone.substr(7)
+			}
+		
 			this.email=this.userInfo.email;
 		},
 		methods:{
@@ -90,6 +95,9 @@
 				var that=this;
 				var telReg = /^[1][3,4,5,7,8][0-9]{9}$/;
 				var emailReg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;  
+				if(this.tel.indexOf('*')!==-1){
+					this.tel=this.phone
+				}
 				if(!this.tel&&!this.email){
 					
 					uni.showToast({

@@ -66,13 +66,13 @@ export default {
         },
         {
           id: 'e4',
-          name: '温度错误',//温偏差
+          name: '温偏差',//温偏差
           icon: 'iconwenpiancha',
           status: 0 //正常
         },
         {
           id: 'e5',
-          name: '湿度错误',//湿偏差
+          name: '湿偏差',//湿偏差
           icon: 'iconshipiancha',
           status: 0 //正常
         },

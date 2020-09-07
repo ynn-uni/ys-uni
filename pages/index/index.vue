@@ -16,7 +16,7 @@
 			  <view class="remark cuIcon-more" @click="handelDevSign">
 			  </view>
 		  </view>
-        <nodata v-if="data.t.length<=0" :text="'未获取到相关设备数据,请联系管理员'" :height="true"></nodata>
+        <nodata v-if="!datas.t" :text="'未获取到设备数据,请检查设备是否开启及网络是否连通'" :height="true"></nodata>
 		<view v-else>
 			<showDev :datas="tData" :hdatas="hData" v-if="TabCur===0" @changetemperature="design"></showDev>
 			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
@@ -122,7 +122,7 @@ export default {
 	  h:null,
       scrollLeft: 0,
       tabIndex: 0,
-      data:{},
+      datas:{},
       tabList: [
         {
           name: '温/湿度',
@@ -226,10 +226,12 @@ export default {
         }
         instance.onmessage = evt => {
 			console.log(evt)
-          if (evt.data === 'PONG') return
+          if (evt.data === 'PONG'){
+			  this.datas={} 
+			  return
+		  } 
           const json = JSON.parse(evt.data)
-          this.data=json
-		  
+          this.datas=json
 		  if(json.e.e1!==null){
 			  this.waringinfo = json.e
 			  this.isCanDesign=json.e.e16
