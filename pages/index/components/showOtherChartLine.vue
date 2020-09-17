@@ -19,9 +19,9 @@ var canvaArea = null
 export default {
   data() {
     return {
-		n:0,
-		size:6,
-	  statr:0,
+      n:0,
+      size:6,
+      statr:0,
       cWidth: '',
       cHeight: '',
       pixelRatio: 1,
@@ -45,12 +45,12 @@ export default {
   },
   watch:{
 	  datas() {
-		let n=this.n
+		  let n=this.n
 	    this.initData(n)
 	    this.showArea('canvasArea1', this.Area)
 	  },
 	  n() {
-	  		let n=this.n
+	  	let n=this.n
 			this.initData(n)
 			this.showArea('canvasArea1', this.Area)
 	  }
@@ -70,7 +70,6 @@ export default {
 		  }else{
 			 this.n=this.n-this.size
 		  }
-		  
 	  },
 	  next(){
 		  if(this.n==12){
@@ -80,7 +79,7 @@ export default {
 		  }
 	  },
 	  initData(n){
-        if(this.datas.length<=0) return;
+      if(this.datas.length<=0) return;
 		  this.Area.categories=[]
           this.Area.series=[]
 		  for(var i=0;i<this.datas[0].data.length;i++){
@@ -89,7 +88,7 @@ export default {
 		  this.Area.series=this.datas.slice(n,n+this.size)
 	  },
     showArea(canvasId, chartData) {
-      canvaArea = new uCharts({
+        canvaArea = new uCharts({
         $this: _self,
         canvasId: canvasId,
         type: 'area',
@@ -128,9 +127,9 @@ export default {
           splitNumber: 5,
           fontSize: 0,
           titleFontColor: '#fff',
-		  format:(e)=>{
-			  return e.toFixed(0)
-		  }
+		    format:(e)=>{
+            return e.toFixed(0)
+          }
         },
         width: _self.cWidth * _self.pixelRatio,
         height: _self.cHeight * _self.pixelRatio,
@@ -147,15 +146,14 @@ export default {
     },
     touchArea(e) {
       var i = 0
-	  
       canvaArea.showToolTip(e, {
         format: function(item, category) {
-			let str=null
-			if(item.name.indexOf('温度')>0){
-				str='℃'
-			}else if(item.name.indexOf('湿度')>0){
-				str='%'
-			}
+        let str=null
+        if(item.name.indexOf('温度')>0){
+          str='℃'
+        }else if(item.name.indexOf('湿度')>0){
+          str='%'
+        }
           return item.name + ':' + item.data+str
         }
       })

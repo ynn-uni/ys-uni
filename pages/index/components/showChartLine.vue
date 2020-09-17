@@ -20,7 +20,7 @@ export default {
       pixelRatio: 1,
       textarea: '',
       Area: {
-        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+        categories: ['2019.09.10 01:00', '', '', '', '', '', '', '', '', '2019.09.10 10:00', '', '', '', '', '', '', '', '', '2019.09.10 11:00'],
         series: [
           { name: '实时温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
           { name: '设定温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
@@ -84,7 +84,7 @@ export default {
         series: chartData.series,
         animation: false,
         xAxis: {
-          disabled: true,
+          // disabled: true,
           axisLine: true,
           type: 'grid',
           gridColor: '#fff',

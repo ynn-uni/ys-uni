@@ -110,16 +110,16 @@ let cc=0
 export default {
   data() {
     return {
-	  modalName:null,
-	  designSuccess:1,
+			modalName:null,
+			designSuccess:1,
       isCanDesign:0,//温湿度是否可修改
-	  u:0,
+	  	u:0,
       index: 0,
       isLogin: false,
       haveDev: false,
       TabCur: 0,
-	  t:null,
-	  h:null,
+			t:null,
+			h:null,
       scrollLeft: 0,
       tabIndex: 0,
       datas:{},
@@ -128,7 +128,6 @@ export default {
           name: '温/湿度',
           icon: 'iconwenshiduchuanganqi_o'
         },
-        
         {
           name: '预警',
           icon: 'iconfont iconyujing'
@@ -137,10 +136,10 @@ export default {
           name: '数据',
           icon: 'iconfont iconshuju'
         },
-		{
-		  name: '其他',
-		  icon: 'cuIcon-cascades'
-		}
+				{
+					name: '其他',
+					icon: 'cuIcon-cascades'
+				}
       ],
       tData: {
         label: '温度',
@@ -156,125 +155,117 @@ export default {
         output: 0,
 				unit: '%'
       },
-	  seetingt:{},
-	  seetingh:{},
-	  chartData:[],
+			seetingt:{},
+			seetingh:{},
+			chartData:[],
+			timeList:[],
       waringinfo: {},
-	  otherData:[],
-	  isWaring:false
+			otherData:[],
+			isWaring:false
     }
   },
   components: {
     showDevData,
     showWaringData,
     showChartLine,
-	showOtherChartLine,
+		showOtherChartLine,
     noLogin,
     nodata,
-	showDev
+		showDev
   },
   computed: {
     ...mapGetters(['token', 'devList', 'devListMac', 'userInfo','socketInstance']),
-	...mapState (['isAppHide']),
+		...mapState (['isAppHide']),
     picker() {
-	  if(!this.devList) return
-      let list = []
-      this.devList.forEach(val => {
-        list.push(val.title)
-      })
-      return list
+	  		if(!this.devList) return
+				let list = []
+				this.devList.forEach(val => {
+					list.push(val.title)
+				})
+      	return list
     }
   },
   watch: {
     devListMac(val,old) {
-		if(val!=old){
-			this.initsocket()
-		}
+			if(val!=old){
+				this.initsocket()
+			}
     },
-	seetingt(){
-		if(this.isCanDesign==1){
-			this.designSuccess=1
+		seetingt(){
+			if(this.isCanDesign==1){
+				this.designSuccess=1
+			}
+		},
+		seetingh(){
+			if(this.isCanDesign==1){
+				this.designSuccess=1
+			}
 		}
-	},
-	seetingh(){
-		if(this.isCanDesign==1){
-			this.designSuccess=1
-		}
-		
-	}
   },
   onShow() {
-	  
     if(this.isAppHide&&this.devList&&this.devList.length>0) {
-	  this.initMac()
-	}
-    
+			this.initMac()
+		}
   },
- 
   methods: {
     ...mapActions('dev', ['initWebsocket', 'closeWebsocket']),
     ...mapMutations('user', ['updateDevListMac']),
-	...mapMutations( ['updateIsAppHide']),
+		...mapMutations( ['updateIsAppHide']),
     initsocket() {
-		if(this.socketInstance){
-			this.socketInstance.close()
-		}
-		
+			if(this.socketInstance){
+				this.socketInstance.close()
+			}
       this.initWebsocket().then(instance => {
         instance.onopen = evt => {
           instance.send({ mac: this.devListMac })
         }
         instance.onmessage = evt => {
-			console.log(evt)
-          if (evt.data === 'PONG'){
-			  // this.datas={} 
-			  return
-		  } 
-          const json = JSON.parse(evt.data)
-          this.datas=json
-		  if(json.e.e1!==null){
-			  this.waringinfo = json.e
-			  this.isCanDesign=json.e.e16
-		  }
-		  
-          
-		  this.checkWaring(this.waringinfo )
-          this.tData = this.setTemperatureData(json.t)
-          this.hData = this.setHumidityData(json.h)
-      	  this.chartData=this.setChartData(json)
-		  this.otherData=this.serOtherData(json.p)
-		  if(json.u){
-			   this.u=json.u
-		  }
-		 
+					console.log(evt)
+					if (evt.data === 'PONG'){
+						// this.datas={} 
+						return
+					} 
+					const json = JSON.parse(evt.data)
+					this.datas=json
+					if(json.e.e1!==null){
+						this.waringinfo = json.e
+						this.isCanDesign=json.e.e16
+					}
+					this.checkWaring(this.waringinfo )
+					this.tData = this.setTemperatureData(json.t)
+					this.hData = this.setHumidityData(json.h)
+					this.chartData=this.setChartData(json)
+					this.otherData=this.serOtherData(json.p)
+					if(json.u){
+						this.u=json.u
+					}
         }
       })
     },
-	checkWaring(data){
-		this.isWaring=false
-		if(data.length<=0) return
-		for(var i in data){
-			if(data[i]==1&&i.split('e')[1]<9&&i!='e6'){
-				this.isWaring=true
-			}else if(data['e6']==0){
-				this.isWaring=true
+		checkWaring(data){
+			this.isWaring=false
+			if(data.length<=0) return
+			for(var i in data){
+				if(data[i]==1&&i.split('e')[1]<9&&i!='e6'){
+					this.isWaring=true
+				}else if(data['e6']==0){
+					this.isWaring=true
+				}
 			}
-		}
-	},
+		},
     initMac(){
-		for(var i=0;i<this.devList.length;i++){
-			if (this.devList[i].mac == this.devListMac) {
-			  this.index = i
-			  this.initsocket()
-			  return
-			}else{
-				this.index = 0
-			}
-		}	
-		this.initsocket()
-		this.updateIsAppHide(false)
-		
-	},
+			for(var i=0;i<this.devList.length;i++){
+				if (this.devList[i].mac == this.devListMac) {
+					this.index = i
+					this.initsocket()
+					return
+				}else{
+					this.index = 0
+				}
+			}	
+			this.initsocket()
+			this.updateIsAppHide(false)
+		},
     tabSelect(e) {
       this.TabCur = e.currentTarget.dataset.id
       this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -284,7 +275,6 @@ export default {
       this.index = e.detail.value //index为选择序列下标
       this.updateDevListMac(this.devList[this.index].mac)
     },
-    
     getLastData(data) {
       if (Array.isArray(data)) {
         const length = data.length
@@ -296,7 +286,7 @@ export default {
     setTemperatureData(data) {
       if (!data.length) return
       data = this.getLastData(data)
-	  this.seetingt=data.Ts
+	  	this.seetingt=data.Ts
       return {
         label: '温度',
         current: Number(data.Ta).toFixed(1),
@@ -308,7 +298,7 @@ export default {
     setHumidityData(data) {
       if (!data.length) return
       data = this.getLastData(data)
-	  this.seetingh=data.Hs
+	  	this.seetingh=data.Hs
       return {
         label: '湿度',
         current: Number(data.Ha).toFixed(1),
@@ -317,85 +307,81 @@ export default {
 				unit: '%'
       }
     },
-	design(obj){
-		let t=this.tData.setting
-		let h=this.hData.setting
-		console.log('u:'+this.u,'iscandesign:'+this.designSuccess)
-		if(this.u==0){
-		  return uni.showToast({
-		  	title:'暂时无法设定数据，请稍后再试',
-			  icon:'none'
-		  })
-		}else if(this.designSuccess==0){
-			return uni.showToast({
-				title:'数据设定中，请稍后再试',
-						  icon:'none'
-			})
-		}else{
-			if(obj.name=='t'){
-				if(obj.seeting=='-'){
-					t--
-					this.setDevTandH(t,h)
-				}else if(obj.seeting=='+'){
-					t++
-					this.setDevTandH(t,h)
-				}else{
-					this.showHModel(obj.seeting)
-				}
+		design(obj){
+			let t=this.tData.setting
+			let h=this.hData.setting
+			console.log('u:'+this.u,'iscandesign:'+this.designSuccess)
+			if(this.u==0){
+				return uni.showToast({
+					title:'暂时无法设定数据，请稍后再试',
+					icon:'none'
+				})
+			}else if(this.designSuccess==0){
+				return uni.showToast({
+								title:'数据设定中，请稍后再试',
+								icon:'none'})
 			}else{
-				if(obj.seeting=='-'){
-					h--
-					this.setDevTandH(t,h)
-				}else if(obj.seeting=='+'){
-					h++
-					this.setDevTandH(t,h)
-				}else{//designT
-					this.showHModel(obj.seeting)
+				if(obj.name=='t'){
+					if(obj.seeting=='-'){
+						t--
+						this.setDevTandH(t,h)
+					}else if(obj.seeting=='+'){
+						t++
+						this.setDevTandH(t,h)
+					}else{
+						this.showHModel(obj.seeting)
+					}
+				}else{
+					if(obj.seeting=='-'){
+						h--
+						this.setDevTandH(t,h)
+					}else if(obj.seeting=='+'){
+						h++
+						this.setDevTandH(t,h)
+					}else{//designT
+						this.showHModel(obj.seeting)
+					}
 				}
 			}
-		}
-	},
-	makesure(str){
-		if(str=='t'&&!this.t){
-			return uni.showToast({
-				title:'请填写设定温度',
-				icon:'none'
+		},
+		makesure(str){
+			if(str=='t'&&!this.t){
+				return uni.showToast({
+					title:'请填写设定温度',
+					icon:'none'
+				})
+			}else if(str=='h'&&!this.h){
+				return uni.showToast({
+					title:'请填写设定湿度',
+					icon:'none'
+				})
+			}else{
+				let t=this.t?this.t:this.tData.setting
+				let h=this.h?this.h:this.hData.setting
+				console.log(t,h)
+				this.setDevTandH(t,h)
+			}
+			this.hideModal()
+		},
+		showHModel(str){
+			this.modalName=str
+		},
+		hideModal(){
+			this.modalName=null
+		},
+		setDevTandH(t,h){
+			let obj={
+				mac:this.devListMac,
+				temperature:t,
+				humidity:h
+			}
+			setDeviceTemperatureOrHumidity(obj).then((res)=>{
+				this.designSuccess=0
+				this.h=null;
+				this.t=null;
 			})
-		}else if(str=='h'&&!this.h){
-			return uni.showToast({
-				title:'请填写设定湿度',
-				icon:'none'
-			})
-		}else{
 			
-			let t=this.t?this.t:this.tData.setting
-			let h=this.h?this.h:this.hData.setting
-			console.log(t,h)
-			this.setDevTandH(t,h)
-		}
-		
-		
-		this.hideModal()
-	},
-	showHModel(str){
-		this.modalName=str
-	},
-	hideModal(){
-		this.modalName=null
-	},
-	setDevTandH(t,h){
-		let obj={
-			mac:this.devListMac,
-			temperature:t,
-			humidity:h
-		}
-		setDeviceTemperatureOrHumidity(obj).then((res)=>{
-			this.designSuccess=0
-			this.h=null;
-			this.t=null;
-		})
-		
-	},
+		},
     setChartData(data){
       if(!data.t||!data.h) return;
       let newData=[{ name: '实时温度', data: [] },
@@ -430,65 +416,56 @@ export default {
       return newData
     },
     serOtherData(data){
-		if(!data) return;
-		let newData=[
-			{ name: '传感器1温度', data: [] },
-			{ name: '传感器1湿度', data: [] },
-			{ name: '传感器2温度', data: [] },
-			{ name: '传感器2湿度', data: [] },
-			{ name: '传感器3温度', data: [] },
-			{ name: '传感器3湿度', data: [] },
-			{ name: '传感器4温度', data: [] },
-			{ name: '传感器4湿度', data: [] },
-			{ name: '传感器5温度', data: [] },
-			{ name: '传感器5湿度', data: [] },
-			{ name: '传感器6温度', data: [] },
-			{ name: '传感器6湿度', data: [] },
-			{ name: '传感器7温度', data: [] },
-			{ name: '传感器7湿度', data: [] },
-			{ name: '传感器8温度', data: [] },
-			{ name: '传感器8湿度', data: [] },
-			{ name: '传感器9温度', data: [] },
-			{ name: '传感器9湿度', data: [] }];
-			
-			if(data.length){
-				this.otherData=[]
-				data.forEach((val,index)=>{
-					for(var i in val){
-						newData.forEach((el,index2)=>{
-							
-							if(i.split('p')[1]==(index2+1)){
-								
-								el.data.push(Number(val[i]).toFixed(1))
-								// el.data.push(val[i])
-							}
-						})
-						
-					}
-				})
-				
-			}else{
-				
-				newData=this.otherData
-				this.otherData.forEach((val,index)=>{
-				  newData[index].data=val.data.slice(1)
-				})
-				for(var i in data){
-					newData.forEach((el,index2)=>{
-						if(i.split('p')[1]==(index2+1)){
-							el.data.push(Number(data[i]).toFixed(1))
-							// el.data.push(data[i])
+			if(!data) return;
+			let newData=[
+					{ name: '传感器1温度', data: [] },
+					{ name: '传感器1湿度', data: [] },
+					{ name: '传感器2温度', data: [] },
+					{ name: '传感器2湿度', data: [] },
+					{ name: '传感器3温度', data: [] },
+					{ name: '传感器3湿度', data: [] },
+					{ name: '传感器4温度', data: [] },
+					{ name: '传感器4湿度', data: [] },
+					{ name: '传感器5温度', data: [] },
+					{ name: '传感器5湿度', data: [] },
+					{ name: '传感器6温度', data: [] },
+					{ name: '传感器6湿度', data: [] },
+					{ name: '传感器7温度', data: [] },
+					{ name: '传感器7湿度', data: [] },
+					{ name: '传感器8温度', data: [] },
+					{ name: '传感器8湿度', data: [] },
+					{ name: '传感器9温度', data: [] },
+					{ name: '传感器9湿度', data: [] }
+				];
+				if(data.length){
+					this.otherData=[]
+					data.forEach((val,index)=>{
+						for(var i in val){
+							newData.forEach((el,index2)=>{
+								if(i.split('p')[1]==(index2+1)){
+									el.data.push(Number(val[i]).toFixed(1))
+									// el.data.push(val[i])
+								}
+							})
 						}
 					})
-					
+				}else{
+					newData=this.otherData
+					this.otherData.forEach((val,index)=>{
+						newData[index].data=val.data.slice(1)
+					})
+					for(var i in data){
+						newData.forEach((el,index2)=>{
+							if(i.split('p')[1]==(index2+1)){
+								el.data.push(Number(data[i]).toFixed(1))
+								// el.data.push(data[i])
+							}
+						})
+					}
 				}
-			}
-			
-			return newData
-			
-			
-	},
-	handelDevSign(){
+				return newData
+		},
+		handelDevSign(){
       uni.navigateTo({
         url:'/pages/index/Remarks/Remarks'
       })

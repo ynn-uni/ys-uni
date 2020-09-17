@@ -93,12 +93,11 @@ import uCharts from '@/components/u-charts/u-charts.js'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 var _self
 var canvaArcbar1 = null
-
 export default {
   data() {
     return {
-		t:{},
-		h:{},
+			t:{},
+			h:{},
       cWidth3: '', //圆弧进度图
       cHeight3: '', //圆弧进度图
       arcbarWidth: '', //圆弧进度图，进度条宽度,此设置可使各端宽度一致
@@ -128,45 +127,39 @@ export default {
         }
       }
     },
-	hdatas: {
-	  type: Object,
-	  default: () => {
-	    return {
-	      label: '',
-	      setting: '',
-	      current: '',
-	      output: '',
-	      unit: ''
-	    }
-	  }
-	}
+		hdatas: {
+			type: Object,
+			default: () => {
+				return {
+					label: '',
+					setting: '',
+					current: '',
+					output: '',
+					unit: ''
+				}
+			}
+		}
   },
   watch: {
     datas() {
       this.t=this.datas
-	  
     },
-	hdatas() {
-		this.h=this.hdatas
-		
-	}
+		hdatas() {
+			this.h=this.hdatas
+		}
   },
   mounted() {
-    
   },
-
   methods: {
-	showModel(str){
-		this.$emit('changetemperature',{seeting:str})
-	},
-	handelTemperature(str){
-		this.$emit('changetemperature',{name:'t',seeting:str})
-		
-	},
-	handelHu(str){
-		this.$emit('changetemperature',{name:'h',seeting:str})
-		
-	},
+		showModel(str){
+			this.$emit('changetemperature',{seeting:str})
+		},
+		handelTemperature(str){
+			this.$emit('changetemperature',{name:'t',seeting:str})
+		},
+		handelHu(str){
+			this.$emit('changetemperature',{name:'h',seeting:str})
+		}
   
   }
 }

@@ -41,7 +41,6 @@
 <script>
 import uniGrid from '@/components/uni-grid/uni-grid.vue'
 import uniGridItem from '@/components/uni-grid-item/uni-grid-item.vue'
-
 export default {
   data() {
     return {
@@ -94,55 +93,51 @@ export default {
           icon: 'iconneicuncuowu',
           status: 0 //正常
         },
-		{
-		  id: 'e9',
-		  name: '系统错误',
-		  icon: 'iconxitongcuowu',
-		  status: 0 //正常
-		}
-		
-        
+        {
+          id: 'e9',
+          name: '系统错误',
+          icon: 'iconxitongcuowu',
+          status: 0 //正常
+        }
       ],
-	  waringDataStatus:[
-		  
-		  {
-		    id: 'e10',
-		    name: '压缩机一',
-		    icon: 'iconyasuoji',
-		    status: 0 //正常
-		  },
-		  {
-		    id: 'e11',
-		    name: '压缩机二',
-		    icon: 'iconyasuoji',
-		    status: 0 //正常
-		  },
-		  {
-		    id: 'e12',
-		    name: '开门',
-		    icon: 'iconfengji',
-		    status: 0 //正常
-		  },
-		  {
-		    id: 'e13',
-		    name: '照明',
-		    icon: 'iconzhaoming',
-		    status: 0 //正常
-		  },
-		  {
-		    id: 'e14',
-		    name: '温度控制',
-		    icon: 'iconwendukongzhi',
-		    status: 0 //正常
-		  },
-		  {
-		    id: 'e15',
-		    name: '湿度控制',
-		    icon: 'iconshidukongzhi',
-		    status: 0 //正常
-		  }
-		  
-	  ]
+      waringDataStatus:[
+        {
+          id: 'e10',
+          name: '压缩机一',
+          icon: 'iconyasuoji',
+          status: 0 //正常
+        },
+        {
+          id: 'e11',
+          name: '压缩机二',
+          icon: 'iconyasuoji',
+          status: 0 //正常
+        },
+        {
+          id: 'e12',
+          name: '开门',
+          icon: 'iconfengji',
+          status: 0 //正常
+        },
+        {
+          id: 'e13',
+          name: '照明',
+          icon: 'iconzhaoming',
+          status: 0 //正常
+        },
+        {
+          id: 'e14',
+          name: '温度控制',
+          icon: 'iconwendukongzhi',
+          status: 0 //正常
+        },
+        {
+          id: 'e15',
+          name: '湿度控制',
+          icon: 'iconshidukongzhi',
+          status: 0 //正常
+        }
+      ]
     }
   },
   props: {
@@ -163,22 +158,20 @@ export default {
   mounted() {
     this.init()
   },
-
   methods: {
     init() {
-		if(!this.waringinfo) return
-		this.waringinfo['e6']=this.waringinfo['e6']==0?1:0
+		  if(!this.waringinfo) return
+		  this.waringinfo['e6']=this.waringinfo['e6']==0?1:0
       this.waringData.map(i => {
-		  if(i.id.split('e')[1]<9){
-			   i.status = this.waringinfo[i.id]
-		  }
-       
+        if(i.id.split('e')[1]<9){
+          i.status = this.waringinfo[i.id]
+        }
       })
-	  this.waringDataStatus.map(i => {
-		  if(i.id.split('e')[1]>8){
-			  i.status = this.waringinfo[i.id]
-		  }
-	  })
+      this.waringDataStatus.map(i => {
+        if(i.id.split('e')[1]>8){
+          i.status = this.waringinfo[i.id]
+        }
+      })
     }
   }
 }

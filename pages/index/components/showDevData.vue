@@ -83,16 +83,14 @@ export default {
     this.arcbarWidth = uni.upx2px(38)
     this.showArcbar('canvasGauge', this.chartData)
   },
-
   methods: {
     initdata() {
       this.chartData.series[0].name = '实时' + this.datas.label
       this.chartData.series[0].data = this.datas.current
     },
-	handelTemperature(str){
-		this.$emit('changetemperature',str)
-		
-	},
+    handelTemperature(str){
+      this.$emit('changetemperature',str)
+    },
     showArcbar(canvasId, chartData) {
       canvaArcbar1 = new uCharts({
         $this: _self,
