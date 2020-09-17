@@ -399,18 +399,18 @@ export default {
     setChartData(data){
       if(!data.t||!data.h) return;
       let newData=[{ name: '实时温度', data: [] },
-            { name: '输出温度', data: [] },
+            { name: '设定温度', data: [] },
             { name: '实时湿度', data: [] },
-            { name: '输出湿度', data: [] }];
+            { name: '设定湿度', data: [] }];
       if(data.t.length>1){
         this.chartData=[]
         data.t.forEach((val)=>{
           newData[0].data.push(parseInt(val.Ta).toFixed(2))
-          newData[1].data.push(val.To)
+          newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
-          newData[3].data.push(val.Ho)
+          newData[3].data.push(val.Hs)
         })
 		
       }else{
@@ -420,11 +420,11 @@ export default {
         })
         data.t.forEach((val)=>{
           newData[0].data.push(parseInt(val.Ta).toFixed(2))
-          newData[1].data.push(val.To)
+          newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
-          newData[3].data.push(val.Ho)
+          newData[3].data.push(val.Hs)
         })
       }
       return newData

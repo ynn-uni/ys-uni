@@ -52,9 +52,9 @@
 				pixelRatio:1,//像素比
 				Area:{categories:['0:00','','','','0:30','','','','','1:00','','','','','1:30','','','','','2:00'],
 				series:[{name:'实时温度',data:[25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25]},
-				{name:'输出温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
+				{name:'设定温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
 				{name:'实时湿度',data:[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]},
-				{name:'输出湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
+				{name:'设定湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
 			}
 		},
 		computed:{
@@ -113,9 +113,9 @@
 								}
 								that.Area.categories.unshift(time);
 								that.Area.series[0].data.unshift(Math.round((val['ta'])*10)/10);
-								that.Area.series[1].data.unshift(val['to']);
+								that.Area.series[1].data.unshift(val['ts']);
 								that.Area.series[2].data.unshift(Math.round((val['ha'])*10)/10);
-								that.Area.series[3].data.unshift(val['ho']);
+								that.Area.series[3].data.unshift(val['hs']);
 							// }
 						})
 						
@@ -132,7 +132,7 @@
 			PickerChange(e) {//选择设备
 				var that=this;
 				this.index = e.detail.value//index为选择序列下标
-				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac);
+				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac,this.page,this.size);
 			},
 			delDate(){
 				this.startDate='开始时间'
@@ -145,7 +145,7 @@
 				this.showDate=time[0]+'年'+time[1]+'月'+time[2]+'日'
 				this.startDate = e.detail.value+' 00:00:00'
 				this.endDate =e.detail.value+' 23:59:59'
-				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac);
+				that.getHistoryData(that.startDate,that.endDate,that.devList[that.index].mac,this.page,this.size);
 			},
 			endDateChange(e) {
 				this.endDate = e.detail.value

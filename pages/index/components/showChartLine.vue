@@ -23,9 +23,9 @@ export default {
         categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         series: [
           { name: '实时温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '输出温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          { name: '设定温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
           { name: '实时湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '输出湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+          { name: '设定湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
         ]
       } //图表数据对象
     }
@@ -56,7 +56,8 @@ export default {
       this.Area.series=[]
 		  for(var i=0;i<this.datas[0].data.length;i++){
 			  this.Area.categories.push(i)
-		  }
+      }
+      console.log(this.datas)
 		  this.Area.series=this.datas
 	  },
     showArea(canvasId, chartData) {
