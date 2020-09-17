@@ -227,7 +227,7 @@ export default {
         instance.onmessage = evt => {
 			console.log(evt)
           if (evt.data === 'PONG'){
-			  this.datas={} 
+			  // this.datas={} 
 			  return
 		  } 
           const json = JSON.parse(evt.data)

@@ -53,8 +53,9 @@
 		},
 		onLoad(option) {
 			var data=JSON.parse(option.data);
-		          this.name=data.name;
-				  this.tel=data.phone;
+							this.name=data.name;
+							var phone=data.phone
+					 this.tel=phone.substr(0, 3) + '****' +phone.substr(7)
 				  this.address=data.address;
 				  this.dis=data.content;
 				  this.status=data.status;

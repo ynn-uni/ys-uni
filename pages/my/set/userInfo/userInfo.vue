@@ -55,7 +55,11 @@
 			 ...mapGetters([ 'userInfo'])
 		},
 		onShow() {
-			this.tel=this.userInfo.phone;
+			// this.tel=this.userInfo.phone;
+			if(this.userInfo.phone){
+					this.phone=JSON.parse(JSON.stringify(this.userInfo.phone));
+					this.tel=this.phone.substr(0, 3) + '****' + this.phone.substr(7)
+			}
 			this.email=this.userInfo.email;
 		},
 		methods:{
