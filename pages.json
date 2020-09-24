@@ -1,10 +1,14 @@
 {
     "pages" : [
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		
+       
 		{
 		    "path" : "pages/index/index",
 		    "style" : {}
+		},
+		{
+		    "path" : "pages/my/help/helpdetail/helpdetail"
+		    
 		},
 		{
 		    "path" : "pages/information/information"
@@ -80,10 +84,7 @@
             "path" : "pages/my/about/about"
             
         },
-        {
-            "path" : "pages/my/help/helpdetail/helpdetail"
-            
-        },
+       
         {
             "path" : "pages/my/Repair/repairDetail/repairDetail"
            
@@ -111,7 +112,6 @@
         "selectedColor" : "#4b4b4b",
         "borderStyle" : "black",
         "backgroundColor" : "#ffffff",
-        "fontSize" : "",
         "list" : [
             {
                 "pagePath" : "pages/index/index",

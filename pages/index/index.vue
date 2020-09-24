@@ -209,7 +209,7 @@ export default {
   },
   methods: {
     ...mapActions('dev', ['initWebsocket', 'closeWebsocket']),
-    ...mapMutations('user', ['updateDevListMac']),
+		...mapMutations('user', ['updateDevListMac']),
 		...mapMutations( ['updateIsAppHide']),
     initsocket() {
 			if(this.socketInstance){
@@ -222,7 +222,7 @@ export default {
         instance.onmessage = evt => {
 					console.log(evt)
 					if (evt.data === 'PONG'){
-						// this.datas={} 
+						this.datas={} 
 						return
 					} 
 					const json = JSON.parse(evt.data)
@@ -230,6 +230,8 @@ export default {
 					if(json.e.e1!==null){
 						this.waringinfo = json.e
 						this.isCanDesign=json.e.e16
+					}else{
+						this.datas={} 
 					}
 					this.checkWaring(this.waringinfo )
 					this.tData = this.setTemperatureData(json.t)
