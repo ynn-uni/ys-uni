@@ -63,7 +63,7 @@
 				</view>
 				<view class="move">
 					<view class="bg-gray">
-						<view class="bg-red" @tap="delDevice(item.id)">删除</view>
+						<view class="bg-red" @tap="delDevice(item)">删除</view>
 					</view>
 					
 				</view>
@@ -202,20 +202,21 @@
 					})
 				}
 			},
-			delDevice(id){
+			delDevice(item){
 				var that=this;
 				var id=parseInt(id);
 				// 弹出是否删除
 				this.$refs.adddev.showModalDel()
 				// this.modalName = 'DialogModal2'
-				this.delid=id;
+				this.delid=item;
 				
 			},
 			delDev(){
 				
-				delDevice({id:this.delid}).then((res)=>{
+				delDevice({id:parseInt(this.delid.id)}).then((res)=>{
 					this.fatchDevListByToken()
 					this.updateIsAppHide(true)
+					
 				})
 			},
 			

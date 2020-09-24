@@ -263,8 +263,9 @@ export default {
 					return
 				}else{
 					this.index = 0
+						this.updateDevListMac(this.devList[0].mac)
 				}
-			}	
+			}
 			this.initsocket()
 			this.updateIsAppHide(false)
 		},
