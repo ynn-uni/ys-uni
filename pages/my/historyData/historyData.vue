@@ -4,7 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">历史数据</block>
 		</cu-custom>
-		<view class="pick" v-if="devList">
+		<view class="pick" v-if="devList.length">
 			<picker @change="PickerChange" :value="index" :range="picker" style-="font-size:30upx">
 				<view class="picker">
 					{{devList[index].title}}
@@ -81,6 +81,7 @@
 			if(this.devList&&this.devList.length){
 				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
 			}
+			console.log(this.haveData)
 		},
 		methods: {
 			initTime(){
@@ -126,6 +127,7 @@
 						}
 						
 					}
+					
 					uni.hideLoading()
 				})
 			},

@@ -99,19 +99,22 @@
 				getNoticeList({page,size,start,end}).then((res)=>{
 					var data=res.data.data
 					var newData=[]
-					if(page>1){
-						newData=this.initData(data)
-						that.infoList=that.infoList.concat(newData)
-					}else if(page==1){
-						that.infoList=[]
-						// if(data.length<1){
-						// 	that.isNoData=true
-						// }else{
-							that.infoList=this.initData(data)
-						// 	that.isNoData=false
-						// }
-						
+					if(data&&data.length){
+						if(page>1){
+							newData=this.initData(data)
+							that.infoList=that.infoList.concat(newData)
+						}else if(page==1){
+							that.infoList=[]
+							// if(data.length<1){
+							// 	that.isNoData=true
+							// }else{
+								that.infoList=this.initData(data)
+							// 	that.isNoData=false
+							// }
+							
+						}
 					}
+					
 					uni.hideLoading()
 				})
 				

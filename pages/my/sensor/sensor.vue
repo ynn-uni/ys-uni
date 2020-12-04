@@ -4,7 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">传感器设置</block>
 		</cu-custom>
-		<view class="content" v-if="devList">
+		<view class="content" v-if="devList.length">
 			<form class="flex flex-direction align-center" @submit="makesure()">
 				<view class="item">
 					<view class="flex">
@@ -143,7 +143,10 @@
 			}
 		},
 		mounted() {
-			this.getDevSensor()
+			if(this.devList&&this.devList.length){
+				this.getDevSensor()
+			}
+			
 		},
 		computed:{
 			...mapGetters([ 'devList']),
