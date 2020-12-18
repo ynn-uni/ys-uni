@@ -41,7 +41,11 @@ export default {
 	  datas: {
 	    type: Array,
 	    default: () => []
-	  }
+    },
+    timelist:{
+      type: Array,
+	    default: () => []
+    }
   },
   watch:{
 	  datas() {
@@ -82,9 +86,21 @@ export default {
       if(this.datas.length<=0) return;
 		  this.Area.categories=[]
           this.Area.series=[]
-		  for(var i=0;i<this.datas[0].data.length;i++){
-			  this.Area.categories.push(i)
-		  }
+		  for(var i=0;i<this.timelist[4].data.length;i++){
+			    if(i===4||i==14){
+          this.Area.categories.push(this.timelist[4].data[i].split(' ')[1])
+        }else{
+          this.Area.categories.push('')
+        }
+      }
+      console.log(148,this.timelist)
+      // for(var i=0;i<this.datas[4].data.length;i++){
+      //   if(i===4||i==14){
+      //     this.Area.categories.push(this.datas[4].data[i].split(' ')[1])
+      //   }else{
+      //     this.Area.categories.push('')
+      //   }
+      // }
 		  this.Area.series=this.datas.slice(n,n+this.size)
 	  },
     showArea(canvasId, chartData) {
@@ -111,7 +127,7 @@ export default {
         series: chartData.series,
         animation: false,
         xAxis: {
-          disabled: true,
+          // disabled: true,
           axisLine: true,
           type: 'grid',
           gridColor: '#fff',

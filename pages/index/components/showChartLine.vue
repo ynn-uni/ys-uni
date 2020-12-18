@@ -54,11 +54,15 @@ export default {
       if(this.datas.length<=0) return;
 		  this.Area.categories=[]
       this.Area.series=[]
-		  for(var i=0;i<this.datas[0].data.length;i++){
-			  this.Area.categories.push(i)
+		  for(var i=0;i<this.datas[4].data.length;i++){
+        if(i===4||i==14){
+          this.Area.categories.push(this.datas[4].data[i].split(' ')[1])
+        }else{
+          this.Area.categories.push('')
+        }
       }
-      console.log(this.datas)
-		  this.Area.series=this.datas
+      var list=JSON.parse(JSON.stringify(this.datas))
+		  this.Area.series=list.splice(0,4)
 	  },
     showArea(canvasId, chartData) {
       canvaArea = new uCharts({

@@ -21,7 +21,7 @@
 			<showDev :datas="tData" :hdatas="hData" v-if="TabCur===0" @changetemperature="design"></showDev>
 			<showWaringData v-if="TabCur===1" :waringinfo="waringinfo"></showWaringData>
 			<showChartLine v-if="TabCur===2" :datas="chartData"></showChartLine>
-			<showOtherChartLine v-if="TabCur===3" :datas="otherData"></showOtherChartLine>
+			<showOtherChartLine v-if="TabCur===3" :datas="otherData" :timelist="chartData"></showOtherChartLine>
 		</view>
         <scroll-view scroll-x class="bg-white nav margin-tb">
           <view class="flex text-center tablist">
@@ -390,16 +390,18 @@ export default {
       let newData=[{ name: '实时温度', data: [] },
             { name: '设定温度', data: [] },
             { name: '实时湿度', data: [] },
-            { name: '设定湿度', data: [] }];
+						{ name: '设定湿度', data: [] },
+						{ name:'时间',data:[]}];
       if(data.t.length>1){
         this.chartData=[]
         data.t.forEach((val)=>{
           newData[0].data.push(parseInt(val.Ta).toFixed(2))
-          newData[1].data.push(val.Ts)
+					newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
-          newData[3].data.push(val.Hs)
+					newData[3].data.push(val.Hs)
+					newData[4].data.push(val.time)
         })
 		
       }else{
