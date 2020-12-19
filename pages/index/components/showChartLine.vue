@@ -25,7 +25,8 @@ export default {
           { name: '实时温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
           { name: '设定温度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
           { name: '实时湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-          { name: '设定湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+          { name: '设定湿度', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+          {name: '', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
         ]
       } //图表数据对象
     }
@@ -55,15 +56,17 @@ export default {
 		  this.Area.categories=[]
       this.Area.series=[]
 		  for(var i=0;i<this.datas[4].data.length;i++){
-        if(i===4||i==14){
-          this.Area.categories.push(this.datas[4].data[i].split(' ')[1])
-        }else{
-          this.Area.categories.push('')
-        }
+        // if(i===4||i==14){
+          this.Area.categories.push(this.datas[4].data[i])
+        // }else{
+        //   this.Area.categories.push('')
+        // }
       }
       console.log(this.datas)
       var list=JSON.parse(JSON.stringify(this.datas))
-		  this.Area.series=list.splice(0,4)
+      list[4]={name: '', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      console.log(list)
+		  this.Area.series=list
 	  },
     showArea(canvasId, chartData) {
       canvaArea = new uCharts({
@@ -73,7 +76,7 @@ export default {
         fontSize: 12,
         padding: [8, 8, 8, 8],
         legend: {
-          show: true,
+          show: false,
           position: 'top',
           float: 'center',
           itemGap: 60,
@@ -89,7 +92,7 @@ export default {
         series: chartData.series,
         animation: false,
         xAxis: {
-          // disabled: true,
+          disabled: true,
           axisLine: true,
           type: 'grid',
           gridColor: '#fff',
@@ -125,12 +128,14 @@ export default {
         format: function(item, category) {
           var str = ''
           if (i == 0 || i == 1) {
-            str = '℃'
-          } else {
-            str = '%'
+            str = item.name + ':' + item.data +'℃'
+          } else if(i == 2 || i == 3) {
+            str = item.name + ':' + item.data +'%'
+          }else{
+            str=category
           }
           i++
-          return item.name + ':' + item.data + str
+          return str
         }
       })
     }

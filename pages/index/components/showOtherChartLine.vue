@@ -87,11 +87,11 @@ export default {
 		  this.Area.categories=[]
           this.Area.series=[]
 		  for(var i=0;i<this.timelist[4].data.length;i++){
-			    if(i===4||i==14){
-          this.Area.categories.push(this.timelist[4].data[i].split(' ')[1])
-        }else{
-          this.Area.categories.push('')
-        }
+			    // if(i===4||i==14){
+          this.Area.categories.push(this.timelist[4].data[i])
+        // }else{
+        //   this.Area.categories.push('')
+        // }
       }
       console.log(148,this.timelist)
       // for(var i=0;i<this.datas[4].data.length;i++){
@@ -101,7 +101,10 @@ export default {
       //     this.Area.categories.push('')
       //   }
       // }
-		  this.Area.series=this.datas.slice(n,n+this.size)
+      var list=JSON.parse(JSON.stringify(this.datas.slice(n,n+this.size)))
+      list[6]={name: '', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      console.log(list)
+		  this.Area.series=list
 	  },
     showArea(canvasId, chartData) {
         canvaArea = new uCharts({
@@ -111,7 +114,7 @@ export default {
         fontSize: 12,
         padding: [8, 8, 20, 8],
         legend: {
-          show: true,
+          show: false,
           position: 'top',
           float: 'center',
           itemGap: 60,
@@ -127,7 +130,7 @@ export default {
         series: chartData.series,
         animation: false,
         xAxis: {
-          // disabled: true,
+          disabled: true,
           axisLine: true,
           type: 'grid',
           gridColor: '#fff',
@@ -166,11 +169,13 @@ export default {
         format: function(item, category) {
         let str=null
         if(item.name.indexOf('温度')>0){
-          str='℃'
+          str=item.name + ':' + item.data+'℃'
         }else if(item.name.indexOf('湿度')>0){
-          str='%'
+          str=item.name + ':' + item.data+'%'
+        }else{
+          str=category
         }
-          return item.name + ':' + item.data+str
+          return str
         }
       })
     }
