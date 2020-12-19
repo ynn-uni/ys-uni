@@ -54,7 +54,8 @@
 				series:[{name:'实时温度',data:[25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25]},
 				{name:'设定温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
 				{name:'实时湿度',data:[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]},
-				{name:'设定湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
+				{name:'设定湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]},
+				{name:'时间',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
 			}
 		},
 		computed:{
@@ -105,21 +106,19 @@
 						that.Area.series[1].data.splice(0);
 						that.Area.series[2].data.splice(0);
 						that.Area.series[3].data.splice(0);
+						that.Area.series[4].data.splice(0);
 						res.data.data.forEach((val,i)=>{
 							// for(var i in val){
 								// that.Area.categories.push(val['time']);
-								var time=''
-								if(i%100===0){
-									var time=val['time'].split(' ')[1]
-								}
-								that.Area.categories.unshift(time);
+								that.Area.categories.unshift(val['time']);
 								that.Area.series[0].data.unshift(Math.round((val['ta'])*10)/10);
 								that.Area.series[1].data.unshift(val['ts']);
 								that.Area.series[2].data.unshift(Math.round((val['ha'])*10)/10);
 								that.Area.series[3].data.unshift(val['hs']);
+								that.Area.series[4].data.unshift(0);
 							// }
 						})
-						
+						console.log(this.Area)
 						that.showArea('canvasArea1',this.Area);
 					}else{
 						if(this.page===1){
@@ -178,7 +177,7 @@
 					animation: false,
 					enableScroll: true,//开启图表拖动
 					xAxis: {
-						disabled:false,//是否显示x轴
+						disabled:true,//是否显示x轴
 						gridColor:'#fff',
 						dashLength:10,
 						type:'grid',
@@ -243,12 +242,15 @@
 				canvaArea.showToolTip(e, {
 					format: function (item, category) {
 						let str=null
+						console.log(item)
 						if(item.name.indexOf('温度')>0){
-							str='℃'
+							str=item.name + ':' + item.data +'℃'
 						}else if(item.name.indexOf('湿度')>0){
-							str='%'
+							str=item.name + ':' + item.data +'%'
+						}else{
+							str=category
 						}
-						return item.name + ':' + item.data +str
+						return str
 					}
 				});
 			},
