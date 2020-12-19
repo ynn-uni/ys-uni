@@ -77,7 +77,7 @@ export default {
         },
         {
           id: 'e6',
-          name: '电源错误',
+          name: '断电',
           icon: 'icondianyuancuowu',
           status: 0 //正常
         },
