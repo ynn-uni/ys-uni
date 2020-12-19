@@ -394,12 +394,13 @@ export default {
 						{ name:'时间',data:[]}];
       if(data.t.length>1){
         this.chartData=[]
-        data.t.forEach((val)=>{
-          newData[0].data.push(parseInt(val.Ta).toFixed(2))
+        data.t.forEach((val)=>{ 
+					// newData[0].data.push(parseInt(val.Ta).toFixed(2))
+					newData[0].data.push(Math.floor(val.Ta * 100) / 100)
 					newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
-          newData[2].data.push( parseInt(val.Ha).toFixed(2))
+          newData[2].data.push(Math.floor(val.Ha * 100) / 100 )
 					newData[3].data.push(val.Hs)
 					newData[4].data.push(val.time)
         })
@@ -410,11 +411,11 @@ export default {
           newData[index].data=val.data.slice(1)
         })
         data.t.forEach((val)=>{
-          newData[0].data.push(parseInt(val.Ta).toFixed(2))
+          newData[0].data.push(Math.floor(val.Ta * 100) / 100)
           newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
-          newData[2].data.push( parseInt(val.Ha).toFixed(2))
+          newData[2].data.push( Math.floor(val.Ha * 100) / 100 )
 					newData[3].data.push(val.Hs)
 					newData[4].data.push(val.time)
         })
@@ -449,8 +450,8 @@ export default {
 					data.forEach((val,index)=>{
 						for(var i in val){
 							newData.forEach((el,index2)=>{
-								if(i.split('p')[1]==(index2+1)){
-									el.data.push(Number(val[i]).toFixed(1))
+								if(i.split('p')[1]==(index2+1)){ 
+									el.data.push(Math.floor(val[i] * 100) / 100)
 									// el.data.push(val[i])
 								}
 							})
@@ -464,7 +465,7 @@ export default {
 					for(var i in data){
 						newData.forEach((el,index2)=>{
 							if(i.split('p')[1]==(index2+1)){
-								el.data.push(Number(data[i]).toFixed(1))
+								el.data.push(Math.floor(data[i] * 100) / 100)
 								// el.data.push(data[i])
 							}
 						})
