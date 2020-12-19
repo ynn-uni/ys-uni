@@ -61,6 +61,7 @@ export default {
           this.Area.categories.push('')
         }
       }
+      console.log(this.datas)
       var list=JSON.parse(JSON.stringify(this.datas))
 		  this.Area.series=list.splice(0,4)
 	  },

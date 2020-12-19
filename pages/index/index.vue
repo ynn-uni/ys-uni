@@ -415,9 +415,11 @@ export default {
         })
         data.h.forEach((val)=>{
           newData[2].data.push( parseInt(val.Ha).toFixed(2))
-          newData[3].data.push(val.Hs)
+					newData[3].data.push(val.Hs)
+					newData[4].data.push(val.time)
         })
-      }
+			}
+			console.log('test',newData)
       return newData
     },
     serOtherData(data){

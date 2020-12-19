@@ -1,14 +1,14 @@
 <template>
 	<view class="devlist">
-	<cu-custom :isBack="true">
+	<cu-custom :isBack="true" bgColor="bg-e">
 		<block slot="backText">返回</block>
 		<block slot="content">故障引导列表</block>
 	</cu-custom>
 	<view class=" menu-avatar cu-list">
-		<view class=" dl-item" v-for="(item,index) in data" :key='index' @tap="handelDetail">
+		<view class=" dl-item" v-for="(item,index) in data" :key='index' @tap="handelDetail(item)">
 			<view class="info" >
 				<view class="num">
-					{{index>10?index+1:'0'+(index+1)}}
+					{{index>=9?index+1:'0'+(index+1)}}
 				</view>
 				<view class="line"></view>
 					<view class="name">
@@ -25,13 +25,80 @@
 	export default {
 		data() {
 			return {
-				data:[{id:0,name:'故障一'},{id:1,name:'故障二'},{id:2,name:'故障三'}]
+				data:[
+					{
+						id:0,
+						name:'超温故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/cw.png'
+					},
+					{
+						id:1,
+						name:'清扫冷凝器灰尘',
+						type:2,
+						source:'http://img.mahaoyuan.com/qslnqhc.mp4'
+					},
+					{
+						id:2,
+						name:'水路维护',
+						type:2,
+						source:'http://img.mahaoyuan.com/slwh.mp4'
+					},
+					{
+						id:3,
+						name:'打印机故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/dyj.png'
+					},
+					{
+						id:4,
+						name:'加热系统故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/jr.png'
+					},
+					{
+						id:5,
+						name:'开机无电源',
+						type:1,
+						source:'http://img.mahaoyuan.com/kjwdy.png'
+					},
+					{
+						id:6,
+						name:'水系统',
+						type:1,
+						source:'http://img.mahaoyuan.com/sxt.png'
+					},
+					{
+						id:7,
+						name:'通讯故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/tx.png'
+					},
+					{
+						id:8,
+						name:'箱体漏水',
+						type:1,
+						source:'http://img.mahaoyuan.com/xtls.png'
+					},
+					{
+						id:9,
+						name:'仪表故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/ybgz.png'
+					},
+					{
+						id:10,
+						name:'制冷系统故障',
+						type:1,
+						source:'http://img.mahaoyuan.com/zlxt.png'
+					}
+				]
 			}
 		},
 		methods: {
-			handelDetail(){
+			handelDetail(item){
 				uni.navigateTo({
-					url:'/pages/my/help/helpdetail/helpdetail'
+					url:`/pages/my/help/helpdetail/helpdetail?name=${item.name}&type=${item.type}&source=${item.source}`
 				})
 			}
 		}
