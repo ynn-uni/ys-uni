@@ -2,11 +2,11 @@
 	<view class="remarks">
 		<cu-custom :isBack="true" bgColor="bg-e" >
 			<block slot="backText">返回</block>
-			<block slot="content">设备备注</block>
+			<block slot="content">设备日志</block>
 		</cu-custom>
 		<view class="remark-item" v-for="(item,index) in signData" :key='index'>
 			<view class="title">
-				备注{{index+1}}
+				日志{{index+1}}
 			</view>
 			<view class="dis" v-text="item">
 				<!-- {{item}} -->
