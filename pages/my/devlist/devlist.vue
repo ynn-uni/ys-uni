@@ -24,21 +24,22 @@
 						<form >
 							<view class="form-input">
 								<view class="">
-									<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" />
+									<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" cursor-spacing="20"/>
 								</view>
 								<view class="mac flex align-center">
-									<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" />
+									<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" cursor-spacing="20"/>
 									<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 								</view>
 								<view class="">
-									<input v-model="devName" type="text" value="" placeholder="输入设备用户名" />
+									<input v-model="devName" type="text" value="" placeholder="输入设备用户名" cursor-spacing="20" />
 								</view>
 								<view class="">
-									<input v-model="devPwd" type="password" value="" placeholder="输入设备密码" />
+									<input v-model="devPwd" value="" placeholder="输入设备密码" cursor-spacing="20" />
+									<!-- <input v-model="devPwd" type="password" value="" placeholder="输入设备密码" cursor-spacing="20" /> -->
 								</view>
 							</view>
 							<view class="addbtn">
-								<button class="cu-btn round sure bg-linear" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">确认绑定</button>
+								<button class="cu-btn round sure bg-linear" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">{{isEdit?'保存':'确认绑定'}}</button>
 							</view>
 						</form>
 					</view>
@@ -65,6 +66,9 @@
 					<view class="bg-gray">
 						<view class="bg-red" @tap="delDevice(item)">删除</view>
 					</view>
+					<view class="bg-gray">
+						<view class="bg-red bg-black" @tap="editDevice(item)">编辑</view>
+					</view>
 					
 				</view>
 			</view>
@@ -81,6 +85,7 @@
 	export default {
 		data() {
 			return {
+				isEdit:false,
 				modalName: null,
 				listTouchStart: 0,
 				listTouchDirection: null,
@@ -180,19 +185,26 @@
 						username: this.devName,
 						password:this.devPwd
 					}
+					if(this.isEdit){
+						console.log(data)
+						this.isEdit=false
+					}else{
+						addDevice(data).then((res)=>{
+							if(res.msg==='添加设备数据成功'){
+								this.fatchDevListByToken()
+								// this.devlist.push(data)
+								this.devTitle=null;
+								this.devMac=null;
+								this.devName=null;
+								this.devPwd=null;
+								this.modalName=null
+								// this.$emit('haslogin')
+							}
+						})
+					}
 					
-					addDevice(data).then((res)=>{
-						if(res.msg==='添加设备数据成功'){
-							this.fatchDevListByToken()
-							// this.devlist.push(data)
-							this.devTitle=null;
-							this.devMac=null;
-							this.devName=null;
-							this.devPwd=null;
-							this.modalName=null
-							// this.$emit('haslogin')
-						}
-					})
+					
+					
 					
 					
 				}else{
@@ -210,6 +222,15 @@
 				// this.modalName = 'DialogModal2'
 				this.delid=item;
 				
+			},
+			editDevice(item){
+				this.modalName = 'DialogModal3'
+				this.isEdit=true
+				console.log(item)
+				this.devTitle=item.title
+				this.devMac=item.mac
+				this.devName=''
+				this.devPwd=''
 			},
 			delDev(){
 				
