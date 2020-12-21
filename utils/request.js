@@ -15,8 +15,15 @@ export async function request(url = '', method = 'GET', data = {}, token = '') {
       const [error, res] = data;
       if (error) {
         console.log(error);
+        tip("系统错误");
       }
-      return res.data;
+      if (res.data.status == 0) {
+        return res.data;
+      } else {
+        handleError(res.data);
+        return Promise.reject(res.data);
+      }
+      // return res.data;
     });
 }
 
@@ -26,4 +33,20 @@ export async function postAction(url, data = {}) {
 
 export async function getAction(url, data = {}) {
   return request(url, 'GET', data);
+}
+function handleError(response) {
+  const { msg, status } = response;
+  switch (status) {
+    case 401:
+      tip("未授权，请重新登录！");
+    default:
+      tip(msg);
+  }
+}
+
+function tip(msg = "未知错误") {
+  uni.showToast({
+    title: msg,
+    icon: "none"
+  });
 }
