@@ -23,17 +23,17 @@
 					<form >
 						<view class="form-input">
 							<view class="">
-								<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" />
+								<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" cursor-spacing="20" />
 							</view>
 							<view class="mac flex align-center">
-								<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" />
+								<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" cursor-spacing="20" />
 								<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 							</view>
 							<view class="">
-								<input v-model="devName" type="text" value="" placeholder="输入设备用户名" />
+								<input v-model="devName" type="text" value="" placeholder="输入设备用户名" cursor-spacing="20" />
 							</view>
 							<view class="">
-								<input v-model="devPwd" type="password" value="" placeholder="输入设备密码" />
+								<input v-model="devPwd" type="password" value="" placeholder="输入设备密码" cursor-spacing="20" />
 							</view>
 						</view>
 						<view class="addbtn">
