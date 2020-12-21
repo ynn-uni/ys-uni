@@ -98,7 +98,37 @@ export default {
           name: '系统错误',
           icon: 'iconxitongcuowu',
           status: 0 //正常
-        }
+        },
+        // {
+        //   id: 'e10',
+        //   name: '风机',
+        //   icon: 'iconfengji',
+        //   status: 0 //正常
+        // },
+        // {
+        //   id: 'e10',
+        //   name: '温度传感器',
+        //   icon: 'iconwenduchuanganqi',
+        //   status: 0 //正常
+        // },
+        // {
+        //   id: 'e10',
+        //   name: '湿度传感器',
+        //   icon: 'iconwenshiduchuanganqi',
+        //   status: 0 //正常
+        // },
+        // {
+        //   id: 'e10',
+        //   name: '制冷1',
+        //   icon: 'iconzhileng',
+        //   status: 0 //正常
+        // },
+        // {
+        //   id: 'e10',
+        //   name: '制冷2',
+        //   icon: 'iconzhileng',
+        //   status: 0 //正常
+        // }
       ],
       waringDataStatus:[
         {
@@ -116,7 +146,7 @@ export default {
         {
           id: 'e12',
           name: '开门',
-          icon: 'iconfengji',
+          icon: 'iconkaimen2-05-05',
           status: 0 //正常
         },
         {
@@ -137,6 +167,7 @@ export default {
           icon: 'iconshidukongzhi',
           status: 0 //正常
         }
+        
       ]
     }
   },
@@ -172,6 +203,8 @@ export default {
           i.status = this.waringinfo[i.id]
         }
       })
+      
+      
     }
   }
 }
@@ -214,7 +247,7 @@ export default {
       box-shadow: 0px 0px 20upx 0px rgba(119, 134, 238, 0.22);
     }
     .text {
-      font-size: 30upx;
+      font-size: 26upx;
       color: #313131;
     }
     &.status-error .myicon {
