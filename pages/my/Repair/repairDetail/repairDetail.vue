@@ -31,9 +31,9 @@
 				<textarea value="" v-model="dis" disabled />
 			</view>
 			
-			<view class="">
+			<!-- <view class="">
 				报修状态：{{status}}
-			</view>
+			</view> -->
 			
 		</form>
 		</view>

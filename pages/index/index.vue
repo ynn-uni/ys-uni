@@ -293,7 +293,7 @@ export default {
       return {
         label: '温度',
         current: Number(data.Ta).toFixed(1),
-        setting: Number(data.Ts).toFixed(1),
+        setting: Number(data.Ts).toFixed(0),
 				output: Number(data.To).toFixed(1),
 				unit: '℃'
       }
@@ -305,7 +305,7 @@ export default {
       return {
         label: '湿度',
         current: Number(data.Ha).toFixed(1),
-        setting: Number(data.Hs).toFixed(1),
+        setting: Number(data.Hs).toFixed(0),
 				output: Number(data.Ho).toFixed(1),
 				unit: '%'
       }
@@ -314,12 +314,13 @@ export default {
 			let t=this.tData.setting
 			let h=this.hData.setting
 			console.log('u:'+this.u,'iscandesign:'+this.designSuccess)
-			if(this.u==0){
-				return uni.showToast({
-					title:'暂时无法设定数据，请稍后再试',
-					icon:'none'
-				})
-			}else if(this.designSuccess==0){
+			// if(this.u==0){
+			// 	return uni.showToast({
+			// 		title:'已有用户登录设备，暂时无法设定数据，请稍后再试',
+			// 		icon:'none'
+			// 	})
+			// }else 
+			if(this.designSuccess==0){
 				return uni.showToast({
 								title:'数据设定中，请稍后再试',
 								icon:'none'})
