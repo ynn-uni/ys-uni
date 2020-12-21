@@ -26,7 +26,7 @@
 			<view class="item" v-for="(item,index) in infoList" :key="index">
 				<view class="title">
 					<view class="text">
-						{{item.mac}}
+						{{item.title}}
 					</view>
 					<view class="time">
 						{{item.time}}
@@ -125,7 +125,7 @@
 					this.isNoData=true
 				}else{
 					data.forEach((val,index)=>{
-						newData[index]={contentl:val.error,time:val.created_at,mac:val.mac,id:val.id}
+						newData[index]={contentl:val.error,time:val.created_at,mac:val.mac,id:val.id,title:val.title}
 					})
 					this.isNoData=false
 				}
