@@ -111,7 +111,7 @@
 			},
 			makesure(){//添加设备
 				var that=this;
-				if(this.devTitle&&this.devMac&& this.devName && this.devPwd){
+				if(this.devTitle&&this.devMac){
 					var data={
 						title:this.devTitle,
 						mac: this.devMac,
@@ -262,7 +262,7 @@
 								height: 260upx;
 								display: flex;
 								flex-direction: column;
-								justify-content: space-between;
+								justify-content: center;
 								align-items: center;
 								input{
 									width: 518upx;

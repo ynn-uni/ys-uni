@@ -147,11 +147,11 @@ export default {
           icon: 'iconfont iconyujing'
         },
         {
-          name: '数据',
+          name: '控制趋势',
           icon: 'iconfont iconshuju'
         },
 				{
-					name: '其他',
+					name: '监测趋势',
 					icon: 'cuIcon-cascades'
 				}
       ],
@@ -307,7 +307,7 @@ export default {
       return {
         label: '温度',
         current: Number(data.Ta).toFixed(1),
-        setting: Number(data.Ts).toFixed(0),
+        setting: Number(data.Ts).toFixed(1),
 				output: Number(data.To).toFixed(1),
 				unit: '℃'
       }
@@ -319,7 +319,7 @@ export default {
       return {
         label: '湿度',
         current: Number(data.Ha).toFixed(1),
-        setting: Number(data.Hs).toFixed(0),
+        setting: Number(data.Hs).toFixed(1),
 				output: Number(data.Ho).toFixed(1),
 				unit: '%'
       }
@@ -412,11 +412,11 @@ export default {
         this.chartData=[]
         data.t.forEach((val)=>{ 
 					// newData[0].data.push(parseInt(val.Ta).toFixed(2))
-					newData[0].data.push(Math.floor(val.Ta * 100) / 100)
+					newData[0].data.push(Math.floor(val.Ta * 10) / 10)
 					newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
-          newData[2].data.push(Math.floor(val.Ha * 100) / 100 )
+          newData[2].data.push(Math.floor(val.Ha * 10) / 10 )
 					newData[3].data.push(val.Hs)
 					newData[4].data.push(val.time)
         })
@@ -427,11 +427,11 @@ export default {
           newData[index].data=val.data.slice(1)
         })
         data.t.forEach((val)=>{
-          newData[0].data.push(Math.floor(val.Ta * 100) / 100)
+          newData[0].data.push(Math.floor(val.Ta * 10) / 10)
           newData[1].data.push(val.Ts)
         })
         data.h.forEach((val)=>{
-          newData[2].data.push( Math.floor(val.Ha * 100) / 100 )
+          newData[2].data.push( Math.floor(val.Ha * 10) / 10 )
 					newData[3].data.push(val.Hs)
 					newData[4].data.push(val.time)
         })
@@ -467,7 +467,7 @@ export default {
 						for(var i in val){
 							newData.forEach((el,index2)=>{
 								if(i.split('p')[1]==(index2+1)){ 
-									el.data.push(Math.floor(val[i] * 100) / 100)
+									el.data.push(Math.floor(val[i] * 10) / 10)
 									// el.data.push(val[i])
 								}
 							})
@@ -481,7 +481,7 @@ export default {
 					for(var i in data){
 						newData.forEach((el,index2)=>{
 							if(i.split('p')[1]==(index2+1)){
-								el.data.push(Math.floor(data[i] * 100) / 100)
+								el.data.push(Math.floor(data[i] * 10) / 10)
 								// el.data.push(data[i])
 							}
 						})
@@ -521,7 +521,7 @@ export default {
 		  font-size: 34upx;
 		  color: #333333;
 		  .ico {
-			font-size: 60upx;
+			font-size: 50upx;
 			color: $primaryColor;
 		  }
 		  .myico{

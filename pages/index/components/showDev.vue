@@ -39,7 +39,7 @@
 	  	  <view class="cu-progress round bg-bgc">
 	  	    <view class="bg-percent bg-percent-t" :style="[{ width: datas.output + '%'||'0%'}]"></view>
 	  	  </view>
-	  	  <view class="margin-left-xs">{{ datas.output }}℃</view>
+	  	  <view class="margin-left-xs">{{ datas.output }}%</view>
 	  	</view>
 	  </view>
 	  <view class="box flex align-center flex-direction">

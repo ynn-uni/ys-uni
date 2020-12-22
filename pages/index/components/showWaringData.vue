@@ -1,9 +1,9 @@
 <template>
   <view class="showwaring animation-fade">
     <view class="box">
-		<!-- <view class="title">
-			预警状态
-		</view> -->
+		<view class="title">
+			报警
+		</view>
       <uni-grid :column="5" :show-border="false" :square="false" class="gride">
         <uni-grid-item v-for="(item,index) in waringData" :key="index">
           <view
@@ -16,12 +16,12 @@
           </view>
         </uni-grid-item>
       </uni-grid>
-	  <view class="border-top">
+	  <!-- <view class="border-top">
 	  	
-	  </view>
-	  <!-- <view class="title">
-	  	开关状态
 	  </view> -->
+	  <view class="title">
+	  	状态
+	  </view>
 	  <uni-grid :column="6" :show-border="false" :square="false" class="gride ">
 	    <uni-grid-item v-for="(item,index) in waringDataStatus" :key="index">
 	      <view
@@ -224,6 +224,7 @@ export default {
 	  font-size: 34upx;
 	  color: $uni-text-color;
 	  padding: 10upx 0;
+    padding-left: 20rpx;
   }
   .my-item {
     margin: 10upx 0;
@@ -235,13 +236,13 @@ export default {
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      width: 100upx;
-      height: 100upx;
+      width: 80upx;
+      height: 80upx;
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 0px 20upx 0px rgba(119, 134, 238, 0.22);
     }
     .text {
-      font-size: 26upx;
+      font-size: 24upx;
       color: #313131;
     }
     &.status-error .myicon {

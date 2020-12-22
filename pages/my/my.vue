@@ -35,19 +35,18 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
-			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/sensor/sensor" @touchstart="touchStart" @touchend="touchEnd">
+			<!-- <view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/sensor/sensor" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
-					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
+					<image src="../../static/images/devtool.png" mode=""></image>
 					 <view class="iconfont1 cuIcon-circle"></view>
 					<view class="title">传感器设置</view>
 				</view>
 				<view class="cu-right">
 					<text class="cuIcon-right"></text>
 				</view>
-			</view>
+			</view> -->
 			<view class="cu-form-group" @tap="doubleTap" data-path="/pages/my/devlist/devlist" @touchstart="touchStart" @touchend="touchEnd">
 				<view class="cu-left">
-					<!-- <image src="../../static/images/devtool.png" mode=""></image> -->
 					<view class="iconfont1 cuIcon-vipcard"></view>
 					<view class="title">设备中心</view>
 				</view>

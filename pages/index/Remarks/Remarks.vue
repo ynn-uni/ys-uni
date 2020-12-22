@@ -40,6 +40,7 @@ import {getDeviceSign} from '@/apis'
 								this.signData.push(data[i])
 							}
 						}
+						console.log(this.signData)
 				})
 			}
 		}
