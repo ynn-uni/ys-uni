@@ -22,19 +22,19 @@
 				<view class="form-box">
 					<form >
 						<view class="form-input">
-							<view class="">
+							<view class="margin-bottom">
 								<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" cursor-spacing="20" />
 							</view>
 							<view class="mac flex align-center">
 								<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" cursor-spacing="20" />
 								<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 							</view>
-							<view class="">
+							<!-- <view class="">
 								<input v-model="devName" type="text" value="" placeholder="输入设备用户名" cursor-spacing="20" />
 							</view>
 							<view class="">
 								<input v-model="devPwd" type="password" value="" placeholder="输入设备密码" cursor-spacing="20" />
-							</view>
+							</view> -->
 						</view>
 						<view class="addbtn">
 							<button class="cu-btn round bg-red" @tap="makesure" >确认绑定</button>
@@ -214,7 +214,7 @@
 									height: 260upx;
 									display: flex;
 									flex-direction: column;
-									justify-content: space-between;
+									justify-content: center;
 									align-items: center;
 									input{
 										width: 518upx;

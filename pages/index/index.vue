@@ -55,9 +55,15 @@
 	  		<view class="bg-white">
 	  			<form class="form-box ">
 	  				<view class="form-input">
-	  					<view class="flex justify-center">
-	  						<input v-model="t" value="" placeholder="输入设定温度" type="number" />
+	  					<view class="flex justify-center ">
+	  						<input v-model="t" value="" placeholder="输入设定温度" type="number" cursor-spacing="20" />
 	  					</view>
+							<!-- <view class="flex justify-center margin-tb-xs">
+	  						<input v-model="userName" value="" placeholder="设备用户名" type="number" cursor-spacing="20" />
+	  					</view>
+							<view class="flex justify-center margin-tb-xs">
+	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20" />
+	  					</view> -->
 	  					
 	  				</view>
 	  				<view class="addbtn">
@@ -80,8 +86,14 @@
 	  			<form class="form-box ">
 	  				<view class="form-input">
 	  					<view class="flex justify-center">
-	  						<input v-model="h" value="" placeholder="输入设定湿度" type="number" />
+	  						<input v-model="h" value="" placeholder="输入设定湿度" type="number" cursor-spacing="20" />
 	  					</view>
+							<!-- <view class="flex justify-center margin-tb-xs">
+	  						<input v-model="userName" value="" placeholder="设备用户名 " type="number" cursor-spacing="20" />
+	  					</view>
+							<view class="flex justify-center margin-tb-xs">
+	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20"/>
+	  					</view> -->
 	  					
 	  				</view>
 	  				<view class="addbtn">
@@ -92,6 +104,7 @@
 	  		</view>
 	  	</view>
 	  </view>
+		
 	
   </view>
 </template>
@@ -110,6 +123,7 @@ let cc=0
 export default {
   data() {
     return {
+			userinfo:false,
 			modalName:null,
 			designSuccess:1,
       isCanDesign:0,//温湿度是否可修改
@@ -250,7 +264,7 @@ export default {
 			for(var i in data){
 				if(data[i]==1&&i.split('e')[1]<9&&i!='e6'){
 					this.isWaring=true
-				}else if(data['e6']==0){
+				}else if(data['e6']==0){//断电状态与其他状态相反
 					this.isWaring=true
 				}
 			}
@@ -314,13 +328,12 @@ export default {
 			let t=this.tData.setting
 			let h=this.hData.setting
 			console.log('u:'+this.u,'iscandesign:'+this.designSuccess)
-			// if(this.u==0){
-			// 	return uni.showToast({
-			// 		title:'已有用户登录设备，暂时无法设定数据，请稍后再试',
-			// 		icon:'none'
-			// 	})
-			// }else 
-			if(this.designSuccess==0){
+			if(this.u==0){
+				return uni.showToast({
+					title:'已有用户登录设备，暂时无法设定数据，请稍后再试',
+					icon:'none'
+				})
+			}else if(this.designSuccess==0){
 				return uni.showToast({
 								title:'数据设定中，请稍后再试',
 								icon:'none'})
@@ -372,6 +385,7 @@ export default {
 		},
 		hideModal(){
 			this.modalName=null
+			
 		},
 		setDevTandH(t,h){
 			let obj={
@@ -380,6 +394,7 @@ export default {
 				humidity:h
 			}
 			setDeviceTemperatureOrHumidity(obj).then((res)=>{
+				console.log(res)
 				this.designSuccess=0
 				this.h=null;
 				this.t=null;

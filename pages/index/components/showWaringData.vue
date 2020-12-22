@@ -22,7 +22,7 @@
 	  <!-- <view class="title">
 	  	开关状态
 	  </view> -->
-	  <uni-grid :column="5" :show-border="false" :square="false" class="gride ">
+	  <uni-grid :column="6" :show-border="false" :square="false" class="gride ">
 	    <uni-grid-item v-for="(item,index) in waringDataStatus" :key="index">
 	      <view
 	        class="gride-item flex justify-center align-center flex-direction my-item status-default"
@@ -99,36 +99,36 @@ export default {
           icon: 'iconxitongcuowu',
           status: 0 //正常
         },
-        // {
-        //   id: 'e10',
-        //   name: '风机',
-        //   icon: 'iconfengji',
-        //   status: 0 //正常
-        // },
-        // {
-        //   id: 'e10',
-        //   name: '温度传感器',
-        //   icon: 'iconwenduchuanganqi',
-        //   status: 0 //正常
-        // },
-        // {
-        //   id: 'e10',
-        //   name: '湿度传感器',
-        //   icon: 'iconwenshiduchuanganqi',
-        //   status: 0 //正常
-        // },
-        // {
-        //   id: 'e10',
-        //   name: '制冷1',
-        //   icon: 'iconzhileng',
-        //   status: 0 //正常
-        // },
-        // {
-        //   id: 'e10',
-        //   name: '制冷2',
-        //   icon: 'iconzhileng',
-        //   status: 0 //正常
-        // }
+        {
+          id: 'fanAlarm',
+          name: '风机',
+          icon: 'iconfengji',
+          status: 0 //正常
+        },
+        {
+          id: 'tempSensorAlarm',
+          name: '温度传感器',
+          icon: 'iconwenduchuanganqi',
+          status: 0 //正常
+        },
+        {
+          id: 'humiSensorAlarm',
+          name: '湿度传感器',
+          icon: 'iconwenshiduchuanganqi',
+          status: 0 //正常
+        },
+        {
+          id: 'ref1AlarmDI',
+          name: '制冷1',
+          icon: 'iconzhileng',
+          status: 0 //正常
+        },
+        {
+          id: 'ref2AlarmDI',
+          name: '制冷2',
+          icon: 'iconzhileng',
+          status: 0 //正常
+        }
       ],
       waringDataStatus:[
         {
@@ -194,17 +194,11 @@ export default {
 		  if(!this.waringinfo) return
 		  this.waringinfo['e6']=this.waringinfo['e6']==0?1:0
       this.waringData.map(i => {
-        if(i.id.split('e')[1]<9){
           i.status = this.waringinfo[i.id]
-        }
       })
       this.waringDataStatus.map(i => {
-        if(i.id.split('e')[1]>8){
           i.status = this.waringinfo[i.id]
-        }
       })
-      
-      
     }
   }
 }
