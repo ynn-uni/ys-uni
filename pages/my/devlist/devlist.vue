@@ -22,32 +22,32 @@
 					<view class="form-box">
 						<!-- <form @submit="" @reset=""> -->
 						<form >
-							<view class="form-input">
-								<view class="">
+							<view class="form-input" :class="isEdit?'justify-between':'justify-center'">
+								<view :class="!isEdit?'margin-bottom':''">
 									<input v-model="devTitle" type="text" value="" placeholder="输入设备名称" cursor-spacing="20"/>
 								</view>
-								<view class="mac flex align-center">
+								<view class="mac flex align-center ">
 									<input v-model="devMac" type="text" value="" placeholder="输入设备MAC地址" cursor-spacing="20"/>
 									<button class="cu-btn mybtn" @tap="handelGetMac">扫一扫</button>
 								</view>
-								<view class="">
+								<view class="" v-if="isEdit">
 									<input v-model="devName" type="text" value="" placeholder="输入设备用户名" cursor-spacing="20" />
 								</view>
-								<view class="">
+								<view class=""  v-if="isEdit">
 									<input v-model="devPwd" value="" placeholder="输入设备密码" cursor-spacing="20" />
 									<!-- <input v-model="devPwd" type="password" value="" placeholder="输入设备密码" cursor-spacing="20" /> -->
 								</view>
 							</view>
 							<view class="addbtn">
-								<button class="cu-btn round sure bg-linear" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">{{isEdit?'保存':'确认绑定'}}</button>
+								<button class="cu-btn round sure bg-linear" @tap="doubleTap" @touchstart="touchStart" @touchend="touchEnd">{{isEdit?'保存':'提交'}}</button>
 							</view>
 						</form>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="cu-list menu-avatar">
-			
+		<view class="cu-list menu-avatar" v-if="devList.length">
+			<view class='text-gray flex alc justify-center text-sm margin-bottom-xs'>*左滑设备信息块,可编辑/删除设备信息</view>
 			<view class="cu-item dl-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in devList" :key="index"
 			 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd" :data-target="'move-box-' + index" >
 			
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-	import {setUserPhone,addDevice,delDevice,} from '../../../apis/index.js'
+	import {setUserPhone,addDevice,delDevice,updateDevice} from '../../../apis/index.js'
 	import modelre from '@/components/modelre.vue'
 	import { mapGetters, mapActions, mapMutations ,mapState} from 'vuex';
 	export default {
@@ -152,6 +152,7 @@
 			},
 			hideModal(){
 				this.modalName = null;
+				this.isEdit=false
 			},
 			touchStart(e) {
 			  this.touchStartTime = e.timeStamp;
@@ -176,43 +177,69 @@
 			    }
 			  }
 			},
+			updateDevice(data){
+				updateDevice(data).then((res)=>{
+					console.log(res)
+					this.fatchDevListByToken()
+						// this.devlist.push(data)
+						this.devTitle=null;
+						this.devMac=null;
+						this.devName=null;
+						this.devPwd=null;
+						this.modalName=null
+						this.isEdit=false
+				})
+			},
+			addDevice(data){
+				addDevice(data).then((res)=>{
+					if(res.msg==='添加设备数据成功'){
+						this.fatchDevListByToken()
+						// this.devlist.push(data)
+						this.devTitle=null;
+						this.devMac=null;
+						this.devName=null;
+						this.devPwd=null;
+						this.modalName=null
+						// this.$emit('haslogin')
+					}
+				})
+			},
 			makesure(){
 				var that=this;
-				if(this.devTitle&&this.devMac&& this.devName && this.devPwd){
-					var data={
-						title:this.devTitle,
-						mac: this.devMac,
-						username: this.devName,
-						password:this.devPwd
-					}
-					if(this.isEdit){
-						console.log(data)
-						this.isEdit=false
-					}else{
-						addDevice(data).then((res)=>{
-							if(res.msg==='添加设备数据成功'){
-								this.fatchDevListByToken()
-								// this.devlist.push(data)
-								this.devTitle=null;
-								this.devMac=null;
-								this.devName=null;
-								this.devPwd=null;
-								this.modalName=null
-								// this.$emit('haslogin')
+				if(this.isEdit){
+						
+						if(this.devTitle&&this.devMac&&this.devName&&this.devPwd){
+							var data={
+								title:this.devTitle,
+								mac: this.devMac,
+								username: this.devName,
+								password:this.devPwd
 							}
-						})
-					}
+							this.updateDevice(data)
+							}else{
+								uni.showToast({
+									title:'请输入完整的设备信息',
+									icon:'none'
+								})
+							}
+					}else{
+						if(this.devTitle&&this.devMac){
+							var data={
+								title:this.devTitle,
+								mac: this.devMac,
+								username: this.devName,
+								password:this.devPwd
+							}
+							this.addDevice(data)
+						}else{
+							uni.showToast({
+								title:'请输入完整的设备信息',
+								icon:'none'
+							})
+						}
 					
-					
-					
-					
-					
-				}else{
-					uni.showToast({
-						title:'请输入设备信息',
-						icon:'none'
-					})
 				}
+				
 			},
 			delDevice(item){
 				var that=this;
@@ -229,8 +256,8 @@
 				console.log(item)
 				this.devTitle=item.title
 				this.devMac=item.mac
-				this.devName=''
-				this.devPwd=''
+				this.devName=item.username
+				this.devPwd=item.password
 			},
 			delDev(){
 				
@@ -298,7 +325,6 @@
 									height: 260upx;
 									display: flex;
 									flex-direction: column;
-									justify-content: space-between;
 									align-items: center;
 									input{
 										width: 518upx;

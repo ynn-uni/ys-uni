@@ -15,6 +15,9 @@ export function setUserPhone(data = {}) {
 export function addDevice(data = {}) {
   return getAction('/Api/Device/addDevice', data);
 }
+export function updateDevice(data = {}) {
+  return postAction('/Api/Device/setDevice', data);
+}
 //删除设备
 export function delDevice(data = {}) {
   return getAction('/Api/Device/delDevice', data);
@@ -56,6 +59,7 @@ export function getProductList(data = {}) {
 export function addRepair(data = {}) {
   return getAction('/Api/Repair/addRepair', data);
 }
+
 //历史故障列表 getNoticeList
 export function getNoticeList(data = {}) {
   return getAction('/Api/Notice/getErrorList', data);
