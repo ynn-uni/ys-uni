@@ -152,6 +152,11 @@
 			},
 			hideModal(){
 				this.modalName = null;
+				this.devTitle=null;
+				this.devMac=null;
+				this.devName=null;
+				this.devPwd=null;
+				this.modalName=null
 				this.isEdit=false
 			},
 			touchStart(e) {
@@ -227,8 +232,8 @@
 							var data={
 								title:this.devTitle,
 								mac: this.devMac,
-								username: this.devName,
-								password:this.devPwd
+								username: '',
+								password:''
 							}
 							this.addDevice(data)
 						}else{
