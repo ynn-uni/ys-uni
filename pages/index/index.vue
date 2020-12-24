@@ -56,7 +56,7 @@
 	  			<form class="form-box ">
 	  				<view class="form-input">
 	  					<view class="flex justify-center ">
-	  						<input v-model="t" value="" placeholder="输入设定温度" type="number" cursor-spacing="20" />
+	  						<input v-model="t" value="" placeholder="输入设定温度" type="digit" cursor-spacing="20" />
 	  					</view>
 							<!-- <view class="flex justify-center margin-tb-xs">
 	  						<input v-model="userName" value="" placeholder="设备用户名" type="number" cursor-spacing="20" />
@@ -86,7 +86,7 @@
 	  			<form class="form-box ">
 	  				<view class="form-input">
 	  					<view class="flex justify-center">
-	  						<input v-model="h" value="" placeholder="输入设定湿度" type="number" cursor-spacing="20" />
+	  						<input v-model="h" value="" placeholder="输入设定湿度" type="digit" cursor-spacing="20" />
 	  					</view>
 							<!-- <view class="flex justify-center margin-tb-xs">
 	  						<input v-model="userName" value="" placeholder="设备用户名 " type="number" cursor-spacing="20" />
