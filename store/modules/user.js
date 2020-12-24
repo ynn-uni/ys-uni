@@ -40,12 +40,12 @@ export default {
         if (error) {
           console.error(error);
         }
-		if(data.code){
-			commit('updateCodeOnce', data.code);
-			dispatch('checkUserSetting');
-		}else{
-			dispatch('wxLogin');
-		}
+        if(data.code){
+          commit('updateCodeOnce', data.code);
+          dispatch('checkUserSetting');
+        }else{
+          dispatch('wxLogin');
+        }
       });
     },
     // 检查用户授权设置

@@ -115,8 +115,8 @@
 					var data={
 						title:this.devTitle,
 						mac: this.devMac,
-						username: this.devName,
-						password:this.devPwd
+						username: '',
+						password:''
 					}
 					addDevice(data).then((res)=>{
 						if(res.msg==='添加设备数据成功'){
