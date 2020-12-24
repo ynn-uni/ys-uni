@@ -21,6 +21,10 @@
 		<view class="charts" v-show="!haveData">
 			<canvas canvas-id="canvasArea1" id="canvasArea1" class="charts"  @touchstart="touchLineA" disable-scroll=true @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
+		<view class="change flex justify-between align-center">
+			<button class="cu-btn round sure" @tap="before">上一组</button>
+			<button class="cu-btn round sure" @tap="next">下一组</button>
+	  </view>
 		<noData v-if="haveData" :text="'没有找到相关数据'"></noData>
 	</view>
 </template>
@@ -34,9 +38,10 @@
 	export default {
 		data() {
 			return {
+				n:1,
 				dataList:[],
 				page:1,
-				size:500,
+				size:300,
 				haveData:true,
 				devTitle:'',
 				devlist:[],
@@ -50,12 +55,16 @@
 				cWidth:'750',//画布宽
 				cHeight:'800',//画布高
 				pixelRatio:1,//像素比
-				Area:{categories:['0:00','','','','0:30','','','','','1:00','','','','','1:30','','','','','2:00'],
-				series:[{name:'实时温度',data:[25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25]},
-				{name:'设定温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
-				{name:'实时湿度',data:[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]},
-				{name:'设定湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]},
-				{name:'时间',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}]},
+				Area:{
+					categories:['0:00','','','','0:30','','','','','1:00','','','','','1:30','','','','','2:00'],
+					series:[
+						{name:'实时温度',data:[25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25]},
+						{name:'设定温度',data:[20,26,10,0,24,58,9,64,66,55,33,44,13,54,25,85,45,56,24,26]},
+						{name:'实时湿度',data:[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]},
+						{name:'设定湿度',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]},
+						{name:'时间',data:[25,13,89,45,65,25,16,58,79,62,35,29,46,58,24,16,43,15,46,58]}
+					]
+				},
 			}
 		},
 		computed:{
@@ -82,9 +91,24 @@
 			if(this.devList&&this.devList.length){
 				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
 			}
-			console.log(this.haveData)
 		},
 		methods: {
+			before(){
+				if(this.n==1){
+					this.n=4
+				}else{
+					this.n=this.n-1
+				}
+				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
+			},
+			next(){
+				if(this.n==4){
+					this.n=1
+				}else{
+					this.n=this.n+1
+				}
+				this.getHistoryData(this.startDate,this.endDate,this.devList[0].mac,this.page,this.size);
+			},
 			initTime(){
 				var shshmyDate = new Date();
 				this.showDate=shshmyDate.getFullYear()+'年'+(shshmyDate.getMonth()+1)+'月'+shshmyDate.getDate()+'日';
@@ -95,40 +119,107 @@
 			getHistoryData(start,end,mac,page,size){
 				uni.showLoading()
 				var that=this;
-				getDataList({start:start,end:end,mac:mac,page,size}).then((res)=>{
-					console.log(res.data.data)
+				getDataList({start:start,end:end,mac:mac,page,size,group:this.n}).then((res)=>{
+					this.initSeries()
 					this.dataList=res.data.data
 					if(res.data.data&&res.data.data.length>0){
-						console.log(res.data)
 						that.haveData=false;
 						that.Area.categories.splice(0);
-						that.Area.series[0].data.splice(0);
-						that.Area.series[1].data.splice(0);
-						that.Area.series[2].data.splice(0);
-						that.Area.series[3].data.splice(0);
-						that.Area.series[4].data.splice(0);
-						res.data.data.forEach((val,i)=>{
-							// for(var i in val){
-								// that.Area.categories.push(val['time']);
+						if(this.n===1){
+								res.data.data.forEach((val,i)=>{
 								that.Area.categories.unshift(val['time']);
 								that.Area.series[0].data.unshift(Math.round((val['ta'])*10)/10);
 								that.Area.series[1].data.unshift(val['ts']);
 								that.Area.series[2].data.unshift(Math.round((val['ha'])*10)/10);
 								that.Area.series[3].data.unshift(val['hs']);
 								that.Area.series[4].data.unshift(0);
-							// }
-						})
-						console.log(this.Area)
+							})
+						}else if(this.n===2){
+							res.data.data.forEach((val,i)=>{
+								that.Area.categories.unshift(val['time']);
+								that.Area.series[0].data.unshift(Math.round((val['p1'])*10)/10);
+								that.Area.series[1].data.unshift(Math.round((val['p2'])*10)/10);
+								that.Area.series[2].data.unshift(Math.round((val['p3'])*10)/10);
+								that.Area.series[3].data.unshift(Math.round((val['p4'])*10)/10);
+								that.Area.series[4].data.unshift(Math.round((val['p5'])*10)/10);
+								that.Area.series[5].data.unshift(Math.round((val['p6'])*10)/10);
+								that.Area.series[6].data.unshift(0);
+							})
+						}else if(this.n===3){
+							res.data.data.forEach((val,i)=>{
+								that.Area.categories.unshift(val['time']);
+								that.Area.series[0].data.unshift(Math.round((val['p7'])*10)/10);
+								that.Area.series[1].data.unshift(Math.round((val['p8'])*10)/10);
+								that.Area.series[2].data.unshift(Math.round((val['p9'])*10)/10);
+								that.Area.series[3].data.unshift(Math.round((val['p10'])*10)/10);
+								that.Area.series[4].data.unshift(Math.round((val['p11'])*10)/10);
+								that.Area.series[5].data.unshift(Math.round((val['p12'])*10)/10);
+								that.Area.series[6].data.unshift(0);
+							})
+						}else if(this.n===4){
+							res.data.data.forEach((val,i)=>{
+								that.Area.categories.unshift(val['time']);
+								that.Area.series[0].data.unshift(Math.round((val['p13'])*10)/10);
+								that.Area.series[1].data.unshift(Math.round((val['p14'])*10)/10);
+								that.Area.series[2].data.unshift(Math.round((val['p15'])*10)/10);
+								that.Area.series[3].data.unshift(Math.round((val['p16'])*10)/10);
+								that.Area.series[4].data.unshift(Math.round((val['p17'])*10)/10);
+								that.Area.series[5].data.unshift(Math.round((val['p18'])*10)/10);
+								that.Area.series[6].data.unshift(0);
+							})
+						}
 						that.showArea('canvasArea1',this.Area);
 					}else{
 						if(this.page===1){
 							that.haveData=true;
 						}
-						
 					}
 					
 					uni.hideLoading()
 				})
+			},
+			initSeries(){
+				var that=this
+				var n=this.n
+					if(n===1){
+						that.Area.series=[
+							{name:'实时温度',data:[]},
+							{name:'设定温度',data:[]},
+							{name:'实时湿度',data:[]},
+							{name:'设定湿度',data:[]},
+							{name:'时间',data:[]}
+						]
+					}else if(n===2){
+						that.Area.series=[
+							{name:'传感器1温度',data:[]},
+							{name:'传感器1湿度',data:[]},
+							{name:'传感器2温度',data:[]},
+							{name:'传感器2湿度',data:[]},
+							{name:'传感器3温度',data:[]},
+							{name:'传感器3湿度',data:[]},
+							{name:'时间',data:[]}
+						]
+					}else if(n===3){
+						that.Area.series=[
+							{name:'传感器4温度',data:[]},
+							{name:'传感器4湿度',data:[]},
+							{name:'传感器5温度',data:[]},
+							{name:'传感器5湿度',data:[]},
+							{name:'传感器6温度',data:[]},
+							{name:'传感器6湿度',data:[]},
+							{name:'时间',data:[]}
+						]
+					}else if(n===4){
+						that.Area.series=[
+							{name:'传感器7温度',data:[]},
+							{name:'传感器7湿度',data:[]},
+							{name:'传感器8温度',data:[]},
+							{name:'传感器8湿度',data:[]},
+							{name:'传感器9温度',data:[]},
+							{name:'传感器9湿度',data:[]},
+							{name:'时间',data:[]}
+						]
+					}
 			},
 			PickerChange(e) {//选择设备
 				var that=this;
@@ -262,6 +353,7 @@
 	.historyData{
 		min-height: 100vh;
 		background-color: #FFFFFF;
+		position: relative;
 		.classify{
 			padding: 0 20upx;
 			display: flex;
@@ -354,6 +446,16 @@
 				padding-right: 10px;
 				height: 800upx;
 				background-color: #FFFFFF;
+			}
+		}
+		.change{
+			padding: 0 30upx;
+			width: 100%;
+			position: absolute;
+			top: 1100rpx;
+			z-index: 10;
+			button{
+				height: 40upx;
 			}
 		}
 	}
