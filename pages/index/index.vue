@@ -59,10 +59,10 @@
 	  						<input v-model="t" value="" placeholder="输入设定温度" type="digit" cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
-	  						<input v-model="username" value="" placeholder="设备用户名" type="number" cursor-spacing="20" />
+	  						<input v-model="username" value="" placeholder="设备用户名" cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
-	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20" />
+	  						<input v-model="password" value="" placeholder="密码" cursor-spacing="20" />
 	  					</view>
 	  					
 	  				</view>
@@ -89,10 +89,10 @@
 	  						<input v-model="h" value="" placeholder="输入设定湿度" type="digit" cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
-	  						<input v-model="username" value="" placeholder="设备用户名 " type="number" cursor-spacing="20" />
+	  						<input v-model="username" value="" placeholder="设备用户名 " cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
-	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20"/>
+	  						<input v-model="password" value="" placeholder="密码" cursor-spacing="20"/>
 	  					</view>
 	  					
 	  				</view>
