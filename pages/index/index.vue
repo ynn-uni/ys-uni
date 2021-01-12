@@ -58,12 +58,12 @@
 	  					<view class="flex justify-center ">
 	  						<input v-model="t" value="" placeholder="输入设定温度" type="digit" cursor-spacing="20" />
 	  					</view>
-							<!-- <view class="flex justify-center margin-tb-xs">
-	  						<input v-model="userName" value="" placeholder="设备用户名" type="number" cursor-spacing="20" />
+							<view class="flex justify-center margin-tb-xs">
+	  						<input v-model="username" value="" placeholder="设备用户名" type="number" cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
 	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20" />
-	  					</view> -->
+	  					</view>
 	  					
 	  				</view>
 	  				<view class="addbtn">
@@ -88,12 +88,12 @@
 	  					<view class="flex justify-center">
 	  						<input v-model="h" value="" placeholder="输入设定湿度" type="digit" cursor-spacing="20" />
 	  					</view>
-							<!-- <view class="flex justify-center margin-tb-xs">
-	  						<input v-model="userName" value="" placeholder="设备用户名 " type="number" cursor-spacing="20" />
+							<view class="flex justify-center margin-tb-xs">
+	  						<input v-model="username" value="" placeholder="设备用户名 " type="number" cursor-spacing="20" />
 	  					</view>
 							<view class="flex justify-center margin-tb-xs">
 	  						<input v-model="password" value="" placeholder="密码" type="number" cursor-spacing="20"/>
-	  					</view> -->
+	  					</view>
 	  					
 	  				</view>
 	  				<view class="addbtn">
@@ -171,11 +171,14 @@ export default {
       },
 			seetingt:{},
 			seetingh:{},
+			password:'',
+			username:'',
 			chartData:[],
 			timeList:[],
       waringinfo: {},
 			otherData:[],
-			isWaring:false
+			isWaring:false,
+			instance:null
     }
   },
   components: {
@@ -230,13 +233,14 @@ export default {
 				this.socketInstance.close()
 			}
       this.initWebsocket().then(instance => {
+				// this.instance=instance
         instance.onopen = evt => {
           instance.send({ mac: this.devListMac })
         }
         instance.onmessage = evt => {
 					console.log(evt)
 					if (evt.data === 'PONG'){
-						this.datas={} 
+						// this.datas={} 
 						return
 					} 
 					const json = JSON.parse(evt.data)
@@ -333,7 +337,8 @@ export default {
 					title:'已有用户登录设备，暂时无法设定数据，请稍后再试',
 					icon:'none'
 				})
-			}else if(this.designSuccess==0){
+			}else 
+			if(this.designSuccess==0){
 				return uni.showToast({
 								title:'数据设定中，请稍后再试',
 								icon:'none'})
@@ -391,15 +396,36 @@ export default {
 			let obj={
 				mac:this.devListMac,
 				temperature:t,
-				humidity:h
+				humidity:h,
+				password:this.password,
+				username:this.username
 			}
+			this.h=null
+			this.t=null
+			this.password=''
+			this.username=''
 			setDeviceTemperatureOrHumidity(obj).then((res)=>{
-				console.log(res)
-				this.designSuccess=0
-				this.h=null;
-				this.t=null;
-			})
+				// if(res.status===0){
+						this.designSuccess=0
+						setTimeout(() => {
+							if(this.designSuccess===0){
+								this.designSuccess=1
+								uni.showToast({
+										title:'数据设定失败,请检查用户名密码',
+										icon:'none'
+										})
+							}
+						}, 60000);
+				// }
 			
+			})
+			// console.log(this.userInfo,this.userInfo.id)
+			// var uuid=this.userInfo.id
+			// this.instance.send({ 
+			// 	mac:this.devListMac,
+			// 	temperature:t,
+			// 	humidity:h ,
+			// 	uuid})
 		},
     setChartData(data){
       if(!data.t||!data.h) return;
